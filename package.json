@@ -1,0 +1,162 @@
+{
+    "name": "laravel-artisan",
+    "displayName": "laravel-artisan",
+    "description": "Laravel Artisan commands within Visual Studio Code",
+    "version": "0.0.1",
+    "publisher": "ryannaddy",
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "artisan.clearCompiled",
+                "title": "Artisan: Clear Compiled"
+            },
+            {
+                "command": "artisan.migrate",
+                "title": "Artisan: Migrate"
+            },
+            {
+                "command": "artisan.optimize",
+                "title": "Artisan: Optimize"
+            },
+            {
+                "command": "artisan.serve",
+                "title": "Artisan: Start Server"
+            },
+            {
+                "command": "artisan.make.command",
+                "title": "Artisan: Make Command"
+            },
+            {
+                "command": "artisan.make.event",
+                "title": "Artisan: Make Event"
+            },
+            {
+                "command": "artisan.make.job",
+                "title": "Artisan: Make Job"
+            },
+            {
+                "command": "artisan.make.listener",
+                "title": "Artisan: Make Listener"
+            },
+            {
+                "command": "artisan.make.mail",
+                "title": "Artisan: Make Mail"
+            },
+            {
+                "command": "artisan.make.notification",
+                "title": "Artisan: Make Notification"
+            },
+            {
+                "command": "artisan.make.policy",
+                "title": "Artisan: Make Policy"
+            },
+            {
+                "command": "artisan.make.provider",
+                "title": "Artisan: Make Provider"
+            },
+            {
+                "command": "artisan.make.request",
+                "title": "Artisan: Make Request"
+            },
+            {
+                "command": "artisan.make.seeder",
+                "title": "Artisan: Make Seeder"
+            },
+            {
+                "command": "artisan.make.controller",
+                "title": "Artisan: Make Controller"
+            },
+            {
+                "command": "artisan.make.middleware",
+                "title": "Artisan: Make Middleware"
+            },
+            {
+                "command": "artisan.make.model",
+                "title": "Artisan: Make Model"
+            },
+            {
+                "command": "artisan.make.migration",
+                "title": "Artisan: Make Migration"
+            },
+            {
+                "command": "artisan.cache.clear",
+                "title": "Artisan: Cache Clear"
+            },
+            {
+                "command": "artisan.cache.table",
+                "title": "Artisan: Cache Table"
+            },
+            {
+                "command": "artisan.route.cache",
+                "title": "Artisan: Route Cache"
+            },
+            {
+                "command": "artisan.route.clear",
+                "title": "Artisan: Route Cache Clear"
+            },
+            {
+                "command": "artisan.route.refresh",
+                "title": "Artisan: Route Cache Refresh"
+            },
+            {
+                "command": "artisan.config.cache",
+                "title": "Artisan: Config Cache"
+            },
+            {
+                "command": "artisan.config.clear",
+                "title": "Artisan: Config Cache Clear"
+            },
+            {
+                "command": "artisan.config.refresh",
+                "title": "Artisan: Config Cache Refresh"
+            },
+            {
+                "command": "artisan.key.generate",
+                "title": "Artisan: Key generation"
+            },
+            {
+                "command": "artisan.migrate.install",
+                "title": "Artisan: Migrate Install"
+            },
+            {
+                "command": "artisan.migrate.refresh",
+                "title": "Artisan: Migrate Refresh"
+            },
+            {
+                "command": "artisan.migrate.reset",
+                "title": "Artisan: Migrate Reset"
+            },
+            {
+                "command": "artisan.migrate.rollback",
+                "title": "Artisan: Migrate Rollback"
+            },
+            {
+                "command": "artisan.view.clear",
+                "title": "Artisan: Views Clear"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    }
+}
