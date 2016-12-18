@@ -1,65 +1,36 @@
-# laravel-artisan README
+# Laravel Artisan
 
-This is the README for your extension "laravel-artisan". After writing up a brief description, we recommend including the following sections.
+Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* Make files
+* Manage the database
+* Clear Caches
+* Generate Keys
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* A useable version of `php` that can be ran on the commandline such as `php-cli` (This should be in your path)
+    * The following command should yeild the a php version:
+    * `php -v`
+        * If no php version is returned you don't have php setup correctly.
+        * If you get a version back you are good to go!
+* A Laravel install that has `artisan` in the workspace root
+    * cd into your root directory and run the following command:
+    * `php artisan -v`
+        * If an error is returned you don't have laravel setup correctly.
+        * If you get a Laravel version and a list of commands you are good to go!
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* Currently custom commands can not be ran, but they can be created.
+* Not all commands are implemnted (but most are), as they will be added later on.
 
-## Release Notes
+## How to use
 
-Users appreciate release notes as you update your extension.
+Once you have installed the extension, you can open the command pallet, and start running the commands. Just type `Artisan:` to get a list of commands.
 
-### 1.0.0
+Many commands have optional input questions, leave them blank to use the defaults, or enter your own value.
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Enjoy

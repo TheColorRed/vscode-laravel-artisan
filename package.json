@@ -4,6 +4,17 @@
     "description": "Laravel Artisan commands within Visual Studio Code",
     "version": "0.0.1",
     "publisher": "ryannaddy",
+    "author": {
+        "name": "Ryan Naddy",
+        "url": "http://ryannaddy.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TheColorRed/vscode-laravel-artisan"
+    },
+    "bugs": {
+        "url": "https://github.com/TheColorRed/vscode-laravel-artisan/issues"
+    },
     "engines": {
         "vscode": "^1.5.0"
     },
