@@ -6,7 +6,7 @@ export default class MigrateReset extends Common {
 
     public static async run() {
 
-        let database = await this.getInput('Database to use (Leave blank to use the default database)');
+        let database = await this.getInput('What database should I use?');
 
         cp.exec(`php ${this.artisan} migrate:reset ${database.length > 0 ? '--database=' + database : ''}`, async (err) => {
             if (err) {

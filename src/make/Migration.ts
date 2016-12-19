@@ -17,9 +17,9 @@ export default class MakeMigration extends Common {
         let tableName = '';
 
         // Determine if this is a resource controller or not
-        createTable = await this.getYesNo('Will this create a table?');
+        createTable = await this.getYesNo('Will this migration create a table?');
         if (!createTable) {
-            modifyTable = await this.getYesNo('Will this modify an existing table?');
+            modifyTable = await this.getYesNo('Will this migration modify an existing table?');
         }
 
         if (createTable || modifyTable) {

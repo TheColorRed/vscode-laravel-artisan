@@ -1,13 +1,10 @@
 {
     "name": "laravel-artisan",
-    "displayName": "laravel-artisan",
+    "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
+    "icon": "images/icon.png",
     "version": "0.0.1",
     "publisher": "ryannaddy",
-    "author": {
-        "name": "Ryan Naddy",
-        "url": "http://ryannaddy.com"
-    },
     "repository": {
         "type": "git",
         "url": "https://github.com/TheColorRed/vscode-laravel-artisan"
@@ -21,8 +18,12 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "Laravel",
+        "Artisan"
+    ],
     "activationEvents": [
-        "*"
+        "workspaceContains:artisan"
     ],
     "main": "./out/src/extension",
     "contributes": {

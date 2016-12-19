@@ -12,21 +12,19 @@ export default class MakeModel extends Common {
             return;
         }
         let isController = false;
+        let isMigration = false;
         let isResource = false;
 
         // Determine if this is a resource controller or not
-        let migration = await window.showQuickPick(['Yes', 'No'], { placeHolder: 'Generate a migration for the model?' });
-        let isMigration = migration.toLowerCase() == 'yes' ? true : false;
+        isMigration = await this.getYesNo('Should I create a migration for the model?');
 
         // Should a controller be generated?
-        let controller = await window.showQuickPick(['Yes', 'No'], { placeHolder: 'Generate a controller for the model?' });
-        isController = controller.toLowerCase() == 'yes' ? true : false;
+        isController = await this.getYesNo('Should I create a controller for the model?');
 
         // Ask if the controller is a resource if the previous answer was 'yes'
         if (isController) {
             // Determine if this is a resource controller or not
-            let resource = await window.showQuickPick(['Yes', 'No'], { placeHolder: 'Generate as a resource controller?' });
-            isResource = resource.toLowerCase() == 'yes' ? true : false;
+            isResource = await this.getYesNo('Should I create the controller as a resource?');
         }
 
         // Generate the model

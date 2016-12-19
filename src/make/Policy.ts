@@ -12,7 +12,7 @@ export default class MakePolicy extends Common {
             return;
         }
 
-        let model = await this.getInput('The model to apply this policy to');
+        let model = await this.getInput('What model should I apply this policy to?');
 
         cp.exec(`php ${this.artisan} make:policy ${noteName} ${model.length > 0 ? '--model=' + model : ''}`, async (err) => {
             if (err) {

@@ -12,7 +12,7 @@ export default class MakeJob extends Common {
             return;
         }
 
-        let sync = await this.getYesNo('Should this job be synchronous?');
+        let sync = await this.getYesNo('Should I make this job synchronous?');
 
         cp.exec(`php ${this.artisan} make:job ${jobName} ${sync ? '--sync' : ''}`, async (err) => {
             if (err) {

@@ -12,7 +12,7 @@ export default class MakeController extends Common {
             return;
         }
 
-        let consoleName = await this.getInput('The terminal command name (Default is "command:name")');
+        let consoleName = await this.getInput('What is the terminal command name? (Default is "command:name")');
 
         cp.exec(`php ${this.artisan} make:command ${cmdName} ${consoleName.length > 0 ? '--command=' + consoleName : ''}`, async (err) => {
             if (err) {

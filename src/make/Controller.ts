@@ -13,8 +13,7 @@ export default class MakeController extends Common {
         }
 
         // Determine if this is a resource controller or not
-        let resource = await window.showQuickPick(['Yes', 'No'], { placeHolder: 'Generate as a resource controller?' });
-        let isResource = resource.toLowerCase() == 'yes' ? true : false;
+        let isResource = await this.getYesNo('Should I make this a resource controller?');
 
         // Generate the controller
         cp.exec(`php ${this.artisan} make:controller ${ctrlName} ${isResource ? '-r' : ''}`, async (err) => {
