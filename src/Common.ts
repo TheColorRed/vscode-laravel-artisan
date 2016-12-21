@@ -15,6 +15,7 @@ export default class Common {
 
     protected static async getInput(placeHolder: string) {
         let name = await window.showInputBox({ placeHolder: placeHolder });
+        name = name == undefined ? '' : name;
         // if (name.length == 0) {
         //     window.showErrorMessage('Invalid ' + placeHolder);
         //     return '';
