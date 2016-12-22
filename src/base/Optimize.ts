@@ -5,7 +5,10 @@ import Common from '../Common';
 export default class Optimize extends Common {
 
     public static async run() {
-        cp.exec(`php ${this.artisan} optimize`, async (err) => {
+
+        let optCompser = await this.getYesNo('Should I optimize Composer\'s dump-autoload?');
+
+        cp.exec(`php ${this.artisan} optimize ${!optCompser ? '--psr' : ''}`, async (err) => {
             if (err) {
                 this.showError('Optimization failed', err);
             } else {

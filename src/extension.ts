@@ -1,7 +1,8 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, ExtensionContext } from 'vscode';
+import { commands, ExtensionContext, workspace } from 'vscode';
+import TextDocumentProvider from './TextDocumentProvider';
 
 // Base files
 import ClearCompiled from './base/ClearCompiled';
@@ -39,6 +40,7 @@ import CacheTable from './cache/Table';
 import RouteCache from './route/Cache';
 import RouteCacheClear from './route/Clear';
 import RouteCacheRefresh from './route/Refresh';
+import RouteList from './route/List';
 
 // Cache files
 import ConfigCache from './config/Cache';
@@ -90,6 +92,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.route.cache', () => { RouteCache.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.route.clear', () => { RouteCacheClear.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.route.refresh', () => { RouteCacheRefresh.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.route.list', () => { RouteList.run(); }));
 
     // Config commands
     context.subscriptions.push(commands.registerCommand('artisan.config.cache', () => { ConfigCache.run(); }));
@@ -102,6 +105,7 @@ export function activate(context: ExtensionContext) {
     // View commands
     context.subscriptions.push(commands.registerCommand('artisan.view.clear', () => { ViewClear.run(); }));
 
+    context.subscriptions.push(workspace.registerTextDocumentContentProvider('laravel-artisan', new TextDocumentProvider()))
 }
 
 export function deactivate() { }
