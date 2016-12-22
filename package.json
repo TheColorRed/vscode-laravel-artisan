@@ -105,6 +105,10 @@
         "key": "ctrl+numpad2 ctrl+numpad5"
       },
       {
+        "command": "artisan.migrate.status",
+        "key": "ctrl+numpad2 ctrl+numpad6"
+      },
+      {
         "command": "artisan.cache.clear",
         "key": "ctrl+numpad3 ctrl+numpad1"
       },
@@ -215,6 +219,10 @@
         "title": "Artisan: Migrate Rollback"
       },
       {
+        "command": "artisan.migrate.status",
+        "title": "Artisan: Migrate Status"
+      },
+      {
         "command": "artisan.clearCompiled",
         "title": "Artisan: Clear Compiled"
       },
@@ -225,6 +233,10 @@
       {
         "command": "artisan.serve",
         "title": "Artisan: Start Server"
+      },
+      {
+        "command": "artisan.list",
+        "title": "Artisan: List Commands"
       },
       {
         "command": "artisan.cache.clear",

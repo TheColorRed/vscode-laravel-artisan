@@ -9,6 +9,7 @@ import ClearCompiled from './base/ClearCompiled';
 import Migrate from './base/Migrate';
 import Optimize from './base/Optimize';
 import Serve from './base/Serve';
+import List from './base/List';
 
 // Make files
 import MakeCommand from './make/Command';
@@ -31,6 +32,7 @@ import MigrateInstall from './migrate/Install';
 import MigrateRefresh from './migrate/Refresh';
 import MigrateReset from './migrate/Reset';
 import MigrateRollback from './migrate/Rollback';
+import MigrateStatus from './migrate/Status';
 
 // Cache files
 import CacheClear from './cache/Clear';
@@ -61,6 +63,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.migrate', () => { Migrate.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.optimize', () => { Optimize.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.serve', () => { Serve.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.list', () => { List.run(); }));
 
     // Make commands
     context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run(); }));
@@ -83,6 +86,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.migrate.refresh', () => { MigrateRefresh.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.reset', () => { MigrateReset.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.rollback', () => { MigrateRollback.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.migrate.status', () => { MigrateStatus.run(); }));
 
     // Cache commands
     context.subscriptions.push(commands.registerCommand('artisan.cache.clear', () => { CacheClear.run(); }));
