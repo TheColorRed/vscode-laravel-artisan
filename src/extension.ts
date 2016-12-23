@@ -1,13 +1,15 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, ExtensionContext } from 'vscode';
+import { commands, ExtensionContext, workspace } from 'vscode';
+import TextDocumentProvider from './TextDocumentProvider';
 
 // Base files
 import ClearCompiled from './base/ClearCompiled';
 import Migrate from './base/Migrate';
 import Optimize from './base/Optimize';
 import Serve from './base/Serve';
+import List from './base/List';
 
 // Make files
 import MakeCommand from './make/Command';
@@ -30,6 +32,7 @@ import MigrateInstall from './migrate/Install';
 import MigrateRefresh from './migrate/Refresh';
 import MigrateReset from './migrate/Reset';
 import MigrateRollback from './migrate/Rollback';
+import MigrateStatus from './migrate/Status';
 
 // Cache files
 import CacheClear from './cache/Clear';
@@ -39,6 +42,7 @@ import CacheTable from './cache/Table';
 import RouteCache from './route/Cache';
 import RouteCacheClear from './route/Clear';
 import RouteCacheRefresh from './route/Refresh';
+import RouteList from './route/List';
 
 // Cache files
 import ConfigCache from './config/Cache';
@@ -59,6 +63,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.migrate', () => { Migrate.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.optimize', () => { Optimize.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.serve', () => { Serve.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.list', () => { List.run(); }));
 
     // Make commands
     context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run(); }));
@@ -81,6 +86,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.migrate.refresh', () => { MigrateRefresh.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.reset', () => { MigrateReset.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.rollback', () => { MigrateRollback.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.migrate.status', () => { MigrateStatus.run(); }));
 
     // Cache commands
     context.subscriptions.push(commands.registerCommand('artisan.cache.clear', () => { CacheClear.run(); }));
@@ -90,6 +96,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.route.cache', () => { RouteCache.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.route.clear', () => { RouteCacheClear.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.route.refresh', () => { RouteCacheRefresh.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.route.list', () => { RouteList.run(); }));
 
     // Config commands
     context.subscriptions.push(commands.registerCommand('artisan.config.cache', () => { ConfigCache.run(); }));
@@ -102,6 +109,7 @@ export function activate(context: ExtensionContext) {
     // View commands
     context.subscriptions.push(commands.registerCommand('artisan.view.clear', () => { ViewClear.run(); }));
 
+    context.subscriptions.push(workspace.registerTextDocumentContentProvider('laravel-artisan', new TextDocumentProvider()))
 }
 
 export function deactivate() { }

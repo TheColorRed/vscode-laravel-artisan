@@ -2,10 +2,9 @@ import { window, workspace } from 'vscode';
 import cp = require('child_process');
 import Common from '../Common';
 
-export default class MakeController extends Common {
+export default class MakeCommand extends Common {
 
     public static async run() {
-
         let cmdName = await this.getInput('Command Name');
         if (cmdName.length == 0) {
             this.showError('A command name is required')
