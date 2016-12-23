@@ -9,6 +9,14 @@ Run Laravel Artisan commands from within Visual Studio Code.
 * Clear Caches
 * Generate Keys
 
+### Get a list of routes
+
+![Route List](./images/screens/route-list.gif)
+
+### Make a controller
+
+![Route List](./images/screens/make-controller.gif)
+
 ## Requirements
 
 * A useable version of `php` that can be ran on the commandline such as `php-cli` (This should be in your path)
