@@ -1,301 +1,301 @@
 {
-    "name": "laravel-artisan",
-    "displayName": "Laravel Artisan",
-    "description": "Laravel Artisan commands within Visual Studio Code",
-    "icon": "images/icon.png",
-    "version": "0.0.3",
-    "publisher": "ryannaddy",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/TheColorRed/vscode-laravel-artisan"
-    },
-    "bugs": {
-        "url": "https://github.com/TheColorRed/vscode-laravel-artisan/issues"
-    },
-    "engines": {
-        "vscode": "^1.5.0"
-    },
-    "categories": [
-        "Other"
+  "name": "laravel-artisan",
+  "displayName": "Laravel Artisan",
+  "description": "Laravel Artisan commands within Visual Studio Code",
+  "icon": "images/icon.png",
+  "version": "0.0.3",
+  "publisher": "ryannaddy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheColorRed/vscode-laravel-artisan"
+  },
+  "bugs": {
+    "url": "https://github.com/TheColorRed/vscode-laravel-artisan/issues"
+  },
+  "engines": {
+    "vscode": "^1.5.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "Laravel",
+    "Artisan"
+  ],
+  "activationEvents": [
+    "workspaceContains:artisan"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "keybindings": [
+      {
+        "command": "artisan.make.command",
+        "key": "ctrl+numpad1 ctrl+numpad1"
+      },
+      {
+        "command": "artisan.make.controller",
+        "key": "ctrl+numpad1 ctrl+numpad2"
+      },
+      {
+        "command": "artisan.make.event",
+        "key": "ctrl+numpad1 ctrl+numpad3"
+      },
+      {
+        "command": "artisan.make.job",
+        "key": "ctrl+numpad1 ctrl+numpad4"
+      },
+      {
+        "command": "artisan.make.listener",
+        "key": "ctrl+numpad1 ctrl+numpad5"
+      },
+      {
+        "command": "artisan.make.mail",
+        "key": "ctrl+numpad1 ctrl+numpad6"
+      },
+      {
+        "command": "artisan.make.middleware",
+        "key": "ctrl+numpad1 ctrl+numpad7"
+      },
+      {
+        "command": "artisan.make.migration",
+        "key": "ctrl+numpad1 ctrl+numpad8"
+      },
+      {
+        "command": "artisan.make.model",
+        "key": "ctrl+numpad1 ctrl+numpad9"
+      },
+      {
+        "command": "artisan.make.notification",
+        "key": "ctrl+numpad1 ctrl+numpad0"
+      },
+      {
+        "command": "artisan.make.policy",
+        "key": "ctrl+numpad1 ctrl+numpad_divide"
+      },
+      {
+        "command": "artisan.make.provider",
+        "key": "ctrl+numpad1 ctrl+numpad_multiply"
+      },
+      {
+        "command": "artisan.make.request",
+        "key": "ctrl+numpad1 ctrl+numpad_subtract"
+      },
+      {
+        "command": "artisan.make.seeder",
+        "key": "ctrl+numpad1 ctrl+numpad_add"
+      },
+      {
+        "command": "artisan.migrate",
+        "key": "ctrl+numpad2 ctrl+numpad1"
+      },
+      {
+        "command": "artisan.migrate.install",
+        "key": "ctrl+numpad2 ctrl+numpad2"
+      },
+      {
+        "command": "artisan.migrate.refresh",
+        "key": "ctrl+numpad2 ctrl+numpad3"
+      },
+      {
+        "command": "artisan.migrate.reset",
+        "key": "ctrl+numpad2 ctrl+numpad4"
+      },
+      {
+        "command": "artisan.migrate.rollback",
+        "key": "ctrl+numpad2 ctrl+numpad5"
+      },
+      {
+        "command": "artisan.migrate.status",
+        "key": "ctrl+numpad2 ctrl+numpad6"
+      },
+      {
+        "command": "artisan.cache.clear",
+        "key": "ctrl+numpad3 ctrl+numpad1"
+      },
+      {
+        "command": "artisan.cache.table",
+        "key": "ctrl+numpad3 ctrl+numpad2"
+      },
+      {
+        "command": "artisan.route.cache",
+        "key": "ctrl+numpad4 ctrl+numpad1"
+      },
+      {
+        "command": "artisan.route.clear",
+        "key": "ctrl+numpad4 ctrl+numpad2"
+      },
+      {
+        "command": "artisan.route.refresh",
+        "key": "ctrl+numpad4 ctrl+numpad3"
+      },
+      {
+        "command": "artisan.config.cache",
+        "key": "ctrl+numpad5 ctrl+numpad1"
+      },
+      {
+        "command": "artisan.config.clear",
+        "key": "ctrl+numpad5 ctrl+numpad2"
+      },
+      {
+        "command": "artisan.config.refresh",
+        "key": "ctrl+numpad5 ctrl+numpad3"
+      }
     ],
-    "keywords": [
-        "Laravel",
-        "Artisan"
-    ],
-    "activationEvents": [
-        "workspaceContains:artisan"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "keybindings": [
-            {
-                "command": "artisan.make.command",
-                "key": "ctrl+numpad1 ctrl+numpad1"
-            },
-            {
-                "command": "artisan.make.controller",
-                "key": "ctrl+numpad1 ctrl+numpad2"
-            },
-            {
-                "command": "artisan.make.event",
-                "key": "ctrl+numpad1 ctrl+numpad3"
-            },
-            {
-                "command": "artisan.make.job",
-                "key": "ctrl+numpad1 ctrl+numpad4"
-            },
-            {
-                "command": "artisan.make.listener",
-                "key": "ctrl+numpad1 ctrl+numpad5"
-            },
-            {
-                "command": "artisan.make.mail",
-                "key": "ctrl+numpad1 ctrl+numpad6"
-            },
-            {
-                "command": "artisan.make.middleware",
-                "key": "ctrl+numpad1 ctrl+numpad7"
-            },
-            {
-                "command": "artisan.make.migration",
-                "key": "ctrl+numpad1 ctrl+numpad8"
-            },
-            {
-                "command": "artisan.make.model",
-                "key": "ctrl+numpad1 ctrl+numpad9"
-            },
-            {
-                "command": "artisan.make.notification",
-                "key": "ctrl+numpad1 ctrl+numpad0"
-            },
-            {
-                "command": "artisan.make.policy",
-                "key": "ctrl+numpad1 ctrl+numpad_divide"
-            },
-            {
-                "command": "artisan.make.provider",
-                "key": "ctrl+numpad1 ctrl+numpad_multiply"
-            },
-            {
-                "command": "artisan.make.request",
-                "key": "ctrl+numpad1 ctrl+numpad_subtract"
-            },
-            {
-                "command": "artisan.make.seeder",
-                "key": "ctrl+numpad1 ctrl+numpad_add"
-            },
-            {
-                "command": "artisan.migrate",
-                "key": "ctrl+numpad2 ctrl+numpad1"
-            },
-            {
-                "command": "artisan.migrate.install",
-                "key": "ctrl+numpad2 ctrl+numpad2"
-            },
-            {
-                "command": "artisan.migrate.refresh",
-                "key": "ctrl+numpad2 ctrl+numpad3"
-            },
-            {
-                "command": "artisan.migrate.reset",
-                "key": "ctrl+numpad2 ctrl+numpad4"
-            },
-            {
-                "command": "artisan.migrate.rollback",
-                "key": "ctrl+numpad2 ctrl+numpad5"
-            },
-            {
-                "command": "artisan.migrate.status",
-                "key": "ctrl+numpad2 ctrl+numpad6"
-            },
-            {
-                "command": "artisan.cache.clear",
-                "key": "ctrl+numpad3 ctrl+numpad1"
-            },
-            {
-                "command": "artisan.cache.table",
-                "key": "ctrl+numpad3 ctrl+numpad2"
-            },
-            {
-                "command": "artisan.route.cache",
-                "key": "ctrl+numpad4 ctrl+numpad1"
-            },
-            {
-                "command": "artisan.route.clear",
-                "key": "ctrl+numpad4 ctrl+numpad2"
-            },
-            {
-                "command": "artisan.route.refresh",
-                "key": "ctrl+numpad4 ctrl+numpad3"
-            },
-            {
-                "command": "artisan.config.cache",
-                "key": "ctrl+numpad5 ctrl+numpad1"
-            },
-            {
-                "command": "artisan.config.clear",
-                "key": "ctrl+numpad5 ctrl+numpad2"
-            },
-            {
-                "command": "artisan.config.refresh",
-                "key": "ctrl+numpad5 ctrl+numpad3"
-            }
-        ],
-        "commands": [
-            {
-                "command": "artisan.make.command",
-                "title": "Artisan: Make Command"
-            },
-            {
-                "command": "artisan.make.controller",
-                "title": "Artisan: Make Controller"
-            },
-            {
-                "command": "artisan.make.event",
-                "title": "Artisan: Make Event"
-            },
-            {
-                "command": "artisan.make.job",
-                "title": "Artisan: Make Job"
-            },
-            {
-                "command": "artisan.make.listener",
-                "title": "Artisan: Make Listener"
-            },
-            {
-                "command": "artisan.make.mail",
-                "title": "Artisan: Make Mail"
-            },
-            {
-                "command": "artisan.make.middleware",
-                "title": "Artisan: Make Middleware"
-            },
-            {
-                "command": "artisan.make.migration",
-                "title": "Artisan: Make Migration"
-            },
-            {
-                "command": "artisan.make.model",
-                "title": "Artisan: Make Model"
-            },
-            {
-                "command": "artisan.make.notification",
-                "title": "Artisan: Make Notification"
-            },
-            {
-                "command": "artisan.make.policy",
-                "title": "Artisan: Make Policy"
-            },
-            {
-                "command": "artisan.make.provider",
-                "title": "Artisan: Make Provider"
-            },
-            {
-                "command": "artisan.make.request",
-                "title": "Artisan: Make Request"
-            },
-            {
-                "command": "artisan.make.seeder",
-                "title": "Artisan: Make Seeder"
-            },
-            {
-                "command": "artisan.migrate",
-                "title": "Artisan: Migrate"
-            },
-            {
-                "command": "artisan.migrate.install",
-                "title": "Artisan: Migrate Install"
-            },
-            {
-                "command": "artisan.migrate.refresh",
-                "title": "Artisan: Migrate Refresh"
-            },
-            {
-                "command": "artisan.migrate.reset",
-                "title": "Artisan: Migrate Reset"
-            },
-            {
-                "command": "artisan.migrate.rollback",
-                "title": "Artisan: Migrate Rollback"
-            },
-            {
-                "command": "artisan.migrate.status",
-                "title": "Artisan: Migrate Status"
-            },
-            {
-                "command": "artisan.clearCompiled",
-                "title": "Artisan: Clear Compiled"
-            },
-            {
-                "command": "artisan.optimize",
-                "title": "Artisan: Optimize"
-            },
-            {
-                "command": "artisan.serve",
-                "title": "Artisan: Start Server"
-            },
-            {
-                "command": "artisan.list",
-                "title": "Artisan: List Commands"
-            },
-            {
-                "command": "artisan.cache.clear",
-                "title": "Artisan: Cache Clear"
-            },
-            {
-                "command": "artisan.cache.table",
-                "title": "Artisan: Cache Table"
-            },
-            {
-                "command": "artisan.route.cache",
-                "title": "Artisan: Route Cache"
-            },
-            {
-                "command": "artisan.route.clear",
-                "title": "Artisan: Route Cache Clear"
-            },
-            {
-                "command": "artisan.route.refresh",
-                "title": "Artisan: Route Cache Refresh"
-            },
-            {
-                "command": "artisan.route.list",
-                "title": "Artisan: Route List"
-            },
-            {
-                "command": "artisan.config.cache",
-                "title": "Artisan: Config Cache"
-            },
-            {
-                "command": "artisan.config.clear",
-                "title": "Artisan: Config Cache Clear"
-            },
-            {
-                "command": "artisan.config.refresh",
-                "title": "Artisan: Config Cache Refresh"
-            },
-            {
-                "command": "artisan.key.generate",
-                "title": "Artisan: Key generation"
-            },
-            {
-                "command": "artisan.view.clear",
-                "title": "Artisan: Views Clear"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    },
-    "dependencies": {}
+    "commands": [
+      {
+        "command": "artisan.make.command",
+        "title": "Artisan: Make Command"
+      },
+      {
+        "command": "artisan.make.controller",
+        "title": "Artisan: Make Controller"
+      },
+      {
+        "command": "artisan.make.event",
+        "title": "Artisan: Make Event"
+      },
+      {
+        "command": "artisan.make.job",
+        "title": "Artisan: Make Job"
+      },
+      {
+        "command": "artisan.make.listener",
+        "title": "Artisan: Make Listener"
+      },
+      {
+        "command": "artisan.make.mail",
+        "title": "Artisan: Make Mail"
+      },
+      {
+        "command": "artisan.make.middleware",
+        "title": "Artisan: Make Middleware"
+      },
+      {
+        "command": "artisan.make.migration",
+        "title": "Artisan: Make Migration"
+      },
+      {
+        "command": "artisan.make.model",
+        "title": "Artisan: Make Model"
+      },
+      {
+        "command": "artisan.make.notification",
+        "title": "Artisan: Make Notification"
+      },
+      {
+        "command": "artisan.make.policy",
+        "title": "Artisan: Make Policy"
+      },
+      {
+        "command": "artisan.make.provider",
+        "title": "Artisan: Make Provider"
+      },
+      {
+        "command": "artisan.make.request",
+        "title": "Artisan: Make Request"
+      },
+      {
+        "command": "artisan.make.seeder",
+        "title": "Artisan: Make Seeder"
+      },
+      {
+        "command": "artisan.migrate",
+        "title": "Artisan: Migrate"
+      },
+      {
+        "command": "artisan.migrate.install",
+        "title": "Artisan: Migrate Install"
+      },
+      {
+        "command": "artisan.migrate.refresh",
+        "title": "Artisan: Migrate Refresh"
+      },
+      {
+        "command": "artisan.migrate.reset",
+        "title": "Artisan: Migrate Reset"
+      },
+      {
+        "command": "artisan.migrate.rollback",
+        "title": "Artisan: Migrate Rollback"
+      },
+      {
+        "command": "artisan.migrate.status",
+        "title": "Artisan: Migrate Status"
+      },
+      {
+        "command": "artisan.clearCompiled",
+        "title": "Artisan: Clear Compiled"
+      },
+      {
+        "command": "artisan.optimize",
+        "title": "Artisan: Optimize"
+      },
+      {
+        "command": "artisan.serve",
+        "title": "Artisan: Start Server"
+      },
+      {
+        "command": "artisan.list",
+        "title": "Artisan: List Commands"
+      },
+      {
+        "command": "artisan.cache.clear",
+        "title": "Artisan: Cache Clear"
+      },
+      {
+        "command": "artisan.cache.table",
+        "title": "Artisan: Cache Table"
+      },
+      {
+        "command": "artisan.route.cache",
+        "title": "Artisan: Route Cache"
+      },
+      {
+        "command": "artisan.route.clear",
+        "title": "Artisan: Route Cache Clear"
+      },
+      {
+        "command": "artisan.route.refresh",
+        "title": "Artisan: Route Cache Refresh"
+      },
+      {
+        "command": "artisan.route.list",
+        "title": "Artisan: Route List"
+      },
+      {
+        "command": "artisan.config.cache",
+        "title": "Artisan: Config Cache"
+      },
+      {
+        "command": "artisan.config.clear",
+        "title": "Artisan: Config Cache Clear"
+      },
+      {
+        "command": "artisan.config.refresh",
+        "title": "Artisan: Config Cache Refresh"
+      },
+      {
+        "command": "artisan.key.generate",
+        "title": "Artisan: Key generation"
+      },
+      {
+        "command": "artisan.view.clear",
+        "title": "Artisan: Views Clear"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {}
 }
