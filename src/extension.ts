@@ -5,55 +5,55 @@ import { commands, ExtensionContext, workspace } from 'vscode';
 import TextDocumentProvider from './TextDocumentProvider';
 
 // Base files
-import ClearCompiled from './base/ClearCompiled';
-import Migrate from './base/Migrate';
-import Optimize from './base/Optimize';
-import Serve from './base/Serve';
-import List from './base/List';
+import ClearCompiled from './commands/base/ClearCompiled';
+import Migrate from './commands/base/Migrate';
+import Optimize from './commands/base/Optimize';
+import Serve from './commands/base/Serve';
+import List from './commands/base/List';
 
 // Make files
-import MakeCommand from './make/Command';
-import MakeController from './make/Controller';
-import MakeEvent from './make/Event';
-import MakeJob from './make/Job';
-import MakeListener from './make/Listener';
-import MakeMail from './make/Mail';
-import MakeMiddleware from './make/Middleware';
-import MakeModel from './make/Model';
-import MakeMigration from './make/Migration';
-import MakeNotification from './make/Notification';
-import MakePolicy from './make/Policy';
-import MakeProvider from './make/Provider';
-import MakeRequest from './make/Request';
-import MakeSeeder from './make/Seeder';
+import MakeCommand from './commands/make/Command';
+import MakeController from './commands/make/Controller';
+import MakeEvent from './commands/make/Event';
+import MakeJob from './commands/make/Job';
+import MakeListener from './commands/make/Listener';
+import MakeMail from './commands/make/Mail';
+import MakeMiddleware from './commands/make/Middleware';
+import MakeModel from './commands/make/Model';
+import MakeMigration from './commands/make/Migration';
+import MakeNotification from './commands/make/Notification';
+import MakePolicy from './commands/make/Policy';
+import MakeProvider from './commands/make/Provider';
+import MakeRequest from './commands/make/Request';
+import MakeSeeder from './commands/make/Seeder';
 
 // Migrate files
-import MigrateInstall from './migrate/Install';
-import MigrateRefresh from './migrate/Refresh';
-import MigrateReset from './migrate/Reset';
-import MigrateRollback from './migrate/Rollback';
-import MigrateStatus from './migrate/Status';
+import MigrateInstall from './commands/migrate/Install';
+import MigrateRefresh from './commands/migrate/Refresh';
+import MigrateReset from './commands/migrate/Reset';
+import MigrateRollback from './commands/migrate/Rollback';
+import MigrateStatus from './commands/migrate/Status';
 
 // Cache files
-import CacheClear from './cache/Clear';
-import CacheTable from './cache/Table';
+import CacheClear from './commands/cache/Clear';
+import CacheTable from './commands/cache/Table';
 
 // Route files
-import RouteCache from './route/Cache';
-import RouteCacheClear from './route/Clear';
-import RouteCacheRefresh from './route/Refresh';
-import RouteList from './route/List';
+import RouteCache from './commands/route/Cache';
+import RouteCacheClear from './commands/route/Clear';
+import RouteCacheRefresh from './commands/route/Refresh';
+import RouteList from './commands/route/List';
 
 // Cache files
-import ConfigCache from './config/Cache';
-import ConfigCacheClear from './config/Clear';
-import ConfigCacheRefresh from './config/Refresh';
+import ConfigCache from './commands/config/Cache';
+import ConfigCacheClear from './commands/config/Clear';
+import ConfigCacheRefresh from './commands/config/Refresh';
 
 // Key files
-import KeyGenerate from './key/Generate';
+import KeyGenerate from './commands/key/Generate';
 
 // View files
-import ViewClear from './view/Clear';
+import ViewClear from './commands/view/Clear';
 
 
 export function activate(context: ExtensionContext) {
