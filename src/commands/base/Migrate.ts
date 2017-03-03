@@ -18,7 +18,7 @@ export default class Migrate extends Common {
                 Output.error(stdout);
                 this.showError('The migration failed', err);
             } else {
-                this.showMessage('The micration has completed');
+                this.showMessage('The migration has completed');
             }
         });
     }

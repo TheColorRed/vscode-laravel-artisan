@@ -8,7 +8,7 @@ import TextDocumentProvider from './TextDocumentProvider';
 import ClearCompiled from './commands/base/ClearCompiled';
 import Migrate from './commands/base/Migrate';
 import Optimize from './commands/base/Optimize';
-import Serve from './commands/base/Serve';
+import Server from './commands/base/Serve';
 import List from './commands/base/List';
 
 // Make files
@@ -62,7 +62,8 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.clearCompiled', () => { ClearCompiled.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate', () => { Migrate.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.optimize', () => { Optimize.run(); }));
-    context.subscriptions.push(commands.registerCommand('artisan.serve', () => { Serve.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.startServer', () => { Server.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.stopServer', () => { Server.stop(); }));
     context.subscriptions.push(commands.registerCommand('artisan.list', () => { List.run(); }));
 
     // Make commands

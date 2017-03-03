@@ -1,7 +1,13 @@
-# Change Log
-All notable changes to the "laravel-artisan" extension will be documented in this file.
+# 0.0.2
+- Made the input boxes more personable
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+# 0.0.3
+- Added routes display
 
-## [Unreleased]
-- Initial release
+# 0.0.4
+- Added output to show command that was executed
+- Added output to show any error messages
+
+# 0.0.5
+- Fixed typo in the `migrate` command from `micration` to `migration`
+- Added the ability to stop the php server
