@@ -11,3 +11,6 @@
 # 0.0.5
 - Fixed typo in the `migrate` command from `micration` to `migration`
 - Added the ability to stop the php server
+
+# 0.0.6
+- Kill the server when code is closed

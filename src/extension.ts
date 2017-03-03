@@ -110,7 +110,9 @@ export function activate(context: ExtensionContext) {
     // View commands
     context.subscriptions.push(commands.registerCommand('artisan.view.clear', () => { ViewClear.run(); }));
 
-    context.subscriptions.push(workspace.registerTextDocumentContentProvider('laravel-artisan', new TextDocumentProvider()))
+    context.subscriptions.push(workspace.registerTextDocumentContentProvider('laravel-artisan', new TextDocumentProvider()));
 }
 
-export function deactivate() { }
+export function deactivate() {
+    Server.stop();
+}
