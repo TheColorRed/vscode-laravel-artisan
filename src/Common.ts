@@ -74,12 +74,17 @@ export default class Common {
         rows.forEach(row => {
             html += '<tr>';
             row.forEach(item => {
-                html += '<td>' + item + '</td>';
+                if (item.match(/app\\/i)) {
+                    html += `<td><a href="file://${workspace.rootPath}/${item.replace(/@.+$/, '')}.php" class="app-item">` + item + '</a></td>';
+                } else {
+                    html += '<td>' + item + '</td>';
+                }
             });
             html += '</tr>';
         });
         html += '</tbody></table>';
         html += `<style>
+            td a { color: #4080d0; cursor: pointer; }
             .hidden { display: none; }
             .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
             #filter { display: block; padding: 5px; width: 100%; }

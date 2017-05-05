@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
