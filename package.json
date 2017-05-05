@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.4",
+    "version": "0.0.6",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -231,8 +231,12 @@
                 "title": "Artisan: Optimize"
             },
             {
-                "command": "artisan.serve",
+                "command": "artisan.startServer",
                 "title": "Artisan: Start Server"
+            },
+            {
+                "command": "artisan.stopServer",
+                "title": "Artisan: Stop Server"
             },
             {
                 "command": "artisan.list",
