@@ -11,7 +11,7 @@ export default class RouteList extends Common {
         Output.command(command);
         cp.exec(command, async (err, stdout, stderr) => {
             if (err) {
-                Output.error(stdout)
+                Output.error(stdout);
                 return this.showError('The route cache could not be created', err);
             } else {
                 let data = this.parseCliTable(stdout);

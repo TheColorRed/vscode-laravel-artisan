@@ -35,7 +35,7 @@ export default class Common {
             if (i == 0 || i == 2) { continue; }
             else if (i == 1) {
                 (headers = clirows[i].split('|')).forEach((v, k) => {
-                    headers[k] = v.trim();
+                    headers[k] = v.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '').trim();
                     if (headers[k] == '') {
                         delete headers[k];
                     }
@@ -64,7 +64,8 @@ export default class Common {
     }
 
     protected static async openVirtualHtmlFile(path: string, headers: string[], rows: string[][]) {
-        let html: string = `${this.tableStyle}<table>`;
+        let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item"></div>`;
+        html += `${this.tableStyle}<table>`;
         html += '<thead><tr>';
         headers.forEach(header => {
             html += '<th>' + header + '</th>';
@@ -78,6 +79,29 @@ export default class Common {
             html += '</tr>';
         });
         html += '</tbody></table>';
+        html += `<style>
+            .hidden { display: none; }
+            .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
+            #filter { display: block; padding: 5px; width: 100%; }
+        </style>`;
+        html += `<script>
+            let filter = document.querySelector('#filter');
+            filter.focus();
+            filter.addEventListener('input', e => {
+                let v = e.target.value;
+                let rows = document.querySelectorAll('tbody > tr');
+                for (let i = 0, l = rows.length; i < l; i++) {
+                    let row = rows[i];
+                    let txt = row.innerText;
+                    let reg = new RegExp(v, 'ig');
+                    if (reg.test(txt) || v.length == 0) {
+                        row.classList.remove('hidden');
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                }
+            });
+        </script>`
         this.openVirtualFile(path, html);
     }
 
