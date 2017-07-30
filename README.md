@@ -33,7 +33,7 @@ Run Laravel Artisan commands from within Visual Studio Code.
 ## Known Issues
 
 * Currently custom commands can not be ran, but they can be created.
-* Not all commands are implemnted (but most are), as they will be added later on.
+* Not all commands are implemented (but most are), as they will be added later on.
 
 ## How to use
 
