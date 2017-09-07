@@ -1,3 +1,6 @@
+# 0.0.8
+- Added `event:generate` to generate events
+
 # 0.0.7
 - Fixed an issue where `-r` does not exist when creating a resource controller
 - Fixed strange headers on the `route:list` and `list` pages

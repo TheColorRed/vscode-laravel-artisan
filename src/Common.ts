@@ -14,6 +14,10 @@ export default class Common {
             table tbody tr:nth-child(odd){
                 background-color: rgba(0,0,0,0.25);
             }
+            table td a { color: #4080d0; cursor: pointer; }
+            .hidden { display: none; }
+            .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
+            #filter { display: block; padding: 5px; width: 100%; }
         </style>`;
     }
 
@@ -83,12 +87,6 @@ export default class Common {
             html += '</tr>';
         });
         html += '</tbody></table>';
-        html += `<style>
-            td a { color: #4080d0; cursor: pointer; }
-            .hidden { display: none; }
-            .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
-            #filter { display: block; padding: 5px; width: 100%; }
-        </style>`;
         html += `<script>
             let filter = document.querySelector('#filter');
             filter.focus();
