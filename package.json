@@ -285,6 +285,10 @@
             {
                 "command": "artisan.view.clear",
                 "title": "Artisan: Views Clear"
+            },
+            {
+                "command": "artisan.event.generate",
+                "title": "Artisan: Event Generate"
             }
         ]
     },

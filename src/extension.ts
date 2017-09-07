@@ -52,6 +52,9 @@ import ConfigCacheRefresh from './commands/config/Refresh';
 // Key files
 import KeyGenerate from './commands/key/Generate';
 
+// Event files
+import EventGenerate from './commands/event/Generate';
+
 // View files
 import ViewClear from './commands/view/Clear';
 
@@ -106,6 +109,9 @@ export function activate(context: ExtensionContext) {
 
     // Key commands
     context.subscriptions.push(commands.registerCommand('artisan.key.generate', () => { KeyGenerate.run(); }));
+
+    // Event commands
+    context.subscriptions.push(commands.registerCommand('artisan.event.generate', () => { EventGenerate.run(); }));
 
     // View commands
     context.subscriptions.push(commands.registerCommand('artisan.view.clear', () => { ViewClear.run(); }));
