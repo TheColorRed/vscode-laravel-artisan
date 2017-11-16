@@ -9,7 +9,7 @@ export default class MigrateStatus extends Common {
 
         let database = await this.getInput('What database should I use?');
 
-        let command = `php ${this.artisan} migrate:status ${database.length > 0 ? '--database=' + database : ''}`;
+        let command = `php "${this.artisan}" migrate:status ${database.length > 0 ? '--database=' + database : ''}`;
         Output.command(command);
 
         cp.exec(command, async (err, stdout) => {

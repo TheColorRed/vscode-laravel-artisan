@@ -13,7 +13,7 @@ export default class MakeMail extends Common {
             return;
         }
 
-        let command = `php ${this.artisan} make:mail ${mailName}`;
+        let command = `php "${this.artisan}" make:mail ${mailName}`;
         Output.command(command);
 
         cp.exec(command, async (err, stdout) => {

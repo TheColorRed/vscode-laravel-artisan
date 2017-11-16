@@ -6,7 +6,7 @@ import Output from '../../utils/Output';
 export default class ClearCompiled extends Common {
 
     public static async run() {
-        let command = `php ${this.artisan} clear-compiled`;
+        let command = `php "${this.artisan}" clear-compiled`;
         Output.command(command);
         // Generate the controller
         cp.exec(command, async (err, stdout) => {

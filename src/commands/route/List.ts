@@ -7,7 +7,7 @@ import Output from '../../utils/Output';
 export default class RouteList extends Common {
 
     public static async run() {
-        let command = `php ${this.artisan} route:list`;
+        let command = `php "${this.artisan}" route:list`;
         Output.command(command);
         cp.exec(command, async (err, stdout, stderr) => {
             if (err) {

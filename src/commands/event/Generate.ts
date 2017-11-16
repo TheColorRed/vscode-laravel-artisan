@@ -7,7 +7,7 @@ export default class EventGenerate extends Common {
 
     public static async run() {
 
-        let command = `php ${this.artisan} event:generate`;
+        let command = `php "${this.artisan}" event:generate`;
         Output.command(command);
 
         cp.exec(command, async (err, stdout) => {

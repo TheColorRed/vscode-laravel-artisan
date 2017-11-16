@@ -9,7 +9,7 @@ export default class KeyGenerate extends Common {
 
         let update = await this.getYesNo('Should I update the env file?');
 
-        let command = `php ${this.artisan} key:generate ${!update ? '--show' : ''}`;
+        let command = `php "${this.artisan}" key:generate ${!update ? '--show' : ''}`;
         Output.command(command);
 
         cp.exec(command, async (err, stdout) => {

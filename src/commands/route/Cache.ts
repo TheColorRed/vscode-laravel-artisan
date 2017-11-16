@@ -6,7 +6,7 @@ import Output from '../../utils/Output';
 export default class RouteCache extends Common {
 
     public static async run() {
-        let command = `php ${this.artisan} route:cache`;
+        let command = `php "${this.artisan}" route:cache`;
         Output.command(command);
         cp.exec(command, async (err, stdout, stderr) => {
             if (err) {

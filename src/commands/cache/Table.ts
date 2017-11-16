@@ -6,7 +6,7 @@ import Output from '../../utils/Output';
 export default class CacheTable extends Common {
 
     public static async run() {
-        let command = `php ${this.artisan} cache:table`;
+        let command = `php "${this.artisan}" cache:table`;
         Output.command(command);
         cp.exec(command, async (err, stdout) => {
             if (err) {

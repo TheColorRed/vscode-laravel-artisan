@@ -14,7 +14,7 @@ export default class Server extends Common {
         let host = await this.getInput('Should I use a specific host (Default: localhost)?');
         let port = await this.getInput('Should I use a specific port (Default: 8000)?');
 
-        let command = `php ${this.artisan} serve ${host.length > 0 ? '--host=' + host : ''} ${port.length > 0 ? '--port=' + port : ''}`;
+        let command = `php "${this.artisan}" serve ${host.length > 0 ? '--host=' + host : ''} ${port.length > 0 ? '--port=' + port : ''}`;
         Output.command(command);
 
         Server.child = cp.spawn('php', [this.artisan, 'serve'], { detached: true });

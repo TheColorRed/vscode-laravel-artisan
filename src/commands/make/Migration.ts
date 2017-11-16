@@ -27,7 +27,7 @@ export default class MakeMigration extends Common {
             tableName = await this.getInput('What is the name of the table?');
         }
 
-        let command = `php ${this.artisan} make:migration ${migrationName} ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`;
+        let command = `php "${this.artisan}" make:migration ${migrationName} ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`;
         Output.command(command);
 
         // Generate the controller

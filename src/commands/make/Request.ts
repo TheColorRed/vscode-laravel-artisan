@@ -13,7 +13,7 @@ export default class MakeRequest extends Common {
             return;
         }
 
-        let command = `php ${this.artisan} make:request ${requestName}`;
+        let command = `php "${this.artisan}" make:request ${requestName}`;
         Output.command(command);
 
         cp.exec(command, async (err, stdout) => {
