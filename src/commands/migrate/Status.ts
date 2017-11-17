@@ -18,7 +18,7 @@ export default class MigrateStatus extends Common {
                 this.showError('Could not get the status of the migrations', err);
             } else {
                 let data = this.parseCliTable(stdout);
-                this.openVirtualHtmlFile('migrate-status', data.headers, data.rows);
+                this.openVirtualHtmlFile('migrate-status', 'Migrate Status', data.headers, data.rows);
             }
         });
     }

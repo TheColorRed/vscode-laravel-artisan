@@ -1,4 +1,4 @@
-import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position } from 'vscode';
+import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position, ViewColumn } from 'vscode';
 
 export default class Common {
 
@@ -57,18 +57,18 @@ export default class Common {
         return { headers: headers, rows: rows };
     }
 
-    protected static async openVirtualFile(path: string, content: string) {
+    protected static async openVirtualFile(path: string, title: string, content: string) {
         let uri = Uri.parse('laravel-artisan://artisan/' + path);
         let doc = await workspace.openTextDocument(uri);
         let edit = new WorkspaceEdit();
         let range = new Range(0, 0, doc.lineCount, doc.getText().length);
         edit.set(uri, [new TextEdit(range, content)]);
         workspace.applyEdit(edit);
-        commands.executeCommand('vscode.previewHtml', uri);
+        commands.executeCommand('vscode.previewHtml', uri, ViewColumn.One, title);
     }
 
-    protected static async openVirtualHtmlFile(path: string, headers: string[], rows: string[][]) {
-        let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item"></div>`;
+    protected static async openVirtualHtmlFile(path: string, title: string, headers: string[], rows: string[][]) {
+        let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`;
         html += `${this.tableStyle}<table>`;
         html += '<thead><tr>';
         headers.forEach(header => {
@@ -91,10 +91,8 @@ export default class Common {
             let filter = document.querySelector('#filter');
             filter.focus();
             filter.addEventListener('input', e => {
-                let v = e.target.value;
-                let rows = document.querySelectorAll('tbody > tr');
-                for (let i = 0, l = rows.length; i < l; i++) {
-                    let row = rows[i];
+                let v = e.currentTarget.value;
+                document.querySelectorAll('tbody > tr').forEach(row => {
                     let txt = row.innerText;
                     let reg = new RegExp(v, 'ig');
                     if (reg.test(txt) || v.length == 0) {
@@ -102,10 +100,10 @@ export default class Common {
                     } else {
                         row.classList.add('hidden');
                     }
-                }
+                });
             });
         </script>`
-        this.openVirtualFile(path, html);
+        this.openVirtualFile(path, title, html);
     }
 
     protected static async getInput(placeHolder: string) {

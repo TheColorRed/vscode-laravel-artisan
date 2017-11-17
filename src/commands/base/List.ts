@@ -45,15 +45,11 @@ export default class ClearCompiled extends Common {
                         let name: string = command.definition.options[i].name;
                         let descr: string = command.definition.options[i].description;
                         opts.push(name + ' &ndash; ' + descr);
-                        console.log(i)
                     }
                     row.push(opts.join('<br>'));
                     i++;
                 });
-
-                this.openVirtualHtmlFile('artisan-list', headers, rows);
-
-                console.log(list);
+                this.openVirtualHtmlFile('artisan-list', 'Artisan Commands', headers, rows);
             }
         });
     }

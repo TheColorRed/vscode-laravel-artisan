@@ -15,7 +15,7 @@ export default class RouteList extends Common {
                 return this.showError('The route cache could not be created', err);
             } else {
                 let data = this.parseCliTable(stdout);
-                this.openVirtualHtmlFile('route-list', data.headers, data.rows);
+                this.openVirtualHtmlFile('route-list', 'Route List', data.headers, data.rows);
             }
         });
     }

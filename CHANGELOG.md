@@ -1,3 +1,6 @@
+# 0.0.10
+- Fixed issue where `artisan` was not found if there was a space in the path
+
 # 0.0.8
 - Added `event:generate` to generate events
 
