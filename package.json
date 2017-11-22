@@ -143,6 +143,10 @@
         ],
         "commands": [
             {
+                "command": "artisan.run.command",
+                "title": "Artisan: Run Command"
+            },
+            {
                 "command": "artisan.make.command",
                 "title": "Artisan: Make Command"
             },

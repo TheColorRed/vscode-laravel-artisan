@@ -1,3 +1,6 @@
+# 0.0.11
+- Added the ability to run custom commands
+
 # 0.0.10
 - Fixed issue where `artisan` was not found if there was a space in the path
 

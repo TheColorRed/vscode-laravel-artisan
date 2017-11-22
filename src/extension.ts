@@ -58,6 +58,7 @@ import EventGenerate from './commands/event/Generate';
 // View files
 import ViewClear from './commands/view/Clear';
 
+import RunCommand from './commands/run/Command';
 
 export function activate(context: ExtensionContext) {
 
@@ -117,6 +118,9 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.view.clear', () => { ViewClear.run(); }));
 
     context.subscriptions.push(workspace.registerTextDocumentContentProvider('laravel-artisan', new TextDocumentProvider()));
+
+
+    context.subscriptions.push(commands.registerCommand('artisan.run.command', () => { RunCommand.run(); }));
 }
 
 export function deactivate() {
