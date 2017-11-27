@@ -43,6 +43,9 @@ export default class RunCommand extends Common {
       if (err) {
         Output.error(stdout)
         this.showError('Could not run the command')
+      } else {
+        this.showMessage(`Command "${commandSettings.name}" has finished (See output console for more information)`)
+        Output.info(stdout)
       }
     })
   }
