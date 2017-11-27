@@ -215,6 +215,10 @@
                 "title": "Artisan: Migrate Install"
             },
             {
+                "command": "artisan.migrate.fresh",
+                "title": "Artisan: Migrate Fresh"
+            },
+            {
                 "command": "artisan.migrate.refresh",
                 "title": "Artisan: Migrate Refresh"
             },
