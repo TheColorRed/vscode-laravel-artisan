@@ -1,5 +1,8 @@
 # 0.0.11
 - Added the ability to run custom commands
+- Added the ability to run any commands
+- Added `migrate:fresh` to create a fresh database
+- Updated all `node_modules`
 
 # 0.0.10
 - Fixed issue where `artisan` was not found if there was a space in the path

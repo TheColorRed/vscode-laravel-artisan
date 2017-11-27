@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -315,11 +315,11 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
+        "@types/mocha": "^2.2.44",
+        "@types/node": "^6.0.92",
         "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.8"
     },
     "dependencies": {}
 }
