@@ -109,6 +109,10 @@
                 "key": "ctrl+numpad2 ctrl+numpad6"
             },
             {
+                "command": "artisan.migrate.fresh",
+                "key": "ctrl+numpad2 ctrl+numpad7"
+            },
+            {
                 "command": "artisan.cache.clear",
                 "key": "ctrl+numpad3 ctrl+numpad1"
             },
@@ -225,6 +229,10 @@
             {
                 "command": "artisan.migrate.status",
                 "title": "Artisan: Migrate Status"
+            },
+            {
+                "command": "artisan.migrate.fresh",
+                "title": "Artisan: Migrate Fresh"
             },
             {
                 "command": "artisan.clearCompiled",
