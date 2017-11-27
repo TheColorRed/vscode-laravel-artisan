@@ -33,6 +33,7 @@ import MigrateRefresh from './commands/migrate/Refresh';
 import MigrateReset from './commands/migrate/Reset';
 import MigrateRollback from './commands/migrate/Rollback';
 import MigrateStatus from './commands/migrate/Status';
+import MigrateFresh from './commands/migrate/Fresh';
 
 // Cache files
 import CacheClear from './commands/cache/Clear';
@@ -92,6 +93,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.migrate.reset', () => { MigrateReset.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.rollback', () => { MigrateRollback.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.migrate.status', () => { MigrateStatus.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.migrate.fresh', () => { MigrateFresh.run(); }));
 
     // Cache commands
     context.subscriptions.push(commands.registerCommand('artisan.cache.clear', () => { CacheClear.run(); }));
