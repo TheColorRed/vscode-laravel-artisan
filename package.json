@@ -203,6 +203,10 @@
                 "title": "Artisan: Make Request"
             },
             {
+                "command": "artisan.make.resource",
+                "title": "Artisan: Make Resource"
+            },
+            {
                 "command": "artisan.make.seeder",
                 "title": "Artisan: Make Seeder"
             },

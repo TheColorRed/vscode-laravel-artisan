@@ -25,6 +25,7 @@ import MakeNotification from './commands/make/Notification';
 import MakePolicy from './commands/make/Policy';
 import MakeProvider from './commands/make/Provider';
 import MakeRequest from './commands/make/Request';
+import MakeResource from './commands/make/Resource';
 import MakeSeeder from './commands/make/Seeder';
 
 // Migrate files
@@ -85,6 +86,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.make.policy', () => { MakePolicy.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.provider', () => { MakeProvider.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.request', () => { MakeRequest.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.make.resource', () => { MakeResource.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.seeder', () => { MakeSeeder.run(); }));
 
     // Migrate commands
