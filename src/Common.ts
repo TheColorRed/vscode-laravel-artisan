@@ -41,6 +41,7 @@ export default class Common {
     try {
       let doc = await workspace.openTextDocument(workspace.rootPath + filename);
       window.showTextDocument(doc);
+      this.refreshFilesExplorer();
     } catch (e) {
       console.log(e.getMessage);
     }
@@ -156,6 +157,9 @@ export default class Common {
     return false;
   }
 
+  protected static refreshFilesExplorer() {
+    commands.executeCommand('workbench.files.action.refreshFilesExplorer')
+  }
 
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
