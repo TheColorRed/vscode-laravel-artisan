@@ -1,3 +1,10 @@
+# 0.0.14
+- Added the `make:resource` command
+- Refresh the file explorer when a file is created
+
+# 0.0.12 and 0.0.13
+- vsce bug that doesn't rollback version on publishing error
+
 # 0.0.11
 - Added the ability to run custom commands
 - Added the ability to run any commands
@@ -6,6 +13,9 @@
 
 # 0.0.10
 - Fixed issue where `artisan` was not found if there was a space in the path
+
+# 0.0.9
+- vsce bug that doesn't rollback version on publishing error
 
 # 0.0.8
 - Added `event:generate` to generate events
