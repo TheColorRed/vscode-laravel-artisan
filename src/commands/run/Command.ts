@@ -27,9 +27,15 @@ export default class RunCommand extends Common {
 
     // Ask for information about the options
     for (let opt of commandSettings.options) {
-      let input = await this.getInput(`${opt.name} ${this.getDefaultText(opt)} ${this.getDescription(opt)}`)
-      if (this.isValidInput(input)) {
-        opts.push(`${opt.name}=${input.length > 0 ? input : this.toValidInput(opt.default)}`)
+      if (opt.accept_value) {
+        let input = await this.getInput(`${opt.name} ${this.getDefaultText(opt)} ${this.getDescription(opt)}`)
+        if (this.isValidInput(input)) {
+          let val = ''
+          opts.push(`${opt.name}${opt.is_value_required ? `=${input.length > 0 ? input : this.toValidInput(opt.default)}` : ''}`)
+        }
+        // opts.push(`${opt.name}${opt.accept_value ? `=${input.length > 0 ? input : this.toValidInput(opt.default)}` : ''}`)
+      } else {
+        opts.push(`${opt.name}`)
       }
     }
 
@@ -66,7 +72,7 @@ export default class RunCommand extends Common {
     return ['string', 'number'].indexOf(typeof input) > -1
   }
 
-  private static toValidInput(input) {
-    return ['string', 'number'].indexOf(typeof input) > -1 ? input : ''
+  private static toValidInput(input: any) {
+    return ['string', 'number'].indexOf(typeof input) > -1 ? input.toString() : ''
   }
 }

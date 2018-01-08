@@ -1,3 +1,13 @@
+# 0.0.15
+- Added support for multi-root workspaces
+  - To add a workspace add `artisan.location` to your settings file then use one of the following:
+    - Use a `string` as a path to the workspace root (without `/artisan` filename)
+    - Use a `number` pointing to the workspace array id (`0`, `1`, `2`, etc.)
+- Added better parameter support for optional `Artisan: Run Command` options
+  - TODO: Get laravel to support what parameters are optional. This currently isn't possible with the json string that is returned.
+- Added `Artisan: Make Test` to create artisan tests
+- Added `Artisan: Make Factory` to create factories
+
 # 0.0.11
 - Added the ability to run custom commands
 - Added the ability to run any commands

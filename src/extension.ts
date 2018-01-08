@@ -15,6 +15,7 @@ import List from './commands/base/List';
 import MakeCommand from './commands/make/Command';
 import MakeController from './commands/make/Controller';
 import MakeEvent from './commands/make/Event';
+import MakeFactory from './commands/make/Factory';
 import MakeJob from './commands/make/Job';
 import MakeListener from './commands/make/Listener';
 import MakeMail from './commands/make/Mail';
@@ -27,6 +28,7 @@ import MakeProvider from './commands/make/Provider';
 import MakeRequest from './commands/make/Request';
 import MakeResource from './commands/make/Resource';
 import MakeSeeder from './commands/make/Seeder';
+import MakeTest from './commands/make/Test';
 
 // Migrate files
 import MigrateInstall from './commands/migrate/Install';
@@ -75,6 +77,7 @@ export function activate(context: ExtensionContext) {
     // Make commands
     context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.controller', () => { MakeController.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.make.factory', () => { MakeFactory.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.event', () => { MakeEvent.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.listener', () => { MakeListener.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.mail', () => { MakeMail.run(); }));
@@ -88,6 +91,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('artisan.make.request', () => { MakeRequest.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.resource', () => { MakeResource.run(); }));
     context.subscriptions.push(commands.registerCommand('artisan.make.seeder', () => { MakeSeeder.run(); }));
+    context.subscriptions.push(commands.registerCommand('artisan.make.test', () => { MakeTest.run(); }));
 
     // Migrate commands
     context.subscriptions.push(commands.registerCommand('artisan.migrate.install', () => { MigrateInstall.run(); }));

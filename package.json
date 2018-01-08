@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.11",
+    "version": "0.0.15",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -13,7 +13,7 @@
         "url": "https://github.com/TheColorRed/vscode-laravel-artisan/issues"
     },
     "engines": {
-        "vscode": "^1.5.0"
+        "vscode": "^1.18.0"
     },
     "categories": [
         "Other"
@@ -27,6 +27,20 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "configuration": {
+            "title": "Laravel Artisan",
+            "properties": {
+                "artisan.location": {
+                    "type": [
+                        "string",
+                        "number",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Sets the directory location of the artisan file to be used. Defaults to the root of the workspace"
+                }
+            }
+        },
         "keybindings": [
             {
                 "command": "artisan.make.command",
@@ -163,6 +177,10 @@
                 "title": "Artisan: Make Event"
             },
             {
+                "command": "artisan.make.factory",
+                "title": "Artisan: Make Factory"
+            },
+            {
                 "command": "artisan.make.job",
                 "title": "Artisan: Make Job"
             },
@@ -209,6 +227,10 @@
             {
                 "command": "artisan.make.seeder",
                 "title": "Artisan: Make Seeder"
+            },
+            {
+                "command": "artisan.make.test",
+                "title": "Artisan: Make Test"
             },
             {
                 "command": "artisan.migrate",
@@ -320,10 +342,10 @@
     },
     "devDependencies": {
         "@types/mocha": "^2.2.44",
-        "@types/node": "^6.0.92",
+        "@types/node": "^6.0.96",
         "mocha": "^2.3.3",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.8"
+        "typescript": "^2.6.2",
+        "vscode": "^1.1.10"
     },
     "dependencies": {}
 }

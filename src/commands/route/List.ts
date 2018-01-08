@@ -12,7 +12,7 @@ export default class RouteList extends Common {
         cp.exec(command, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout);
-                return this.showError('The route cache could not be created', err);
+                return this.showError('The route list could not be generated', err);
             } else {
                 let data = this.parseCliTable(stdout);
                 this.openVirtualHtmlFile('route-list', 'Route List', data.headers, data.rows);

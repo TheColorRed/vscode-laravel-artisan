@@ -18,7 +18,28 @@ interface Command {
 
 export default class Common {
 
-  protected static artisan = workspace.rootPath + '/artisan';
+  protected static get artisanRoot(): string {
+    let config = workspace.getConfiguration("artisan")
+    let location = config.get<string | number | null>("location")
+    if (location) {
+      if (typeof location == 'string') {
+        return location
+      } else if (typeof location == 'number') {
+        return workspace.workspaceFolders[location].uri.fsPath
+      }
+    }
+    // If we have gotten this far then a location hasn't been specified
+    // We then get the first workspace
+    if (workspace.workspaceFolders) {
+      return workspace.workspaceFolders[0].uri.fsPath
+    }
+    // Last resort get the rootpath (this is technically deperecated)
+    return workspace.rootPath
+  }
+
+  protected static get artisan(): string {
+    return this.artisanRoot + '/artisan'
+  }
 
   private static get tableStyle(): string {
     return `<style>
@@ -39,7 +60,7 @@ export default class Common {
 
   protected static async openFile(filename: string) {
     try {
-      let doc = await workspace.openTextDocument(workspace.rootPath + filename);
+      let doc = await workspace.openTextDocument(this.artisanRoot + '/' + filename);
       window.showTextDocument(doc);
     } catch (e) {
       console.log(e.getMessage);
@@ -95,7 +116,7 @@ export default class Common {
       html += '<tr>';
       row.forEach(item => {
         if (item.match(/app\\/i)) {
-          html += `<td><a href="file://${workspace.rootPath}/${item.replace(/@.+$/, '')}.php" class="app-item">` + item + '</a></td>';
+          html += `<td><a href="file://${this.artisanRoot}/${item.replace(/@.+$/, '')}.php" class="app-item">` + item + '</a></td>';
         } else {
           html += '<td>' + item + '</td>';
         }
