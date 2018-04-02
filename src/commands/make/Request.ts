@@ -13,10 +13,10 @@ export default class MakeRequest extends Common {
             return;
         }
 
-        let command = `php "${this.artisan}" make:request ${requestName}`;
+        let command = `php artisan make:request ${requestName}`;
         Output.command(command);
 
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the request', err);

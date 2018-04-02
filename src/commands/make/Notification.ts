@@ -13,10 +13,10 @@ export default class MakeNotification extends Common {
             return;
         }
 
-        let command = `php "${this.artisan}" make:notification ${noteName}`;
+        let command = `php artisan make:notification ${noteName}`;
         Output.command(command);
 
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the notification', err);

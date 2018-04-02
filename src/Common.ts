@@ -1,5 +1,6 @@
 import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position, ViewColumn } from 'vscode';
-import cp = require('child_process');
+import * as cp from 'child_process';
+import * as fs from 'fs'
 
 interface Command {
   name: string
@@ -184,7 +185,7 @@ export default class Common {
 
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
-      cp.exec(`php "${this.artisan}" list --format=json`, (err, stdout) => {
+      cp.exec(`php artisan list --format=json`, (err, stdout) => {
         let commands: any[] = JSON.parse(stdout).commands
         let commandList: Command[] = []
         commands.forEach(command => {

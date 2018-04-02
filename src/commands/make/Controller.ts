@@ -15,10 +15,10 @@ export default class MakeController extends Common {
 
         // Determine if this is a resource controller or not
         let isResource = await this.getYesNo('Should I make this a resource controller?');
-        let command = `php "${this.artisan}" make:controller ${ctrlName} ${isResource ? '--resource' : ''}`;
+        let command = `php artisan make:controller ${ctrlName} ${isResource ? '--resource' : ''}`;
         Output.command(command);
         // Generate the controller
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the controller', err);

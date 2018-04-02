@@ -10,10 +10,10 @@ export default class MigrateRefresh extends Common {
         let database = await this.getInput('What database should I use?');
         let seed = await this.getYesNo('Should I seed the database for you?');
 
-        let command = `php "${this.artisan}" migrate:refresh ${database.length > 0 ? '--database=' + database : ''} ${seed ? '--seed' : ''}`;
+        let command = `php artisan migrate:refresh ${database.length > 0 ? '--database=' + database : ''} ${seed ? '--seed' : ''}`;
         Output.command(command);
 
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('The database could not be refreshed', err);

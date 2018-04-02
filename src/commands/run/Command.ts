@@ -43,9 +43,9 @@ export default class RunCommand extends Common {
     args = args.filter(a => a != '')
     opts = opts.filter(a => a != '')
 
-    let command = `php "${this.artisan}" ${commandSettings.name} ${args.join(' ')} ${opts.join(' ')}`
+    let command = `php artisan ${commandSettings.name} ${args.join(' ')} ${opts.join(' ')}`
     Output.command(command)
-    cp.exec(command, (err, stdout) => {
+    cp.exec(`cd "${this.artisanRoot}" && ${command}`, (err, stdout) => {
       if (err) {
         Output.error(stdout)
         this.showError('Could not run the command')

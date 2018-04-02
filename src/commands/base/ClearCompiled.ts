@@ -6,10 +6,10 @@ import Output from '../../utils/Output';
 export default class ClearCompiled extends Common {
 
     public static async run() {
-        let command = `php "${this.artisan}" clear-compiled`;
+        let command = `php artisan clear-compiled`;
         Output.command(command);
         // Generate the controller
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('Compilation was not cleared', err);

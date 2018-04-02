@@ -13,10 +13,10 @@ export default class MakeProvider extends Common {
             return;
         }
 
-        let command = `php "${this.artisan}" make:provider ${providerName}`;
+        let command = `php artisan make:provider ${providerName}`;
         Output.command(command);
 
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the provider', err);

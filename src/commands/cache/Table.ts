@@ -6,9 +6,9 @@ import Output from '../../utils/Output';
 export default class CacheTable extends Common {
 
     public static async run() {
-        let command = `php "${this.artisan}" cache:table`;
+        let command = `php artisan cache:table`;
         Output.command(command);
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('A migration table could not be created for the cache database table', err);

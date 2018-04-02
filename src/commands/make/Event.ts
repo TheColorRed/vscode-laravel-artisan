@@ -12,9 +12,9 @@ export default class MakeEvent extends Common {
             this.showError('An event name is required')
             return;
         }
-        let command = `php "${this.artisan}" make:event ${evtName}`;
+        let command = `php artisan make:event ${evtName}`;
         Output.command(command);
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the event', err);

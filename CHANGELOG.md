@@ -1,3 +1,9 @@
+# 0.0.17
+- Changed exec so it changes directories before running the artisan command
+
+# 0.0.16
+- Forgot to merge `0.0.14` into the push
+
 # 0.0.15
 - Added support for multi-root workspaces
   - To add a workspace add `artisan.location` to your settings file then use one of the following:

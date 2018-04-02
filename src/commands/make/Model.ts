@@ -28,11 +28,11 @@ export default class MakeModel extends Common {
             isResource = await this.getYesNo('Should I create the controller as a resource?');
         }
 
-        let command = `php "${this.artisan}" make:model ${modelName} ${isMigration ? '-m' : ''} ${isController ? '-c' : ''} ${isResource ? '-r' : ''}`;
+        let command = `php artisan make:model ${modelName} ${isMigration ? '-m' : ''} ${isController ? '-c' : ''} ${isResource ? '-r' : ''}`;
         Output.command(command);
 
         // Generate the model
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the model', err);

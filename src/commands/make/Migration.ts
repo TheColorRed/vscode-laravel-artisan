@@ -27,11 +27,11 @@ export default class MakeMigration extends Common {
             tableName = await this.getInput('What is the name of the table?');
         }
 
-        let command = `php "${this.artisan}" make:migration ${migrationName} ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`;
+        let command = `php artisan make:migration ${migrationName} ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`;
         Output.command(command);
 
         // Generate the controller
-        cp.exec(command, async (err, stdout, stderr) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the migration', err);

@@ -10,10 +10,10 @@ export default class Migrate extends Common {
         let database = await this.getInput('What database should I use?');
         let seed = await this.getYesNo('Should I seed the database for you?');
 
-        let command = `php "${this.artisan}" migrate ${seed ? '--seed' : ''} ${database.length > 0 ? '--database=' + database : ''}`;
+        let command = `php artisan migrate ${seed ? '--seed' : ''} ${database.length > 0 ? '--database=' + database : ''}`;
         Output.command(command);
 
-        cp.exec(command, async (err, stdout) => {
+        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('The migration failed', err);
