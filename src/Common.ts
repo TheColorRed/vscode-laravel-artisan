@@ -118,7 +118,7 @@ export default class Common {
       html += '<tr>';
       row.forEach(item => {
         if (item.match(/app\\/i)) {
-          html += `<td><a href="file://${this.artisanRoot}/${item.replace(/@.+$/, '')}.php" class="app-item">` + item + '</a></td>';
+          html += `<td><a href="file://${workspace.rootPath}/${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php" class="app-item">` + item + '</a></td>';
         } else {
           html += '<td>' + item + '</td>';
         }
