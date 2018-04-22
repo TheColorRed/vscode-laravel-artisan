@@ -9,10 +9,10 @@ export default class Server extends Common {
     private static host: string;
     private static port: string;
 
-    public static async run() {
+    public static async run(useDefaults = false) {
 
-        let host = await this.getInput('Should I use a specific host (Default: localhost)?');
-        let port = await this.getInput('Should I use a specific port (Default: 8000)?');
+        let host = useDefaults ? '' : await this.getInput('Should I use a specific host (Default: localhost)?');
+        let port = useDefaults ? '' : await this.getInput('Should I use a specific port (Default: 8000)?');
 
         let command = `php "${this.artisan}" serve ${host.length > 0 ? '--host=' + host : ''} ${port.length > 0 ? '--port=' + port : ''}`;
         Output.command(command);
