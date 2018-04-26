@@ -42,6 +42,13 @@ export default class Common {
     return this.artisanRoot + '/artisan'
   }
 
+  protected static execCmd(command: string, callback: (err: Error | undefined, stdout: string, stderr: string) => void) {
+    let cmd = process.platform == 'win32' ? `cd /d "${this.artisanRoot}" && ${command}` : `cd "${this.artisanRoot}" && ${command}`
+    cp.exec(cmd, async (err, stdout, stderr) => {
+      await callback(err, stdout, stderr)
+    });
+  }
+
   private static get tableStyle(): string {
     return `<style>
             body { padding: 0; margin: 0; }

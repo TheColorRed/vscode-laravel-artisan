@@ -19,7 +19,7 @@ export default class MakeListener extends Common {
         let command = `php artisan make:listener ${listenerName} ${event.length > 0 ? '--event=' + event : ''} ${queued ? '--queued' : ''}`;
         Output.command(command);
 
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the listener', err);

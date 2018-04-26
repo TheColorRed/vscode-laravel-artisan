@@ -12,7 +12,7 @@ export default class KeyGenerate extends Common {
         let command = `php artisan key:generate ${!update ? '--show' : ''}`;
         Output.command(command);
 
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('The key could not be generated', err);

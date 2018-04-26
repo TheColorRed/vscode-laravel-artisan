@@ -12,7 +12,7 @@ export default class MigrateRollback extends Common {
         let command = `php artisan migrate:rollback ${database.length > 0 ? '--database=' + database : ''}`;
         Output.command(command);
 
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('The database could not be rolled back', err);

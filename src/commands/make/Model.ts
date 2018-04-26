@@ -32,7 +32,7 @@ export default class MakeModel extends Common {
         Output.command(command);
 
         // Generate the model
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the model', err);

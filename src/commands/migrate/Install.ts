@@ -11,7 +11,7 @@ export default class MigrateInstall extends Common {
         let command = `php artisan migrate:install ${database.length > 0 ? '--database=' + database : ''}`;
         Output.command(command);
 
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('The migration repository was not installed', err);

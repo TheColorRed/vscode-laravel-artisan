@@ -9,7 +9,7 @@ export default class RouteList extends Common {
     public static async run() {
         let command = `php artisan route:list`;
         Output.command(command);
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout, stderr) => {
+        this.execCmd(command, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout);
                 return this.showError('The route list could not be generated', err);

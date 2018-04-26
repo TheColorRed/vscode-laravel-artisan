@@ -1,3 +1,7 @@
+# 0.0.18
+- Added command to run the artisan server with default values `Artisan: Start Server (Default Host and Port)`
+- Fixed Windows issue where `cd` doesn't change directories if the project is on another dive letter `D:, E:`, etc.
+
 # 0.0.17
 - Changed exec so it changes to project root directory before running the artisan command
   - This will allow artisan to be executed from it's root directory

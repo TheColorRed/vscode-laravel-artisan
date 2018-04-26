@@ -7,12 +7,12 @@ export default class Optimize extends Common {
 
     public static async run() {
 
-        let optCompser = await this.getYesNo('Should I optimize Composer\'s dump-autoload?');
+        let optComposer = await this.getYesNo('Should I optimize Composer\'s dump-autoload?');
 
-        let command = `php artisan optimize ${!optCompser ? '--psr' : ''}`;
+        let command = `php artisan optimize ${!optComposer ? '--psr' : ''}`;
         Output.command(command);
 
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+        this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);
                 this.showError('Optimization failed', err);

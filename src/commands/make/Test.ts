@@ -18,7 +18,7 @@ export default class MakeTest extends Common {
     let command = `php artisan make:test ${testName} ${isUnitTest ? '--unit' : ''}`;
     Output.command(command);
     // Generate the controller
-    cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout) => {
+    this.execCmd(command, async (err, stdout) => {
       if (err) {
         Output.error(stdout)
         this.showError('Could not create the test', err);

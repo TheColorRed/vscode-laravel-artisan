@@ -8,7 +8,7 @@ export default class ConfigCache extends Common {
     public static async run() {
         let command = `php artisan config:cache`;
         Output.command(command);
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout, stderr) => {
+        this.execCmd(command, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout);
                 return this.showError('The config cache could not be created', err);

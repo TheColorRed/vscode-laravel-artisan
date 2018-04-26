@@ -7,7 +7,7 @@ export default class ConfigCacheClear extends Common {
 
     public static async run() {
         let command = `php artisan config:clear`
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err) => {
+        this.execCmd(command, async (err) => {
             if (err) {
                 return this.showError('The config cache could not be cleared', err);
             } else {

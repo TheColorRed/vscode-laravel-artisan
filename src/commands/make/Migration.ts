@@ -31,7 +31,7 @@ export default class MakeMigration extends Common {
         Output.command(command);
 
         // Generate the controller
-        cp.exec(`cd "${this.artisanRoot}" && ${command}`, async (err, stdout, stderr) => {
+        this.execCmd(command, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout)
                 this.showError('Could not create the migration', err);
