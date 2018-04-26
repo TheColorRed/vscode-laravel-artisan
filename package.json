@@ -273,6 +273,10 @@
                 "title": "Artisan: Start Server"
             },
             {
+                "command": "artisan.startServerUseDefaults",
+                "title": "Artisan: Start Server (Default Host and Port)"
+            },
+            {
                 "command": "artisan.stopServer",
                 "title": "Artisan: Stop Server"
             },
