@@ -261,10 +261,6 @@
                 "title": "Artisan: Migrate Status"
             },
             {
-                "command": "artisan.migrate.fresh",
-                "title": "Artisan: Migrate Fresh"
-            },
-            {
                 "command": "artisan.clearCompiled",
                 "title": "Artisan: Clear Compiled"
             },
@@ -342,10 +338,10 @@
     },
     "devDependencies": {
         "@types/mocha": "^2.2.44",
-        "@types/node": "^6.0.96",
+        "@types/node": "^9.6.1",
         "mocha": "^2.3.3",
         "typescript": "^2.6.2",
-        "vscode": "^1.1.10"
+        "vscode": "^1.1.14"
     },
     "dependencies": {}
 }

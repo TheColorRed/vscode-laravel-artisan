@@ -1,5 +1,10 @@
 # 0.0.17
-- Changed exec so it changes directories before running the artisan command
+- Changed exec so it changes to project root directory before running the artisan command
+  - This will allow artisan to be executed from it's root directory
+- Fix 'File Not Found' error when clicking a route action
+  - This can be found under `Artisan: Route List`
+- Moved server from child process to integrated terminal
+- Removed duplicate `artisan.migrate.fresh` command
 
 # 0.0.16
 - Forgot to merge `0.0.14` into the push
