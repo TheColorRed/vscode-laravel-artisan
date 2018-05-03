@@ -13,8 +13,7 @@ export default class MakeSeeder extends Common {
             return;
         }
 
-        let command = `php artisan make:seeder ${seedName}`;
-        Output.command(command);
+        let command = `make:seeder ${seedName}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

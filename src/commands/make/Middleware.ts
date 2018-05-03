@@ -13,8 +13,7 @@ export default class MakeMiddleware extends Common {
             return;
         }
 
-        let command = `php artisan make:middleware ${middleName}`;
-        Output.command(command);
+        let command = `make:middleware ${middleName}`;
 
         // Generate the controller
         this.execCmd(command, async (err, stdout) => {

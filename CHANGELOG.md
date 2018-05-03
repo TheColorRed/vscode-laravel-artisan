@@ -1,3 +1,12 @@
+# 0.0.20
+- Preserve the web views: `Route List`, `List Commands`, `Migrate Status` using the new WebView API.
+  - This will allow for navigation away from, and then back to the tab without reloading the web view.
+- `Route List` will automatically update when routes are added/removed/updated.
+- When clicking on a `Route List` route, the document will open and the cursor will move to the line where the function is defined.
+
+# 0.0.19
+- Fixed issue where starting the server with values other than the default would still use the default values.
+
 # 0.0.18
 - Added command to run the artisan server with default values `Artisan: Start Server (Default Host and Port)`
 - Fixed Windows issue where `cd` doesn't change directories if the project is on another dive letter `D:, E:`, etc.

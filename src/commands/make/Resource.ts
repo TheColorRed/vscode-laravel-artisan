@@ -15,8 +15,8 @@ export default class MakeResource extends Common {
 
         // Determine if this is a resource collection or not
         let isCollection = await this.getYesNo('Should I make this a resource collection?');
-        let command = `php artisan make:resource ${ctrlName} ${isCollection ? '--collection' : ''}`;
-        Output.command(command);
+        let command = `make:resource ${ctrlName} ${isCollection ? '--collection' : ''}`;
+
         // Generate the resource
         this.execCmd(command, async (err, stdout) => {
             if (err) {

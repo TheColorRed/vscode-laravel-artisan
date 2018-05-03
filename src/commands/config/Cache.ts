@@ -6,8 +6,7 @@ import Output from '../../utils/Output';
 export default class ConfigCache extends Common {
 
     public static async run() {
-        let command = `php artisan config:cache`;
-        Output.command(command);
+        let command = `config:cache`;
         this.execCmd(command, async (err, stdout, stderr) => {
             if (err) {
                 Output.error(stdout);

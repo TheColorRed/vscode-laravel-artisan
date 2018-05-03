@@ -8,9 +8,7 @@ export default class MigrateRollback extends Common {
     public static async run() {
 
         let database = await this.getInput('What database should I use?');
-
-        let command = `php artisan migrate:rollback ${database.length > 0 ? '--database=' + database : ''}`;
-        Output.command(command);
+        let command = `migrate:rollback ${database.length > 0 ? '--database=' + database : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

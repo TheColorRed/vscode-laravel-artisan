@@ -13,8 +13,7 @@ export default class MakeMail extends Common {
             return;
         }
 
-        let command = `php artisan make:mail ${mailName}`;
-        Output.command(command);
+        let command = `make:mail ${mailName}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

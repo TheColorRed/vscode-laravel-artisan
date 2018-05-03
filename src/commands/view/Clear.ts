@@ -6,8 +6,7 @@ import Output from '../../utils/Output';
 export default class ViewClear extends Common {
 
     public static async run() {
-        let command = `php artisan view:clear`;
-        Output.command(command);
+        let command = `view:clear`;
         this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout);

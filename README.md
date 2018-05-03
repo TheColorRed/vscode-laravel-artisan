@@ -21,8 +21,8 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Requirements
 
-* A useable version of `php` that can be ran on the commandline such as `php-cli` (This should be in your path)
-    * The following command should yeild a php version:
+* A useable version of `php` that can be ran on the command line such as `php-cli` (This should be in your path)
+    * The following command should yield a php version:
     * `php -v`
         * If no php version is returned you don't have php setup correctly.
         * If you get a version back you are good to go!
@@ -40,4 +40,4 @@ Just type `Artisan:` to get a list of commands.
 
 Many commands have optional input questions, leave them blank to use the defaults, or enter your own value.
 
-All commands are accessable through `Artisan: Run Command`, here you can access your custom commands as well as built in commands.
+All commands are accessible through `Artisan: Run Command`, here you can access your custom commands as well as built in commands.

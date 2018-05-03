@@ -19,8 +19,8 @@ export default class MakeFactory extends Common {
     if (hasModel) {
       modelName = await this.getInput('Does the model have a name? Leave blank to use (Model::class)')
     }
-    let command = `php artisan make:factory ${name} ${hasModel ? `--model${modelName.length > 0 ? `=${modelName}` : ''}` : ''}`;
-    Output.command(command);
+    let command = `make:factory ${name} ${hasModel ? `--model${modelName.length > 0 ? `=${modelName}` : ''}` : ''}`;
+
     // Generate the factory
     this.execCmd(command, async (err, stdout) => {
       if (err) {

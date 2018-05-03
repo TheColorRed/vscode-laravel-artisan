@@ -6,11 +6,8 @@ import Output from '../../utils/Output';
 export default class KeyGenerate extends Common {
 
     public static async run() {
-
         let update = await this.getYesNo('Should I update the env file?');
-
-        let command = `php artisan key:generate ${!update ? '--show' : ''}`;
-        Output.command(command);
+        let command = `key:generate ${!update ? '--show' : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

@@ -9,9 +9,7 @@ export default class CacheClear extends Common {
 
         let store = await this.getInput('Store name (Leave blank to clear everything)');
         let tags = await this.getInput('Should I clear specific tags?');
-
-        let command = `php artisan cache:clear ${store} ${tags.length > 0 ? '--tags=' + tags : ''}`;
-        Output.command(command);
+        let command = `cache:clear ${store} ${tags.length > 0 ? '--tags=' + tags : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

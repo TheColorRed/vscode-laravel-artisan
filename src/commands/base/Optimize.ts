@@ -9,8 +9,7 @@ export default class Optimize extends Common {
 
         let optComposer = await this.getYesNo('Should I optimize Composer\'s dump-autoload?');
 
-        let command = `php artisan optimize ${!optComposer ? '--psr' : ''}`;
-        Output.command(command);
+        let command = `optimize ${!optComposer ? '--psr' : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

@@ -1,6 +1,8 @@
-import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position, ViewColumn } from 'vscode';
+import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position, ViewColumn, Selection } from 'vscode';
 import * as cp from 'child_process';
 import * as fs from 'fs'
+import * as path from 'path';
+import Output from './utils/Output';
 
 interface Command {
   name: string
@@ -43,7 +45,9 @@ export default class Common {
   }
 
   protected static execCmd(command: string, callback: (err: Error | undefined, stdout: string, stderr: string) => void) {
+    command = `php artisan ${command}`
     let cmd = process.platform == 'win32' ? `cd /d "${this.artisanRoot}" && ${command}` : `cd "${this.artisanRoot}" && ${command}`
+    Output.command(command)
     cp.exec(cmd, async (err, stdout, stderr) => {
       await callback(err, stdout, stderr)
     });
@@ -103,17 +107,17 @@ export default class Common {
     return { headers: headers, rows: rows };
   }
 
-  protected static async openVirtualFile(path: string, title: string, content: string) {
-    let uri = Uri.parse('laravel-artisan://artisan/' + path);
-    let doc = await workspace.openTextDocument(uri);
-    let edit = new WorkspaceEdit();
-    let range = new Range(0, 0, doc.lineCount, doc.getText().length);
-    edit.set(uri, [new TextEdit(range, content)]);
-    workspace.applyEdit(edit);
-    commands.executeCommand('vscode.previewHtml', uri, ViewColumn.One, title);
-  }
+  // protected static async openVirtualFile(path: string, title: string, content: string) {
+  //   let uri = Uri.parse('laravel-artisan://artisan/' + path);
+  //   let doc = await workspace.openTextDocument(uri);
+  //   let edit = new WorkspaceEdit();
+  //   let range = new Range(0, 0, doc.lineCount, doc.getText().length);
+  //   edit.set(uri, [new TextEdit(range, content)]);
+  //   workspace.applyEdit(edit);
+  //   commands.executeCommand('vscode.previewHtml', uri, ViewColumn.One, title);
+  // }
 
-  protected static async openVirtualHtmlFile(path: string, title: string, headers: string[], rows: string[][]) {
+  protected static async openVirtualHtmlFile(openPath: string, title: string, headers: string[], rows: string[][]) {
     let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`;
     html += `${this.tableStyle}<table>`;
     html += '<thead><tr>';
@@ -125,7 +129,7 @@ export default class Common {
       html += '<tr>';
       row.forEach(item => {
         if (item.match(/app\\/i)) {
-          html += `<td><a href="file://${workspace.rootPath}/${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php" class="app-item">` + item + '</a></td>';
+          html += `<td><a href="file://${workspace.rootPath}/${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php" data-method="${item.replace(/^.+@/, '')}" class="app-item">` + item + '</a></td>';
         } else {
           html += '<td>' + item + '</td>';
         }
@@ -134,22 +138,76 @@ export default class Common {
     });
     html += '</tbody></table>';
     html += `<script>
-            let filter = document.querySelector('#filter');
+            const filter = document.querySelector('#filter');
+            const body = document.querySelector('table tbody');
+            const rootPath = '${this.artisanRoot.replace(/\\/g, '/')}';
+            const vscode = acquireVsCodeApi()
+            console.log(rootPath);
             filter.focus();
-            filter.addEventListener('input', e => {
-                let v = e.currentTarget.value;
-                document.querySelectorAll('tbody > tr').forEach(row => {
-                    let txt = row.innerText;
-                    let reg = new RegExp(v, 'ig');
-                    if (reg.test(txt) || v.length == 0) {
-                        row.classList.remove('hidden');
-                    } else {
-                        row.classList.add('hidden');
-                    }
+            function filterItems(){
+              let v = filter.value;
+              document.querySelectorAll('tbody > tr').forEach(row => {
+                  let txt = row.textContent;
+                  let reg = new RegExp(v, 'ig');
+                  if (reg.test(txt) || v.length == 0) {
+                      row.classList.remove('hidden');
+                  } else {
+                      row.classList.add('hidden');
+                  }
+              });
+            }
+            function routeEvents(){
+              Array.from(body.querySelectorAll('a')).forEach(item => {
+                item.addEventListener('click', e => {
+                  e.preventDefault();
+                  let target = e.currentTarget;
+                  vscode.postMessage({ file: target.href, method: target.getAttribute('data-method') });
                 });
+              });
+            }
+            filter.addEventListener('input', e => filterItems());
+            window.addEventListener('message', msg => {
+              let rows = msg.data.rows;
+              let html = '';
+              rows.forEach(row => {
+                html += '<tr>';
+                row.forEach(item => {
+                  if (item.match(/app\\\\/i)) {
+                    let file = \`\${rootPath}/\${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php\`.replace(/\\\\/g, '/');
+                    html += \`<td><a href="\${file}" data-method="\${item.replace(/^.+@/, '')}" class="app-item">\` + item + '</a></td>';
+                  } else {
+                    html += '<td>' + item + '</td>';
+                  }
+                });
+                html += '</tr>';
+              });
+              body.innerHTML = html;
+              filterItems();
+              routeEvents();
             });
+            routeEvents();
         </script>`
-    this.openVirtualFile(path, title, html);
+    const panel = window.createWebviewPanel(openPath, title, ViewColumn.Active, {
+      enableScripts: true,
+      retainContextWhenHidden: true
+    })
+    panel.webview.html = html
+    panel.webview.onDidReceiveMessage(async msg => {
+      if (msg.file) {
+        let uri = Uri.parse(msg.file)
+        let method = msg.method || ''
+        let doc = await workspace.openTextDocument(uri)
+        let activeDoc = await window.showTextDocument(doc)
+        if (method.length > 0) {
+          let idx = doc.getText().indexOf(`function ${method}`)
+          if (idx > -1) {
+            let pos = doc.positionAt(idx + 9)
+            activeDoc.selection = new Selection(pos, pos)
+          }
+        }
+      }
+    })
+    return panel
   }
 
   protected static async getInput(placeHolder: string) {
@@ -192,7 +250,7 @@ export default class Common {
 
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
-      cp.exec(`php artisan list --format=json`, (err, stdout) => {
+      cp.exec(`list --format=json`, (err, stdout) => {
         let commands: any[] = JSON.parse(stdout).commands
         let commandList: Command[] = []
         commands.forEach(command => {

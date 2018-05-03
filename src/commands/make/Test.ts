@@ -15,8 +15,8 @@ export default class MakeTest extends Common {
 
     // Determine if this is a resource controller or not
     let isUnitTest = await this.getYesNo('Should I make this a unit test?');
-    let command = `php artisan make:test ${testName} ${isUnitTest ? '--unit' : ''}`;
-    Output.command(command);
+    let command = `make:test ${testName} ${isUnitTest ? '--unit' : ''}`;
+
     // Generate the controller
     this.execCmd(command, async (err, stdout) => {
       if (err) {

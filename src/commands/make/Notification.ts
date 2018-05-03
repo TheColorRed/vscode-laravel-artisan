@@ -13,8 +13,7 @@ export default class MakeNotification extends Common {
             return;
         }
 
-        let command = `php artisan make:notification ${noteName}`;
-        Output.command(command);
+        let command = `make:notification ${noteName}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

@@ -13,8 +13,7 @@ export default class MakeProvider extends Common {
             return;
         }
 
-        let command = `php artisan make:provider ${providerName}`;
-        Output.command(command);
+        let command = `make:provider ${providerName}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

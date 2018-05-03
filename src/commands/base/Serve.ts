@@ -15,15 +15,14 @@ export default class Server extends Common {
         let host = useDefaults ? '' : await this.getInput('Should I use a specific host (Default: localhost)?');
         let port = useDefaults ? '' : await this.getInput('Should I use a specific port (Default: 8000)?');
 
-        Server.host = host.length > 0 ? host : 'localhost';
-        Server.port = port.length > 0 ? port : '8000';
+        this.host = host.length > 0 ? host : 'localhost';
+        this.port = port.length > 0 ? port : '8000';
 
-        let command = `php artisan serve ${host.length > 0 ? '--host=' + host : ''} ${port.length > 0 ? '--port=' + port : ''}`;
-        Output.command(command);
+        let command = `serve ${'--host=' + this.host} ${'--port=' + this.port}`;
 
         this.terminal = window.createTerminal('Laravel Artisan Server');
         this.terminal.show();
-        this.terminal.sendText(`php "${this.artisan}" serve`);
+        this.terminal.sendText(`php "${this.artisan}" serve ${'--host=' + this.host} ${'--port=' + this.port}`);
         this.showMessage(`The server is now running on "http://${Server.host}:${Server.port}"`);
     }
 

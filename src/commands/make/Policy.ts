@@ -14,9 +14,7 @@ export default class MakePolicy extends Common {
         }
 
         let model = await this.getInput('What model should I apply this policy to?');
-
-        let command = `php artisan make:policy ${policyName} ${model.length > 0 ? '--model=' + model : ''}`;
-        Output.command(command);
+        let command = `make:policy ${policyName} ${model.length > 0 ? '--model=' + model : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

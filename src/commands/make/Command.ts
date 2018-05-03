@@ -13,8 +13,8 @@ export default class MakeCommand extends Common {
         }
 
         let consoleName = await this.getInput('What is the terminal command name? (Default is "command:name")');
-        let command = `php artisan make:command ${cmdName} ${consoleName.length > 0 ? '--command=' + consoleName : ''}`;
-        Output.command(command);
+        let command = `make:command ${cmdName} ${consoleName.length > 0 ? '--command=' + consoleName : ''}`;
+
         this.execCmd(command, async (err, stdout) => {
             if (err) {
                 Output.error(stdout)

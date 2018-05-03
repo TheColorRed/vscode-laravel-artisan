@@ -6,8 +6,7 @@ import Output from '../../utils/Output';
 export default class ClearCompiled extends Common {
 
     public static async run() {
-        let command = `php artisan list --format=json`;
-        Output.command(command);
+        let command = `list --format=json`;
         // Generate the controller
         this.execCmd(command, async (err, stdout) => {
             if (err) {

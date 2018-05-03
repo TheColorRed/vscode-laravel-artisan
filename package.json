@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.18",
+    "version": "0.0.20",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -13,7 +13,7 @@
         "url": "https://github.com/TheColorRed/vscode-laravel-artisan/issues"
     },
     "engines": {
-        "vscode": "^1.18.0"
+        "vscode": "^1.23.0"
     },
     "categories": [
         "Other"
@@ -344,8 +344,8 @@
         "@types/mocha": "^2.2.44",
         "@types/node": "^9.6.1",
         "mocha": "^2.3.3",
-        "typescript": "^2.6.2",
-        "vscode": "^1.1.14"
+        "typescript": "^2.8.3",
+        "vscode": "*"
     },
     "dependencies": {}
 }

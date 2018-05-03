@@ -15,9 +15,7 @@ export default class MakeListener extends Common {
 
         let event = await this.getInput('What event class should I listen for?');
         let queued = await this.getYesNo('Should I make the listener queued?');
-
-        let command = `php artisan make:listener ${listenerName} ${event.length > 0 ? '--event=' + event : ''} ${queued ? '--queued' : ''}`;
-        Output.command(command);
+        let command = `make:listener ${listenerName} ${event.length > 0 ? '--event=' + event : ''} ${queued ? '--queued' : ''}`;
 
         this.execCmd(command, async (err, stdout) => {
             if (err) {

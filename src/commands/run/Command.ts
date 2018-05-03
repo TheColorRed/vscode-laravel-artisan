@@ -43,8 +43,8 @@ export default class RunCommand extends Common {
     args = args.filter(a => a != '')
     opts = opts.filter(a => a != '')
 
-    let command = `php artisan ${commandSettings.name} ${args.join(' ')} ${opts.join(' ')}`
-    Output.command(command)
+    let command = `${commandSettings.name} ${args.join(' ')} ${opts.join(' ')}`
+
     this.execCmd(command, (err, stdout) => {
       if (err) {
         Output.error(stdout)
