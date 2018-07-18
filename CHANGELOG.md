@@ -1,3 +1,8 @@
+# 0.0.21
+- Added `factory` and `all` to `make:model`
+- Added the ability to have multiple artisan projects.
+  - Display a list of `artisan` files before running an `artisan` command if there is more than one `artisan` file in the workspace.
+
 # 0.0.20
 - Preserve the web views: `Route List`, `List Commands`, `Migrate Status` using the new WebView API.
   - This will allow for navigation away from, and then back to the tab without reloading the web view.

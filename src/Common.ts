@@ -1,7 +1,5 @@
 import { workspace, window, commands, Uri, WorkspaceEdit, TextEdit, Range, Position, ViewColumn, Selection } from 'vscode';
 import * as cp from 'child_process';
-import * as fs from 'fs'
-import * as path from 'path';
 import Output from './utils/Output';
 
 interface Command {
@@ -21,12 +19,14 @@ interface Command {
 
 export default class Common {
 
+  public static readonly artisanFileList: Uri[] = []
+
   protected static get artisanRoot(): string {
     let config = workspace.getConfiguration("artisan")
     let location = config.get<string | number | null>("location")
     if (location) {
       if (typeof location == 'string') {
-        return location
+        return location.replace(/\$\{workspaceRoot\}/g, workspace.rootPath)
       } else if (typeof location == 'number') {
         return workspace.workspaceFolders[location].uri.fsPath
       }
@@ -36,7 +36,7 @@ export default class Common {
     if (workspace.workspaceFolders) {
       return workspace.workspaceFolders[0].uri.fsPath
     }
-    // Last resort get the rootpath (this is technically deperecated)
+    // Last resort get the root path (this is technically deprecated)
     return workspace.rootPath
   }
 
@@ -44,9 +44,38 @@ export default class Common {
     return this.artisanRoot + '/artisan'
   }
 
-  protected static execCmd(command: string, callback: (err: Error | undefined, stdout: string, stderr: string) => void) {
+  protected static async listArtisanPaths() {
+    let artisanToUse = await Common.getListInput('Which artisan should execute this command?',
+      this.artisanFileList.map(i => i.fsPath)
+      //   this.artisanFileList.map(i => {
+      //     let path = i.path
+      //     workspace.workspaceFolders.forEach(f => {
+      //       path = path.replace(/\\/g, '/').replace(f.uri.fsPath.replace(/\\/g, '/'), '').replace(/\/\/+/, '')
+      //     })
+      //     return path
+      //   })
+    )
+    return artisanToUse
+    // return {
+    //   fullPath: (workspace.rootPath + '/' + artisanToUse).replace(/\\/g, '/').replace(/\/\/+/, '/'),
+    //   path: artisanToUse
+    // }
+  }
+
+
+  protected static async execCmd(command: string, callback: (err: Error | undefined, stdout: string, stderr: string) => void) {
+    let artisanToUse = 'artisan'
+    // If only one artisan is found use it
+    if (this.artisanFileList.length == 1) artisanToUse = this.artisanFileList[0].fsPath
+    // If more than one artisan is found ask which one to use
+    else if (this.artisanFileList.length > 1) artisanToUse = await this.listArtisanPaths()
+
+    let artisanRoot = artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '')
+
+    // return console.log(artisanToUse.replace(/artisan$/, ''))
+
     command = `php artisan ${command}`
-    let cmd = process.platform == 'win32' ? `cd /d "${this.artisanRoot}" && ${command}` : `cd "${this.artisanRoot}" && ${command}`
+    let cmd = process.platform == 'win32' ? `cd /d "${artisanRoot}" && ${command}` : `cd "${artisanRoot}" && ${command}`
     Output.command(command)
     cp.exec(cmd, async (err, stdout, stderr) => {
       await callback(err, stdout, stderr)
@@ -250,7 +279,7 @@ export default class Common {
 
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
-      cp.exec(`list --format=json`, (err, stdout) => {
+      this.execCmd(`list --format=json`, (err, stdout) => {
         let commands: any[] = JSON.parse(stdout).commands
         let commandList: Command[] = []
         commands.forEach(command => {

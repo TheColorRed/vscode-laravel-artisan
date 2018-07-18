@@ -1,8 +1,9 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, ExtensionContext, workspace } from 'vscode';
+import { commands, ExtensionContext, workspace, window } from 'vscode';
 import TextDocumentProvider from './TextDocumentProvider';
+import Common from './Common';
 
 // Base files
 import ClearCompiled from './commands/base/ClearCompiled';
@@ -64,7 +65,9 @@ import ViewClear from './commands/view/Clear';
 
 import RunCommand from './commands/run/Command';
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
+    let files = await workspace.findFiles('**/artisan', undefined)
+    files.forEach(file => Common.artisanFileList.push(file))
 
     // Base commands
     context.subscriptions.push(commands.registerCommand('artisan.clearCompiled', () => { ClearCompiled.run(); }));

@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -23,7 +23,7 @@
         "Artisan"
     ],
     "activationEvents": [
-        "workspaceContains:artisan"
+        "workspaceContains:**/artisan"
     ],
     "main": "./out/src/extension",
     "contributes": {
