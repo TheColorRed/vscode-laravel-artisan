@@ -1,19 +1,15 @@
-import { window, workspace } from 'vscode';
-import cp = require('child_process');
-import Common from '../../Common';
-import Output from '../../utils/Output';
+import Common from '../../Common'
 
 export default class ViewClear extends Common {
 
-    public static async run() {
-        let command = `view:clear`;
-        this.execCmd(command, async (err, stdout) => {
-            if (err) {
-                Output.error(stdout);
-                this.showError('The views could not be cleared', err);
-            } else {
-                this.showMessage('The views were cleared');
-            }
-        });
-    }
+  public static async run() {
+    let command = `view:clear`
+    this.execCmd(command, async (info) => {
+      if (info.err) {
+        this.showError('The views could not be cleared', info.err)
+      } else {
+        this.showMessage('The views were cleared')
+      }
+    })
+  }
 }

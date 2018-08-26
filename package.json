@@ -3,7 +3,7 @@
     "displayName": "Laravel Artisan",
     "description": "Laravel Artisan commands within Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "publisher": "ryannaddy",
     "repository": {
         "type": "git",
@@ -33,11 +33,15 @@
                 "artisan.location": {
                     "type": [
                         "string",
-                        "number",
-                        "null"
+                        "array"
                     ],
-                    "default": null,
-                    "description": "Sets the directory location of the artisan file to be used. Defaults to the root of the workspace"
+                    "default": [],
+                    "description": "Additional Artisan locations"
+                },
+                "artisan.php.location": {
+                    "type": "string",
+                    "default": "php",
+                    "description": "Sets a custom location to the php executable"
                 }
             }
         },

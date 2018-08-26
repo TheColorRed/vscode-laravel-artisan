@@ -1,5 +1,14 @@
+# 0.0.22
+- Added support for a custom php location: `artisan.php.location`.
+- Updated `artisan.location` setting.
+  - Now only takes a string or an array of strings, which consist of artisan paths.
+  - These are additional paths that are not found within the artisan workspace.
+    - Example path: `/path/to/my/artisan-project/artisan`.
+  - `number` was **removed** which specified a workspace number.
+    - Artisan files in all workspaces are now automatically detected.
+
 # 0.0.21
-- Added `factory` and `all` to `make:model`
+- Added `factory` and `all` to `make:model`.
 - Added the ability to have multiple artisan projects.
   - Display a list of `artisan` files before running an `artisan` command if there is more than one `artisan` file in the workspace.
 

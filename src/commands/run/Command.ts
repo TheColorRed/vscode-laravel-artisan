@@ -1,6 +1,5 @@
-import Common from "../../Common";
-import cp = require('child_process');
-import Output from "../../utils/Output";
+import Common from "../../Common"
+import Output from "../../utils/Output"
 
 export default class RunCommand extends Common {
   public static async run() {
@@ -45,14 +44,13 @@ export default class RunCommand extends Common {
 
     let command = `${commandSettings.name} ${args.join(' ')} ${opts.join(' ')}`
 
-    this.execCmd(command, (err, stdout) => {
-      if (err) {
-        Output.error(stdout)
+    this.execCmd(command, (info) => {
+      if (info.err) {
         this.showError('Could not run the command')
       } else {
         let msg = ''
-        if (stdout.length > 0) {
-          Output.info(stdout)
+        if (info.stdout.length > 0) {
+          Output.info(info.stdout)
           msg = '(See output console for more information)'
         }
         this.showMessage(`Command "${commandSettings.name}" has finished ${msg}`.trim())

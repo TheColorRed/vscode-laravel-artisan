@@ -1,9 +1,9 @@
-import { TextDocumentContentProvider, Uri, CancellationToken, commands } from 'vscode';
+import { TextDocumentContentProvider, Uri, CancellationToken } from 'vscode'
 
 export default class Test implements TextDocumentContentProvider {
 
-    public async provideTextDocumentContent(uri: Uri, token: CancellationToken): Promise<string> {
-        return '';
-    }
+  public async provideTextDocumentContent(uri: Uri, token: CancellationToken): Promise<string> {
+    return ''
+  }
 
 }
