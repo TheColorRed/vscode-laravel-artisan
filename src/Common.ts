@@ -2,6 +2,7 @@ import { workspace, window, commands, Uri, ViewColumn, Selection } from 'vscode'
 import * as cp from 'child_process'
 import Output from './utils/Output'
 import { join } from 'path';
+import { resolve } from 'dns';
 
 interface Command {
   name: string
@@ -86,7 +87,7 @@ export default class Common {
     let config = workspace.getConfiguration('artisan')
     let phpLocation = config.get<string | null>('php.location', 'php')
 
-    command = `"${phpLocation}" artisan ${command}`
+    command = `"${phpLocation}" artisan ${command}`.trim()
     let cmd = process.platform == 'win32' ?
       // Windows command
       `cd /d "${artisanRoot}" && ${command}` :
@@ -282,7 +283,12 @@ export default class Common {
   }
 
   protected static async getYesNo(placeHolder: string): Promise<boolean> {
-    let value = await window.showQuickPick(['Yes', 'No'], { placeHolder: placeHolder })
+    let value = await window.showQuickPick(['Yes', 'No'], { placeHolder })
+    return value.toLowerCase() == 'yes' ? true : false
+  }
+
+  protected static async getNoYes(placeHolder: string): Promise<boolean> {
+    let value = await window.showQuickPick(['No', 'Yes'], { placeHolder })
     return value.toLowerCase() == 'yes' ? true : false
   }
 

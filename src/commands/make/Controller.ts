@@ -1,7 +1,6 @@
-import { window, workspace } from 'vscode'
-import cp = require('child_process')
 import Common from '../../Common'
-import Output from '../../utils/Output'
+
+declare type ControllerType = 'basic' | 'resource' | 'api'
 
 export default class MakeController extends Common {
 
@@ -13,9 +12,23 @@ export default class MakeController extends Common {
       return
     }
 
-    // Determine if this is a resource controller or not
-    let isResource = await this.getYesNo('Should I make this a resource controller?')
-    let command = `make:controller ${ctrlName} ${isResource ? '--resource' : ''}`
+    // Determine the type of controller (basic, resource, api)
+    let type = (await this.getListInput('What type of controller is this?', ['Basic', 'Resource', 'API'])).toLowerCase() as ControllerType
+
+    let refModel = false
+    let modelToUse = ''
+    if (type != 'basic') {
+      // Determine the model reference
+      refModel = await this.getYesNo('Should this reference a model?')
+      if (refModel) {
+        modelToUse = await this.getInput('What is the name of the model?')
+      }
+    }
+
+    let modelToUseCommand = refModel ? `--model=${modelToUse} --no-interaction` : ''
+    let typeCommand = type == 'resource' ? '--resource' : type == 'api' ? '--api' : ''
+    let command = `make:controller ${ctrlName} ${typeCommand} ${modelToUseCommand}`
+    // let command = `make:controller ${ctrlName} ${isResource ? '--resource' : ''} ${isAPI ? '--api' : ''}`.trim()
 
     // Generate the controller
     this.execCmd(command, async (info) => {

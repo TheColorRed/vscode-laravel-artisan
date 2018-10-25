@@ -15,7 +15,7 @@ export default class MakeModel extends Common {
     let isFactory = false
     let isAll = false
 
-    //Determine if should we create migration,factory and resource controller
+    // Determine if should we create migration,factory and resource controller
     isAll = await this.getYesNo('Should I create a migration, factory and resource controller for the model?')
 
     if (!isAll) {

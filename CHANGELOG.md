@@ -1,3 +1,9 @@
+# 0.0.23
+- Replaced make controller resource question from `Yes/No` to option list: `Basic/Resource/API`.
+  - If the controller is not a basic controller, the option to reference a model is asked.
+    - If the use wants to reference a model a model name is asked for.
+      - If the model doesn't exist, it is automatically created.
+
 # 0.0.22
 - Added support for a custom php location: `artisan.php.location`.
 - Updated `artisan.location` setting.
