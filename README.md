@@ -58,7 +58,10 @@ If you are running Laravel with Docker you can set config vars like this, consid
 
 Where `app` is your container name. Note this is a base command that will be prepend to artisan commands.
 
-Ex: `docker-compose exec app php artisan make:model Post`
+Ex: `docker-compose exec app php artisan make:model Post`.
+
+Before running any commands, make sure the containers are running (`docker-compose up`).
+
 
 ## WSL
 
