@@ -3,7 +3,7 @@
   "displayName": "Laravel Artisan",
   "description": "Laravel Artisan commands within Visual Studio Code",
   "icon": "images/icon.png",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "publisher": "ryannaddy",
   "repository": {
     "type": "git",
@@ -42,6 +42,16 @@
           "type": "string",
           "default": "php",
           "description": "Sets a custom location to the php executable"
+        },
+        "artisan.docker.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should commands get executed using docker?"
+        },
+        "artisan.docker.command": {
+          "type": "string",
+          "default": null,
+          "description": "Docker command to get container running"
         }
       }
     },
