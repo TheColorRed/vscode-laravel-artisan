@@ -1,3 +1,8 @@
+# 0.0.24
+- Added Docker support
+  - Added setting `"artisan.docker.enabled": true` to enable/disable docker
+  - Added setting `"artisan.docker.command": null` to execute the docker command, where `null` is replaced by the Docker command such as `"docker-compose exec app"`
+
 # 0.0.23
 - Replaced make controller resource question from `Yes/No` to option list: `Basic/Resource/API`.
   - If the controller is not a basic controller, the option to reference a model is asked.

@@ -24,7 +24,7 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Requirements
 
-**Note:** The first setting is optional if the setting `artisan.php.location` is set in your `settings.json` file and points to a valid php executable.
+**Note:** The `php` setting is optional if the setting `artisan.php.location` is set in your `settings.json` file and points to a valid php executable. If this setting is set, the extension will prefer the setting over the one within the path.
 
 * A useable version of `php` that can be ran on the command line such as `php-cli` (This should be in your path)
     * The following command should yield a php version:
@@ -39,26 +39,32 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Usage
 
-Once you have installed the extension, it will become active once you open a workspace that has `artisan` within the root directory.
+Once you have installed the extension, it will become active once you open a workspace that has at least one `artisan` file within the workspace.
 You can then open the command pallet, and start running the commands.
-Just type `Artisan:` to get a list of commands.
+Just type `Artisan:` to get a list of commands. If you have more than one `artisan` file within the workspace, then this will ask which `artisan` file you want to use to execute the selected command.
 
 Many commands have optional input questions, leave them blank to use the defaults, or enter your own value.
 
 All commands are accessible through `Artisan: Run Command`, here you can access your custom commands as well as built in commands.
 
-### Docker
+## Docker
 
 If you are running Laravel with Docker you can set config vars like this, considering your `docker-compose.yml` is placed on project's root.
 
-```
- "artisan.docker.enabled": true,
- "artisan.docker.command": "docker-compose exec app"
+```json
+{
+  "artisan.docker.enabled": true,
+  "artisan.docker.command": "docker-compose exec <app>"
+}
 ```
 
-Where `app` is your container name. Note this is a base command that will be prepend to artisan commands.
+Where `<app>` is your container name. **Note** this is a base command that will prepend to artisan commands.
 
-Ex: `docker-compose exec app php artisan make:model Post`.
+Example:
+
+```sh
+docker-compose exec app php artisan make:model Post
+```
 
 Before running any commands, make sure the containers are running (`docker-compose up`).
 

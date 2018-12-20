@@ -92,10 +92,10 @@ export default class Common {
     let cmd
 
     if (dockerEnabled) {
-      command = `php artisan ${command}`.trim()
+      command = `php artisan ${command}`
       cmd = `cd ${artisanRoot} && ${dockerCommand} ${command}`
     } else {
-      command = `"${phpLocation}" artisan ${command}`.trim()
+      command = `"${phpLocation}" artisan ${command}`
       cmd = process.platform == 'win32' ?
         // Windows command
         `cd /d "${artisanRoot}" && ${command}` :
@@ -103,7 +103,7 @@ export default class Common {
         `cd "${artisanRoot}" && ${command}`
     }
 
-    Output.command(command)
+    Output.command(command.trim())
     cp.exec(cmd, async (err, stdout, stderr) => {
       if (err) {
         Output.error(err.message.trim())
