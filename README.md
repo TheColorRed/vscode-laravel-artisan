@@ -12,6 +12,7 @@ Run Laravel Artisan commands from within Visual Studio Code.
 * Generate Keys
 * View all routes
 * Start/stop a local php server for test purposes
+* Docker support
 
 ### Get a list of routes
 
@@ -45,6 +46,22 @@ Just type `Artisan:` to get a list of commands.
 Many commands have optional input questions, leave them blank to use the defaults, or enter your own value.
 
 All commands are accessible through `Artisan: Run Command`, here you can access your custom commands as well as built in commands.
+
+### Docker
+
+If you are running Laravel with Docker you can set config vars like this, considering your `docker-compose.yml` is placed on project's root.
+
+```
+ "artisan.docker.enabled": true,
+ "artisan.docker.command": "docker-compose exec app"
+```
+
+Where `app` is your container name. Note this is a base command that will be prepend to artisan commands.
+
+Ex: `docker-compose exec app php artisan make:model Post`.
+
+Before running any commands, make sure the containers are running (`docker-compose up`).
+
 
 ## WSL
 

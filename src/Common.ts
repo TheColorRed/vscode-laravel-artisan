@@ -86,13 +86,22 @@ export default class Common {
     // Try an get a custom php location
     let config = workspace.getConfiguration('artisan')
     let phpLocation = config.get<string | null>('php.location', 'php')
+    let dockerEnabled = config.get('docker.enabled', false)
+    let dockerCommand = config.get('docker.command', null)
 
-    command = `"${phpLocation}" artisan ${command}`.trim()
-    let cmd = process.platform == 'win32' ?
-      // Windows command
-      `cd /d "${artisanRoot}" && ${command}` :
-      // Unix command
-      `cd "${artisanRoot}" && ${command}`
+    let cmd
+
+    if (dockerEnabled) {
+      command = `php artisan ${command}`.trim()
+      cmd = `cd ${artisanRoot} && ${dockerCommand} ${command}`
+    } else {
+      command = `"${phpLocation}" artisan ${command}`.trim()
+      cmd = process.platform == 'win32' ?
+        // Windows command
+        `cd /d "${artisanRoot}" && ${command}` :
+        // Unix command
+        `cd "${artisanRoot}" && ${command}`
+    }
 
     Output.command(command)
     cp.exec(cmd, async (err, stdout, stderr) => {
