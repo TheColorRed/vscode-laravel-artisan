@@ -12,7 +12,7 @@ export default class CacheClear extends Common {
       if (info.err) {
         this.showError('The cache could not be cleared', info.err)
       } else {
-        this.showMessage('The was cleared')
+        this.showMessage('The cache was cleared')
       }
     })
   }
