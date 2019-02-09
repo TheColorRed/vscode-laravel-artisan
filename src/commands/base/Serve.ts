@@ -1,4 +1,4 @@
-import { window, Terminal } from 'vscode'
+import { workspace, window, Terminal } from 'vscode'
 import Common from '../../Common'
 
 export default class Server extends Common {
@@ -9,12 +9,16 @@ export default class Server extends Common {
   private static port: string
 
   public static async run(useDefaults = false) {
+    
+    let config = workspace.getConfiguration("artisan")
+    let defaultHost = config.get<string>("serve.defaultHost")
+    let defaultPort = config.get<string>("serve.defaultPort")
 
-    let host = useDefaults ? '' : await this.getInput('Should I use a specific host (Default: localhost)?')
-    let port = useDefaults ? '' : await this.getInput('Should I use a specific port (Default: 8000)?')
+    let host = useDefaults ? '' : await this.getInput(`Should I use a specific host (Default: ${defaultHost})?`)
+    let port = useDefaults ? '' : await this.getInput(`Should I use a specific port (Default: ${defaultPort})?`)
 
-    this.host = host.length > 0 ? host : 'localhost'
-    this.port = port.length > 0 ? port : '8000'
+    this.host = host.length > 0 ? host : defaultHost
+    this.port = port.length > 0 ? port : defaultPort
 
     // let command = `serve ${'--host=' + this.host} ${'--port=' + this.port}`
 
