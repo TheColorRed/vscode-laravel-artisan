@@ -1,3 +1,8 @@
+# 0.0.25
+- Added a `maxBuffer` setting to allow for larger Artisan responses
+  - Default is 200kb
+- Added custom default host/port values when running `artisan serve`
+
 # 0.0.24
 - Added Docker support
   - Added setting `"artisan.docker.enabled": true` to enable/disable docker

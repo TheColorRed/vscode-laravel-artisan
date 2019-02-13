@@ -86,8 +86,9 @@ export default class Common {
     // Try an get a custom php location
     let config = workspace.getConfiguration('artisan')
     let phpLocation = config.get<string | null>('php.location', 'php')
-    let dockerEnabled = config.get('docker.enabled', false)
-    let dockerCommand = config.get('docker.command', null)
+    let dockerEnabled = config.get<boolean>('docker.enabled', false)
+    let dockerCommand = config.get<string>('docker.command', null)
+    let maxBuffer = config.get<number>('maxBuffer', 1024 * 200)
 
     let cmd
 
@@ -104,7 +105,7 @@ export default class Common {
     }
 
     Output.command(command.trim())
-    cp.exec(cmd, async (err, stdout, stderr) => {
+    cp.exec(cmd, { maxBuffer }, async (err, stdout, stderr) => {
       if (err) {
         Output.error(err.message.trim())
         Output.showConsole()
