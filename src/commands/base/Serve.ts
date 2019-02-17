@@ -11,8 +11,8 @@ export default class Server extends Common {
   public static async run(useDefaults = false) {
     
     let config = workspace.getConfiguration("artisan")
-    let defaultHost = config.get<string>("serve.defaultHost")
-    let defaultPort = config.get<string>("serve.defaultPort")
+    let defaultHost = config.get<string>("serve.defaultHost", 'localhost')
+    let defaultPort = config.get<string>("serve.defaultPort", '8000')
 
     let host = useDefaults ? '' : await this.getInput(`Should I use a specific host (Default: ${defaultHost})?`)
     let port = useDefaults ? '' : await this.getInput(`Should I use a specific port (Default: ${defaultPort})?`)
