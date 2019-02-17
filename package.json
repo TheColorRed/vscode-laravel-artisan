@@ -48,6 +48,16 @@
           "default": "php",
           "description": "Sets a custom location to the php executable"
         },
+        "artisan.serve.defaultHost": {
+          "type": "string",
+          "default": "localhost",
+          "description": "Sets the default server address for artisan serve"
+        },
+        "artisan.serve.defaultPort": {
+          "type": "string",
+          "default": "8000",
+          "description": "Sets the default port address for artisan serve"
+        },
         "artisan.docker.enabled": {
           "type": "boolean",
           "default": false,
