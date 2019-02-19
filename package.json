@@ -20,7 +20,8 @@
   ],
   "keywords": [
     "Laravel",
-    "Artisan"
+    "Artisan",
+    "php"
   ],
   "activationEvents": [
     "workspaceContains:**/artisan"
