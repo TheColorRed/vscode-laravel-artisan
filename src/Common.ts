@@ -51,7 +51,7 @@ export default class Common {
     let additionalLocations = config.get<string | null | string[]>("location")
     additionalLocations = typeof additionalLocations == 'string' ? new Array(1).concat(additionalLocations) : additionalLocations
     let list = this.artisanFileList.concat(additionalLocations.map(i => Uri.parse(i)))
-    if (list.length == 1) return list[0].fsPath
+    if (list.length == 1 && list[0].fsPath.length) return list[0].fsPath
     else if (list.length == 0) return 'artisan'
     let artisanToUse = await Common.getListInput('Which artisan should execute this command?',
       list
@@ -90,7 +90,7 @@ export default class Common {
     let dockerCommand = config.get<string>('docker.command', null)
     let maxBuffer = config.get<number>('maxBuffer', 1024 * 200)
 
-    let cmd
+    let cmd = ''
 
     if (dockerEnabled) {
       command = `php artisan ${command}`

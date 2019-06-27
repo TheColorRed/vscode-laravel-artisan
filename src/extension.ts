@@ -13,6 +13,7 @@ import Server from './commands/base/Serve'
 import List from './commands/base/List'
 
 // Make files
+import MakeAuth from './commands/make/Auth'
 import MakeCommand from './commands/make/Command'
 import MakeController from './commands/make/Controller'
 import MakeEvent from './commands/make/Event'
@@ -79,6 +80,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand('artisan.list', () => { List.run() }))
 
   // Make commands
+  context.subscriptions.push(commands.registerCommand('artisan.make.auth', () => { MakeAuth.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.controller', () => { MakeController.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.factory', () => { MakeFactory.run() }))
