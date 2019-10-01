@@ -1,7 +1,13 @@
 # 0.0.25
 - Added a `maxBuffer` setting to allow for larger Artisan responses
-  - Default is 200kb
-- Added custom default host/port values when running `artisan serve`
+  - Default value is 200kb
+- Added custom default host/port settings for when running an Artisan server
+  - The config settings are as follows
+    - `"artisan.serve.defaultHost": "localhost"`
+    - `"artisan.serve.defaultPort": "8000"`
+  - These settings will be used for the following commands
+    - `Artisan: Start Server`
+    - `Artisan: Start Server (Default Host and Port)`
 
 # 0.0.24
 - Added Docker support

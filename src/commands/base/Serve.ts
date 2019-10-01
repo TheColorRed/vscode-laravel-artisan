@@ -13,8 +13,8 @@ export default class Server extends Common {
     let defaultHost = config.get<string>("serve.defaultHost", 'localhost')
     let defaultPort = config.get<string>("serve.defaultPort", '8000')
 
-    let host = useDefaults ? '' : await this.getInput(`Should I use a specific host (Default: ${defaultHost})?`)
-    let port = useDefaults ? '' : await this.getInput(`Should I use a specific port (Default: ${defaultPort})?`)
+    let host = useDefaults ? defaultHost : await this.getInput(`Should I use a specific host (Default: ${defaultHost})?`)
+    let port = useDefaults ? defaultPort : await this.getInput(`Should I use a specific port (Default: ${defaultPort})?`)
 
     Server.host = host.length > 0 ? host : defaultHost
     Server.port = port.length > 0 ? port : defaultPort
