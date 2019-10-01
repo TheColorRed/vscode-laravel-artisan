@@ -1,6 +1,6 @@
 import Common from '../../Common'
 
-export default class ClearCompiled extends Common {
+export default class List extends Common {
 
   public static async run() {
     let command = `list --format=json`
@@ -35,7 +35,7 @@ export default class ClearCompiled extends Common {
           }
           let opts: string[] = []
           for (let i in command.definition.options) {
-            if (['help', 'quiet', 'version', 'ansi', 'no-ansi', 'no-interaction', 'env', 'verbose'].indexOf(i) > -1) { continue }
+            if (['help', 'quiet', 'version', 'ansi', 'no-ansi', 'no-interaction', 'env', 'verbose'].indexOf(i) > -1) continue
             let name: string = command.definition.options[i].name
             let descr: string = command.definition.options[i].description
             opts.push(name + ' &ndash; ' + descr)
