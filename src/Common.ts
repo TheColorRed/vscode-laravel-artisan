@@ -1,8 +1,7 @@
 import { workspace, window, commands, Uri, ViewColumn, Selection } from 'vscode'
 import * as cp from 'child_process'
 import Output from './utils/Output'
-import { join } from 'path';
-import { resolve } from 'dns';
+import { join } from 'path'
 
 interface Command {
   name: string

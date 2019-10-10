@@ -1,3 +1,8 @@
+# 0.0.27
+- Fixed incorrectly formatted start server command
+# 0.0.26
+- Added `make:auth` command
+- Fixed problem of opening action in the routes list
 # 0.0.25
 - Added a `maxBuffer` setting to allow for larger Artisan responses
   - Default value is 200kb

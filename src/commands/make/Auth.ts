@@ -1,7 +1,5 @@
 import Common from '../../Common'
 
-declare type ControllerType = 'basic' | 'resource' | 'api'
-
 export default class MakeAuth extends Common {
 
   public static async run() {
@@ -17,7 +15,6 @@ export default class MakeAuth extends Common {
         this.showError('Could not create the auth', info.err)
       } else {
         this.showMessage('Auth has successfully be created.')
-        // await this.openFile(info.artisan.dir, '/app/Http/Controllers/' + ctrlName + '.php')
       }
     })
   }
