@@ -26,7 +26,7 @@ export default class Server extends Common {
 
     this.terminal = window.createTerminal('Laravel Artisan Server')
     this.terminal.show()
-    this.terminal.sendText(`php "${artisanToUse}" serve ${'--host=' + this.host} ${'--port=' + this.port}`)
+    this.terminal.sendText(`php "${artisanToUse}" serve ${'--host="' + this.host + '"'} ${'--port="' + this.port + '"'}`)
     this.showMessage(`The server is now running on "http://${Server.host}:${Server.port}"`)
   }
 
