@@ -24,7 +24,7 @@ export default class MakeMigration extends Common {
       tableName = await this.getInput('What is the name of the table?')
     }
 
-    let command = `make:migration ${migrationName} ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`
+    let command = `make:migration "${migrationName}" ${createTable ? '--create=' + tableName : ''} ${modifyTable ? '--table=' + tableName : ''}`
 
     // Generate the controller
     this.execCmd(command, async (info) => {
