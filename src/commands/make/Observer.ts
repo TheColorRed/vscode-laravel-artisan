@@ -3,7 +3,7 @@ import Common from '../../Common'
 export default class MakeObserver extends Common {
 
   public static async run() {
-    // Get the name of the controller to create
+    // Get the name of the observer to create
     let observerName = await this.getInput('Observer Name')
     if (observerName.length == 0) {
       this.showError('An observer name is required')
