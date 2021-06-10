@@ -6,7 +6,7 @@ export default class MakeObserver extends Common {
     // Get the name of the controller to create
     let observerName = await this.getInput('Observer Name')
     if (observerName.length == 0) {
-      this.showError('A observer name is required')
+      this.showError('An observer name is required')
       return
     }
 
