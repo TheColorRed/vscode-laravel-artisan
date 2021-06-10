@@ -244,6 +244,10 @@
         "title": "Artisan: Make Notification"
       },
       {
+        "command": "artisan.make.observer",
+        "title": "Artisan: Make Observer"
+      },
+      {
         "command": "artisan.make.policy",
         "title": "Artisan: Make Policy"
       },
@@ -381,6 +385,5 @@
     "mocha": "^2.3.3",
     "typescript": "^3.4.2",
     "vscode": "^1.1.35"
-  },
-  "dependencies": {}
+  }
 }
