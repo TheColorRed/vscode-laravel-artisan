@@ -25,6 +25,7 @@ import MakeMiddleware from './commands/make/Middleware'
 import MakeModel from './commands/make/Model'
 import MakeMigration from './commands/make/Migration'
 import MakeNotification from './commands/make/Notification'
+import MakeObserver from './commands/make/Observer'
 import MakePolicy from './commands/make/Policy'
 import MakeProvider from './commands/make/Provider'
 import MakeRequest from './commands/make/Request'
@@ -92,6 +93,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand('artisan.make.model', () => { MakeModel.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.migration', () => { MakeMigration.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.notification', () => { MakeNotification.run() }))
+  context.subscriptions.push(commands.registerCommand('artisan.make.observer', () => { MakeObserver.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.policy', () => { MakePolicy.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.provider', () => { MakeProvider.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.request', () => { MakeRequest.run() }))
