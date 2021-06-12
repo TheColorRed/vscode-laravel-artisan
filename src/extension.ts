@@ -15,6 +15,7 @@ import List from './commands/base/List'
 // Make files
 import MakeAuth from './commands/make/Auth'
 import MakeCommand from './commands/make/Command'
+import MakeComponent from './commands/make/Component'
 import MakeController from './commands/make/Controller'
 import MakeEvent from './commands/make/Event'
 import MakeFactory from './commands/make/Factory'
@@ -84,6 +85,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand('artisan.make.auth', () => { MakeAuth.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.controller', () => { MakeController.run() }))
+  context.subscriptions.push(commands.registerCommand('artisan.make.component', () => { MakeComponent.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.factory', () => { MakeFactory.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.event', () => { MakeEvent.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.listener', () => { MakeListener.run() }))
