@@ -12,6 +12,7 @@ export default class Server extends Common {
     let config = workspace.getConfiguration("artisan")
     let defaultHost = config.get<string>("serve.defaultHost", 'localhost')
     let defaultPort = config.get<string>("serve.defaultPort", '8000')
+    let phpLocation = config.get<string | null>('php.location', 'php')
 
     let host = useDefaults ? defaultHost : await this.getInput(`Should I use a specific host (Default: ${defaultHost})?`)
     let port = useDefaults ? defaultPort : await this.getInput(`Should I use a specific port (Default: ${defaultPort})?`)
@@ -23,7 +24,7 @@ export default class Server extends Common {
 
     Server.terminal = window.createTerminal('Laravel Artisan Server')
     Server.terminal.show()
-    Server.terminal.sendText(`php "${artisanToUse}" serve --host='${Server.host}' --port='${Server.port}'`)
+    Server.terminal.sendText(`${phpLocation} "${artisanToUse}" serve --host='${Server.host}' --port='${Server.port}'`)
     this.showMessage(`The server is now running on "http://${Server.host}:${Server.port}"`)
   }
 
