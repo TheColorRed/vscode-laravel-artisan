@@ -30,7 +30,7 @@
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
-      "title": "Laravel Artisan Docker",
+      "title": "Laravel Artisan",
       "properties": {
         "artisan.location": {
           "type": [
@@ -387,7 +387,6 @@
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/node": "^9.6.49",
-    "esbuild": "^0.13.4",
     "mocha": "^2.3.3",
     "typescript": "^3.9.10",
     "vscode": "^1.1.35"
