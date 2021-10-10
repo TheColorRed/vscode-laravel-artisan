@@ -30,7 +30,7 @@
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
-      "title": "Laravel Artisan",
+      "title": "Laravel Artisan Docker",
       "properties": {
         "artisan.location": {
           "type": [
@@ -64,6 +64,11 @@
           "type": "boolean",
           "default": false,
           "description": "Should commands get executed using docker?"
+        },
+        "artisan.docker.appendBaseCommand": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable this append php artisan before docker command"
         },
         "artisan.docker.command": {
           "type": "string",
@@ -382,8 +387,9 @@
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/node": "^9.6.49",
+    "esbuild": "^0.13.4",
     "mocha": "^2.3.3",
-    "typescript": "^3.4.2",
+    "typescript": "^3.9.10",
     "vscode": "^1.1.35"
   }
 }

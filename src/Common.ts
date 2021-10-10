@@ -86,14 +86,19 @@ export default class Common {
     let config = workspace.getConfiguration('artisan')
     let phpLocation = config.get<string | null>('php.location', 'php')
     let dockerEnabled = config.get<boolean>('docker.enabled', false)
+    let dockerAppendBaseCommand = config.get<boolean>('docker.appendBaseCommand', true)
     let dockerCommand = config.get<string>('docker.command', null)
     let maxBuffer = config.get<number>('maxBuffer', 1024 * 200)
 
     let cmd = ''
 
     if (dockerEnabled) {
-      command = `php artisan ${command}`
-      cmd = `cd ${artisanRoot} && ${dockerCommand} ${command}`
+      if(dockerAppendBaseCommand){
+        command = `php artisan ${command}`
+      }else{
+        command = `${command}`
+      }
+      cmd = `${dockerCommand} ${command}`
     } else {
       command = `"${phpLocation}" artisan ${command}`
       cmd = process.platform == 'win32' ?
@@ -104,7 +109,7 @@ export default class Common {
     }
 
     Output.command(command.trim())
-    cp.exec(cmd, { maxBuffer }, async (err, stdout, stderr) => {
+    cp.exec(cmd, { maxBuffer ,cwd: artisanRoot }, async (err, stdout, stderr) => {
       if (err) {
         Output.error(err.message.trim())
         Output.showConsole()
