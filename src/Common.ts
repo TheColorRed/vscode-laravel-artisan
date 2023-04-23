@@ -105,7 +105,10 @@ export default class Common {
 
     Output.command(command.trim())
     cp.exec(cmd, { maxBuffer }, async (err, stdout, stderr) => {
+      Output.command(stdout.trim())
+      Output.showConsole()
       if (err) {
+        Output.error('-----------------------------------------')
         Output.error(err.message.trim())
         Output.showConsole()
       }
