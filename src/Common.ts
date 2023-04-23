@@ -110,8 +110,6 @@ export default class Common {
       maxBuffer: maxBuffer 
     }, async (err, stdout, stderr) => {
       if (err) {
-        Output.error(stdout.trim())
-        Output.error('----------------------')
         Output.error(err.message.trim())
         Output.showConsole()
       }
