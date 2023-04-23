@@ -1,4 +1,5 @@
 import Common from '../../Common'
+import * as fs from 'fs';
 
 export default class MakeModel extends Common {
 
@@ -42,7 +43,12 @@ export default class MakeModel extends Common {
       if (info.err) {
         this.showError('Could not create the model', info.err)
       } else {
-        await this.openFile(info.artisan.dir, '/app/' + modelName + '.php')
+        if (fs.existsSync(info.artisan.dir + '/app/Models/' + modelName + '.php')) {
+          await this.openFile(info.artisan.dir, '/app/Models/' + modelName + '.php')
+        }
+        else{
+          await this.openFile(info.artisan.dir, '/app/' + modelName + '.php')
+        }
         if (isController || isAll) {
           await this.openFile(info.artisan.dir, '/app/Http/Controllers/' + modelName + 'Controller.php')
         }
