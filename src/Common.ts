@@ -109,7 +109,10 @@ export default class Common {
       cwd: artisanRoot,
       maxBuffer: maxBuffer 
     }, async (err, stdout, stderr) => {
+      Output.command(stdout.trim())
+      Output.showConsole()
       if (err) {
+        Output.command('-----------------------------------')
         Output.error(err.message.trim())
         Output.showConsole()
       }
