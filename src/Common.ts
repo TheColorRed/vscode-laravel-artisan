@@ -93,19 +93,26 @@ export default class Common {
 
     if (dockerEnabled) {
       command = `php artisan ${command}`
-      cmd = `cd ${artisanRoot} && ${dockerCommand} ${command}`
+      cmd = `${dockerCommand} ${command}`
     } else {
-      command = `"${phpLocation}" artisan ${command}`
-      cmd = process.platform == 'win32' ?
-        // Windows command
-        `cd /d "${artisanRoot}" && ${command}` :
-        // Unix command
-        `cd "${artisanRoot}" && ${command}`
+      if (phpLocation == 'php'){
+        command = `php artisan ${command}`
+      }
+      else{
+        command = `"${phpLocation}" artisan ${command}`
+      }
+      cmd = command
     }
 
     Output.command(command.trim())
-    cp.exec(cmd, { maxBuffer }, async (err, stdout, stderr) => {
+    cp.exec(cmd, { 
+      cwd: artisanRoot,
+      maxBuffer: maxBuffer 
+    }, async (err, stdout, stderr) => {
+      Output.command(stdout.trim())
+      Output.showConsole()
       if (err) {
+        Output.command('-----------------------------------')
         Output.error(err.message.trim())
         Output.showConsole()
       }
