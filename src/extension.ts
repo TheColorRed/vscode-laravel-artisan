@@ -79,6 +79,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand('artisan.startServer', () => { Server.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.startServerUseDefaults', () => { Server.run(true) }))
   context.subscriptions.push(commands.registerCommand('artisan.stopServer', () => { Server.stop() }))
+  context.subscriptions.push(commands.registerCommand('artisan.restartServer', () => { Server.restart() }))
   context.subscriptions.push(commands.registerCommand('artisan.list', () => { List.run() }))
 
   // Make commands
