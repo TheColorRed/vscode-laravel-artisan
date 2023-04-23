@@ -1,4 +1,5 @@
 import Common from '../../Common'
+import * as fs from 'fs';
 
 export default class MakeSeeder extends Common {
 
@@ -16,7 +17,12 @@ export default class MakeSeeder extends Common {
       if (info.err) {
         this.showError('Could not create the seeder', info.err)
       } else {
-        await this.openFile(info.artisan.dir, '/database/seeds/' + seedName + '.php')
+        if (fs.existsSync(info.artisan.dir + '/database/seeders/' + seedName + '.php')) {
+          await this.openFile(info.artisan.dir, '/database/seeders/' + seedName + '.php')
+        }
+        else{
+          await this.openFile(info.artisan.dir, '/database/seeds/' + seedName + '.php')
+        }
       }
     })
   }
