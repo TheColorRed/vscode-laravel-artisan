@@ -36,4 +36,9 @@ export default class Server extends Common {
       this.showError('There is no server currently running')
     }
   }
+
+  public static async restart() {
+    Server.stop();
+    Server.run();
+  }
 }
