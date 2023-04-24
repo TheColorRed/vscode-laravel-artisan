@@ -1,26 +1,35 @@
-import { workspace, window, commands, Uri, ViewColumn, Selection } from 'vscode'
-import * as cp from 'child_process'
-import Output from './utils/Output'
-import { join } from 'path'
+import * as cp from 'child_process';
+import { join } from 'path';
+import { Selection, Uri, ViewColumn, commands, window, workspace } from 'vscode';
+import Output from './utils/Output';
 
 interface Command {
-  name: string
-  description: string
-  arguments: any[]
+  name: string;
+  description: string;
+  arguments: any[];
   options: {
-    name: string
-    shortcut: string
-    accept_value: boolean
-    is_value_required: boolean
-    is_multiple: boolean
-    description: string
-    default: any
-  }[]
+    name: string;
+    shortcut: string;
+    accept_value: boolean;
+    is_value_required: boolean;
+    is_multiple: boolean;
+    description: string;
+    default: any;
+  }[];
+}
+
+export interface CommandInfo {
+  err: Error | undefined;
+  stdout: string;
+  stderr: string;
+  artisan: {
+    dir: string;
+    path: string;
+  };
 }
 
 export default class Common {
-
-  public static readonly artisanFileList: Uri[] = []
+  public static readonly artisanFileList: Uri[] = [];
 
   // protected static get artisanRoot(): string {
   //   let config = workspace.getConfiguration("artisan")
@@ -46,13 +55,14 @@ export default class Common {
   // }
 
   protected static async listArtisanPaths() {
-    let config = workspace.getConfiguration("artisan")
-    let additionalLocations = config.get<string | null | string[]>("location")
-    additionalLocations = typeof additionalLocations == 'string' ? new Array(1).concat(additionalLocations) : additionalLocations
-    let list = this.artisanFileList.concat(additionalLocations.map(i => Uri.parse(i)))
-    if (list.length == 1 && list[0].fsPath.length) return list[0].fsPath
-    else if (list.length == 0) return 'artisan'
-    let artisanToUse = await Common.getListInput('Which artisan should execute this command?',
+    let config = workspace.getConfiguration('artisan');
+    let additionalLocations = config.get<string | null | string[]>('location');
+    additionalLocations = typeof additionalLocations == 'string' ? new Array(1).concat(additionalLocations) : additionalLocations;
+    let list = this.artisanFileList.concat(additionalLocations.map(i => Uri.parse(i)));
+    if (list.length == 1 && list[0].fsPath.length) return list[0].fsPath;
+    else if (list.length == 0) return 'artisan';
+    let artisanToUse = await Common.getListInput(
+      'Which artisan should execute this command?',
       list
         // Get the fs path from the URI
         .map(i => i.fsPath)
@@ -60,106 +70,141 @@ export default class Common {
         .filter(String)
         // Remove Duplicates
         .filter((v, i, a) => a.indexOf(v) === i)
-    )
-    return artisanToUse
+    );
+    return artisanToUse;
   }
 
+  protected static async getArtisanRoot(artisan?: string) {
+    const artisanToUse = artisan ? artisan : await this.listArtisanPaths();
+    return artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '');
+  }
 
-  protected static async execCmd(command: string, callback: (info: {
-    err: Error | undefined
-    stdout: string
-    stderr: string
-    artisan: {
-      dir: string
-      path: string
-    }
-  }) => void, artisan?: string) {
-    let artisanToUse = artisan ? artisan : await this.listArtisanPaths()
+  protected static async execCmd(command: string, callback: (info: CommandInfo) => void, artisan?: string) {
+    const artisanToUse = artisan ? artisan : await this.listArtisanPaths();
     // // If only one artisan is found use it
     // if (this.artisanFileList.length == 1) artisanToUse = this.artisanFileList[0].fsPath
     // // If more than one artisan is found ask which one to use
     // else if (this.artisanFileList.length > 1) artisanToUse = await this.listArtisanPaths()
 
-    let artisanRoot = artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '')
+    // const artisanRoot = artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '');
+    const artisanRoot = await this.getArtisanRoot(artisan);
 
     // Try an get a custom php location
-    let config = workspace.getConfiguration('artisan')
-    let phpLocation = config.get<string | null>('php.location', 'php')
-    let dockerEnabled = config.get<boolean>('docker.enabled', false)
-    let dockerCommand = config.get<string>('docker.command', null)
-    let maxBuffer = config.get<number>('maxBuffer', 1024 * 200)
+    const config = workspace.getConfiguration('artisan');
+    const phpLocation = config.get<string | null>('php.location', 'php');
+    const dockerEnabled = config.get<boolean>('docker.enabled', false);
+    const dockerCommand = config.get<string>('docker.command', null);
+    const maxBuffer = config.get<number>('maxBuffer', 1024 * 200);
+    const wsl = config.get<boolean>('wsl.enabled', false);
 
-    let cmd = ''
-
+    let cmd = '';
     if (dockerEnabled) {
-      command = `php artisan ${command}`
-      cmd = `${dockerCommand} ${command}`
+      command = `php artisan ${command}`;
+      cmd = `${dockerCommand} ${command}`;
     } else {
-      if (phpLocation == 'php'){
-        command = `php artisan ${command}`
+      if (phpLocation == 'php') {
+        command = `php artisan ${command}`;
+      } else {
+        command = `"${phpLocation}" artisan ${command}`;
       }
-      else{
-        command = `"${phpLocation}" artisan ${command}`
-      }
-      cmd = command
+      cmd = command;
     }
 
-    Output.command(command.trim())
-    cp.exec(cmd, { 
-      cwd: artisanRoot,
-      maxBuffer: maxBuffer 
-    }, async (err, stdout, stderr) => {
-      Output.command(stdout.trim())
-      Output.showConsole()
-      if (err) {
-        Output.command('-----------------------------------')
-        Output.error(err.message.trim())
-        Output.showConsole()
-      }
-      await callback({
-        err, stdout, stderr, artisan: {
-          dir: artisanRoot, path: artisanToUse
+    Output.command(command.trim());
+    if (wsl) {
+      console.log('wsl', cmd);
+      const child = cp.spawn('wsl', [cmd], {
+        cwd: artisanRoot,
+        shell: true,
+      });
+      child.stdout.on('data', data => {
+        callback({
+          err: undefined,
+          stdout: data.toString(),
+          stderr: undefined,
+          artisan: {
+            dir: artisanRoot,
+            path: artisanToUse,
+          },
+        });
+      });
+      child.stderr.on('error', err => {
+        callback({
+          err,
+          stdout: undefined,
+          stderr: undefined,
+          artisan: {
+            dir: artisanRoot,
+            path: artisanToUse,
+          },
+        });
+      });
+    } else {
+      cp.exec(
+        cmd,
+        {
+          cwd: artisanRoot,
+          maxBuffer: maxBuffer,
+        },
+        (err, stdout, stderr) => {
+          Output.command(stdout.trim());
+          Output.showConsole();
+          if (err) {
+            Output.command('-----------------------------------');
+            Output.error(err.message.trim());
+            Output.showConsole();
+          }
+          callback({
+            err,
+            stdout,
+            stderr,
+            artisan: {
+              dir: artisanRoot,
+              path: artisanToUse,
+            },
+          });
         }
-      })
-    })
+      );
+    }
   }
 
   protected static async openFile(root: string, filename: string) {
     try {
       // let doc = await workspace.openTextDocument(this.artisanRoot + '/' + filename)
-      let doc = await workspace.openTextDocument(join(root, filename))
-      window.showTextDocument(doc)
-      this.refreshFilesExplorer()
+      let doc = await workspace.openTextDocument(join(root, filename));
+      window.showTextDocument(doc);
+      this.refreshFilesExplorer();
     } catch (e) {
-      console.log(e.message)
+      console.log(e.message);
     }
   }
 
   protected static parseCliTable(cliTable: string) {
-    let clirows = cliTable.split(/\r\n|\n/g)
-    let headers: string[] = []
-    let rows: string[][] = []
+    let cliRows = cliTable.split(/\r\n|\n/g);
+    let headers: string[] = [];
+    let rows: string[][] = [];
     // Parse the cli table
-    for (let i = 0, len = clirows.length; i < len; i++) {
-      if (i == 0 || i == 2) { continue }
-      else if (i == 1) {
-        (headers = clirows[i].split('|')).forEach((v, k) => {
-          headers[k] = v.replace(/[\u001b\u009b][[()#?]*(?:[0-9]{1,4}(?:[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '').trim()
+    for (let i = 0, len = cliRows.length; i < len; i++) {
+      if (i == 0 || i == 2) {
+        continue;
+      } else if (i == 1) {
+        (headers = cliRows[i].split('|')).forEach((v, k) => {
+          headers[k] = v.replace(/[\u001b\u009b][[()#?]*(?:[0-9]{1,4}(?:[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '').trim();
           if (headers[k] == '') {
-            delete headers[k]
+            delete headers[k];
           }
-        })
+        });
       } else {
-        if (clirows[i].indexOf('|') > -1) {
-          let row: string[] = []
-          clirows[i].split(/ \| /g).forEach((v) => {
-            row.push(v.replace(/^\||\|$/g, '').trim())
-          })
-          rows.push(row)
+        if (cliRows[i].indexOf('|') > -1) {
+          let row: string[] = [];
+          cliRows[i].split(/ \| /g).forEach(v => {
+            row.push(v.replace(/^\||\|$/g, '').trim());
+          });
+          rows.push(row);
         }
       }
     }
-    return { headers: headers, rows: rows }
+    return { headers: headers, rows: rows };
   }
 
   // protected static async openVirtualFile(path: string, title: string, content: string) {
@@ -171,7 +216,6 @@ export default class Common {
   //   workspace.applyEdit(edit)
   //   commands.executeCommand('vscode.previewHtml', uri, ViewColumn.One, title)
   // }
-
 
   private static get tableStyle(): string {
     return `<style>
@@ -186,29 +230,36 @@ export default class Common {
       .hidden { display: none; }
       .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
       #filter { display: block; padding: 5px; width: 100%; }
-    </style>`
+      .loading { text-align: center; }
+    </style>`;
   }
 
   protected static async openVirtualHtmlFile(openPath: string, title: string, headers: string[], rows: string[][], artisanRoot: string) {
-    let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`
-    html += `${this.tableStyle}<table>`
-    html += '<thead><tr>'
+    let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`;
+    html += '<h2 class="loading">Loading Route Information...</h2>';
+    html += `${this.tableStyle}<table class="hidden">`;
+    html += '<thead><tr>';
     headers.forEach(header => {
-      html += '<th>' + header + '</th>'
-    })
-    html += '</tr></thead><tbody>'
+      html += '<th>' + header + '</th>';
+    });
+    html += '</tr></thead><tbody>';
     rows.forEach(row => {
-      html += '<tr>'
+      html += '<tr>';
       row.forEach(item => {
-        if (item.match(/app\\/i)) {
-          html += `<td><a href="file:///${workspace.rootPath}/${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php" data-method="${item.replace(/^.+@/, '')}" class="app-item">` + item + '</a></td>'
+        if ((item ?? '').match(/app\\/i)) {
+          html +=
+            `<td><a href="file:///${workspace.rootPath}/${item
+              .replace(/@.+$/, '')
+              .replace(/^App/g, 'app')}.php" data-method="${item.replace(/^.+@/, '')}" class="app-item">` +
+            item +
+            '</a></td>';
         } else {
-          html += '<td>' + item + '</td>'
+          html += '<td>' + item + '</td>';
         }
-      })
-      html += '</tr>'
-    })
-    html += '</tbody></table>'
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
     html += `<script>
     const filter = document.querySelector('#filter')
     const body = document.querySelector('table tbody')
@@ -216,6 +267,8 @@ export default class Common {
     const vscode = acquireVsCodeApi()
     console.log(rootPath)
     filter.focus()
+    const table = document.querySelector('table')
+    const loading = document.querySelector('.loading')
     function filterItems(){
       let v = filter.value
       document.querySelectorAll('tbody > tr').forEach(row => {
@@ -240,11 +293,15 @@ export default class Common {
     filter.addEventListener('input', filterItems)
     window.addEventListener('message', msg => {
       let rows = msg.data.rows
+      if(rows.length >0){
+        table.classList.remove('hidden')
+        loading.classList.add('hidden')
+      }
       let html = ''
       rows.forEach(row => {
         html += '<tr>'
         row.forEach(item => {
-          if (item.match(/app\\\\/i)) {
+          if ((item??'').match(/app\\\\/i)) {
             let file = \`\${rootPath}/\${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php\`.replace(/\\\\/g, '/')
             html += \`<td><a href="\${file}" data-method="\${item.replace(/^.+@/, '')}" class="app-item">\` + item + '</a></td>'
           } else {
@@ -258,92 +315,99 @@ export default class Common {
       routeEvents()
     })
     routeEvents()
-  </script>`
+  </script>`;
     const panel = window.createWebviewPanel(openPath, title, ViewColumn.Active, {
       enableScripts: true,
-      retainContextWhenHidden: true
-    })
-    panel.webview.html = html
+      retainContextWhenHidden: true,
+    });
+    panel.webview.html = html;
     panel.webview.onDidReceiveMessage(async msg => {
       if (msg.file) {
-        let uri = Uri.parse(msg.file)
-        let method = msg.method || ''
-        let doc = await workspace.openTextDocument(uri)
-        let activeDoc = await window.showTextDocument(doc)
+        let uri = Uri.parse(msg.file);
+        let method = msg.method || '';
+        let doc = await workspace.openTextDocument(uri);
+        let activeDoc = await window.showTextDocument(doc);
         if (method.length > 0) {
-          let idx = doc.getText().indexOf(`function ${method}`)
+          let idx = doc.getText().indexOf(`function ${method}`);
           if (idx > -1) {
-            let pos = doc.positionAt(idx + 9)
-            activeDoc.selection = new Selection(pos, pos)
+            let pos = doc.positionAt(idx + 9);
+            activeDoc.selection = new Selection(pos, pos);
           }
         }
       }
-    })
-    return panel
+    });
+    return panel;
   }
 
   protected static async getInput(placeHolder: string) {
-    let name = await window.showInputBox({ placeHolder: placeHolder.replace(/\s\s+/g, ' ').trim() })
-    name = name == undefined ? '' : name
+    let name = await window.showInputBox({
+      placeHolder: placeHolder.replace(/\s\s+/g, ' ').trim(),
+    });
+    name = name == undefined ? '' : name;
     // if (name.length == 0) {
     //   window.showErrorMessage('Invalid ' + placeHolder)
     //   return ''
     // }
-    return name
+    return name;
   }
 
   protected static async getListInput(placeHolder: string, list: string[]) {
-    let name = await window.showQuickPick(list, { placeHolder: placeHolder })
-    name = name == undefined ? '' : name
-    return name
+    let name = await window.showQuickPick(list, { placeHolder: placeHolder });
+    name = name == undefined ? '' : name;
+    return name;
   }
 
   protected static async getYesNo(placeHolder: string): Promise<boolean> {
-    let value = await window.showQuickPick(['Yes', 'No'], { placeHolder })
-    return value.toLowerCase() == 'yes' ? true : false
+    let value = await window.showQuickPick(['Yes', 'No'], { placeHolder });
+    return value.toLowerCase() == 'yes' ? true : false;
   }
 
   protected static async getNoYes(placeHolder: string): Promise<boolean> {
-    let value = await window.showQuickPick(['No', 'Yes'], { placeHolder })
-    return value.toLowerCase() == 'yes' ? true : false
+    let value = await window.showQuickPick(['No', 'Yes'], { placeHolder });
+    return value.toLowerCase() == 'yes' ? true : false;
   }
 
   protected static async showMessage(message: string) {
-    window.showInformationMessage(message)
-    return true
+    window.showInformationMessage(message);
+    return true;
   }
 
   protected static async showError(message: string, consoleErr = null) {
     if (consoleErr !== null) {
-      message += ' (See output console for more details)'
-      console.error(consoleErr + ' (See output console for more details)')
+      message += ' (See output console for more details)';
+      console.error(consoleErr + ' (See output console for more details)');
     }
-    window.showErrorMessage(message)
-    return false
+    window.showErrorMessage(message);
+    return false;
   }
 
   protected static refreshFilesExplorer() {
-    commands.executeCommand('workbench.files.action.refreshFilesExplorer')
+    commands.executeCommand('workbench.files.action.refreshFilesExplorer');
   }
 
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
-      this.execCmd(`list --format=json`, (info) => {
-        let commands: any[] = JSON.parse(info.stdout).commands
-        let commandList: Command[] = []
+      this.execCmd(`list --format=json`, info => {
+        let commands: any[] = JSON.parse(info.stdout).commands;
+        let commandList: Command[] = [];
         commands.forEach(command => {
-          let commandItem = { name: command.name, description: command.description, options: [], arguments: [] }
+          let commandItem = {
+            name: command.name,
+            description: command.description,
+            options: [],
+            arguments: [],
+          };
           for (let i in command.definition.options) {
-            if (['help', 'quiet', 'verbose', 'version', 'ansi', 'no-ansi', 'no-interaction', 'env'].indexOf(i) > -1) continue
-            commandItem.options.push(command.definition.options[i])
+            if (['help', 'quiet', 'verbose', 'version', 'ansi', 'no-ansi', 'no-interaction', 'env'].indexOf(i) > -1) continue;
+            commandItem.options.push(command.definition.options[i]);
           }
           for (let i in command.definition.arguments) {
-            commandItem.arguments.push(command.definition.arguments[i])
+            commandItem.arguments.push(command.definition.arguments[i]);
           }
-          commandList.push(commandItem)
-        })
-        resolve(commandList)
-      })
-    })
+          commandList.push(commandItem);
+        });
+        resolve(commandList);
+      });
+    });
   }
 }

@@ -4,15 +4,15 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Features
 
-* Supports multiple instances of **artisan** in the same workspace hierarchy
-* Make files (Controllers, Migrations, Models, etc)
-* Run Custom Commands
-* Manage the database
-* Clear Caches
-* Generate Keys
-* View all routes
-* Start/stop a local php server for test purposes
-* Docker support
+- Supports multiple instances of **artisan** in the same workspace hierarchy
+- Make files (Controllers, Migrations, Models, etc)
+- Run Custom Commands
+- Manage the database
+- Clear Caches
+- Generate Keys
+- View all routes
+- Start/stop a local php server for test purposes
+- Docker support
 
 ### Get a list of routes
 
@@ -26,16 +26,16 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 **Note:** The `php` setting is optional if the setting `artisan.php.location` is set in your `settings.json` file and points to a valid php executable. If this setting is set, the extension will prefer the setting over the one within the path.
 
-* A useable version of `php` that can be ran on the command line such as `php-cli` (This should be in your path)
-    * The following command should yield a php version:
-    * `php -v`
-        * If no php version is returned you don't have php setup correctly.
-        * If you get a version back you are good to go!
-* A Laravel install that has `artisan` in the workspace root
-    * cd into your root directory and run the following command:
-    * `php artisan -v`
-        * If an error is returned you don't have laravel setup correctly.
-        * If you get a Laravel version and a list of commands you are good to go!
+- A useable version of `php` that can be ran on the command line such as `php-cli` (This should be in your path)
+  - The following command should yield a php version:
+  - `php -v`
+    - If no php version is returned you don't have php setup correctly.
+    - If you get a version back you are good to go!
+- A Laravel install that has `artisan` in the workspace root
+  - cd into your root directory and run the following command:
+  - `php artisan -v`
+    - If an error is returned you don't have laravel setup correctly.
+    - If you get a Laravel version and a list of commands you are good to go!
 
 ## Usage
 
@@ -68,17 +68,31 @@ docker-compose exec app php artisan make:model Post
 
 Before running any commands, make sure the containers are running (`docker-compose up`).
 
-
 ## WSL
 
 If php is installed with WSL (Windows Subsystems for Linux), add the path to the executable in `settings.json` like below
 
-* Replace `<username>` with the correct user name
-* Replace `CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc` with the proper package name
-* Replace `usr\\bin\\php` if **php** is installed in different location
+### Newer versions of WSL
+
+When using the newer versions of WSL, you can set the `artisan.wsl` setting to `true` and the `artisan.php.location` setting to `/usr/bin/php` to use the default php installation.
 
 ```json
 {
-    "artisan.php.location": "C:\\Users\\<username>\\AppData\\Local\\Packages\\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\\LocalState\\rootfs\\usr\\bin\\php"
+  // Opens wsl and runs the command in the wsl shell
+  "artisan.wsl.enabled": true,
+  // Optional if you have php installed in a different location that the one in the path:
+  "artisan.php.location": "/path/to/php"
+}
+```
+
+### Older versions of WSL
+
+- Replace `<username>` with the correct user name
+- Replace `CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc` with the proper package name
+- Replace `usr\\bin\\php` if **php** is installed in different location
+
+```json
+{
+  "artisan.php.location": "C:\\Users\\<username>\\AppData\\Local\\Packages\\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\\LocalState\\rootfs\\usr\\bin\\php"
 }
 ```

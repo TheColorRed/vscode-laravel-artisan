@@ -1,32 +1,59 @@
-import { WebviewPanel } from 'vscode'
-import Common from '../../Common'
+import { Observable, Subscription, exhaustMap, of, timer } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { WebviewPanel } from 'vscode';
+
+import Common, { CommandInfo } from '../../Common';
 
 export default class RouteList extends Common {
-  private static timeout: NodeJS.Timer
-  public static async run() {
-    let command = `route:list`
-    this.execCmd(command, async (info) => {
-      if (info.err) {
-        return this.showError('The route list could not be generated', info.err)
-      } else {
-        let data = this.parseCliTable(info.stdout)
-        let panel = await this.openVirtualHtmlFile('route-list', 'Route List', data.headers, data.rows, info.artisan.dir)
-        this.ping(panel, info.artisan.path)
-        panel.onDidDispose(() => clearInterval(this.timeout))
+  private static panel: WebviewPanel;
+  private static headers: string[] = ['Method', 'URI', 'Name', 'Action', 'Middleware'];
+
+  private static observable = timer(0, 5000).pipe(
+    map(() => 'route:list --json'),
+    tap(async () => {
+      if (typeof RouteList.panel === 'undefined') {
+        const artisan = await Common.getArtisanRoot();
+        RouteList.panel = await Common.openVirtualHtmlFile('route-list', 'Route List', RouteList.headers, [], artisan);
+        RouteList.panel.onDidDispose(() => RouteList.subscription.unsubscribe());
       }
-    })
+    }),
+    exhaustMap(cmd => RouteList.runCommand(cmd)),
+    filter(info => {
+      if (info.err) {
+        Common.showError('The route list could not be generated.', info.err);
+        return false;
+      }
+      return true;
+    }),
+    switchMap(c =>
+      of(c).pipe(
+        map(info => RouteList.parseRouteList(info.stdout)),
+        tap(async info => RouteList.panel.webview.postMessage({ rows: info.rows }))
+      )
+    )
+  );
+  private static subscription?: Subscription;
+
+  public static async run() {
+    this.subscription = this.observable.subscribe();
   }
 
-  private static ping(panel: WebviewPanel, root: string) {
-    let running = false
-    this.timeout = setInterval(() => {
-      if (running) return
-      running = true
-      this.execCmd('route:list', async (info) => {
-        let data = this.parseCliTable(info.stdout)
-        panel.webview.postMessage({ rows: data.rows })
-        running = false
-      }, root)
-    }, 5000)
+  private static runCommand(cmd) {
+    return new Observable<CommandInfo>(sub => {
+      this.execCmd(cmd, async info => {
+        sub.next(info);
+        sub.complete();
+      });
+    });
+  }
+
+  private static parseRouteList(stdout: string): { headers: string[]; rows: string[][] } {
+    const data = JSON.parse(stdout);
+    console.log('data', data);
+    // {domain: null, method: 'GET|HEAD', uri: '/', name: null, action: 'Closure', middleware: []}
+    const rows = data.map((row: any) => {
+      return [row.method, row.uri, row.name, row.action, row.middleware.join(', ')];
+    });
+    return { headers: ['Method', 'URI', 'Name', 'Action', 'Middleware'], rows };
   }
 }
