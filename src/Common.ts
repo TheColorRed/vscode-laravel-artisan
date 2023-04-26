@@ -1,6 +1,6 @@
 import * as cp from 'child_process';
 import { join } from 'path';
-import { Selection, Uri, ViewColumn, commands, window, workspace } from 'vscode';
+import { ProgressLocation, Selection, Uri, ViewColumn, commands, window, workspace } from 'vscode';
 import Output from './utils/Output';
 
 interface Command {
@@ -30,37 +30,16 @@ export interface CommandInfo {
 
 export default class Common {
   public static readonly artisanFileList: Uri[] = [];
-
-  // protected static get artisanRoot(): string {
-  //   let config = workspace.getConfiguration("artisan")
-  //   let location = config.get<string | number | null | string[]>("location")
-  //   if (location) {
-  //     if (typeof location == 'string') {
-  //       return location.replace(/\$\{workspaceRoot\}/g, workspace.rootPath)
-  //     } else if (typeof location == 'number') {
-  //       return workspace.workspaceFolders[location].uri.fsPath
-  //     }
-  //   }
-  //   // If we have gotten this far then a location hasn't been specified
-  //   // We then get the first workspace
-  //   if (workspace.workspaceFolders) {
-  //     return workspace.workspaceFolders[0].uri.fsPath
-  //   }
-  //   // Last resort get the root path (this is technically deprecated)
-  //   return workspace.rootPath
-  // }
-
-  // protected static get artisan(): string {
-  //   return this.artisanRoot + '/artisan'
-  // }
-
+  /**
+   * Get a list of all artisan files in the workspace.
+   */
   protected static async listArtisanPaths() {
     let config = workspace.getConfiguration('artisan');
     let additionalLocations = config.get<string | null | string[]>('location');
-    additionalLocations = typeof additionalLocations == 'string' ? new Array(1).concat(additionalLocations) : additionalLocations;
+    additionalLocations = typeof additionalLocations === 'string' ? new Array(1).concat(additionalLocations) : additionalLocations;
     let list = this.artisanFileList.concat(additionalLocations.map(i => Uri.parse(i)));
-    if (list.length == 1 && list[0].fsPath.length) return list[0].fsPath;
-    else if (list.length == 0) return 'artisan';
+    if (list.length === 1 && list[0].fsPath.length) return list[0].fsPath;
+    else if (list.length === 0) return 'artisan';
     let artisanToUse = await Common.getListInput(
       'Which artisan should execute this command?',
       list
@@ -73,20 +52,22 @@ export default class Common {
     );
     return artisanToUse;
   }
-
+  /**
+   * Gets an artisan file from the workspace.
+   * @param artisan The artisan path to use. If not specified then the user will be prompted to select one.
+   */
   protected static async getArtisanRoot(artisan?: string) {
     const artisanToUse = artisan ? artisan : await this.listArtisanPaths();
     return artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '');
   }
-
+  /**
+   * Executes an artisan command.
+   * @param command The command to execute.
+   * @param callback The callback to execute when the command is finished.
+   * @param artisan The artisan path to use. If not specified then the user will be prompted to select one.
+   */
   protected static async execCmd(command: string, callback: (info: CommandInfo) => void, artisan?: string) {
     const artisanToUse = artisan ? artisan : await this.listArtisanPaths();
-    // // If only one artisan is found use it
-    // if (this.artisanFileList.length == 1) artisanToUse = this.artisanFileList[0].fsPath
-    // // If more than one artisan is found ask which one to use
-    // else if (this.artisanFileList.length > 1) artisanToUse = await this.listArtisanPaths()
-
-    // const artisanRoot = artisanToUse.replace(/artisan$/, '').replace(/\\$/g, '');
     const artisanRoot = await this.getArtisanRoot(artisan);
 
     // Try an get a custom php location
@@ -102,16 +83,88 @@ export default class Common {
       command = `php artisan ${command}`;
       cmd = `${dockerCommand} ${command}`;
     } else {
-      if (phpLocation == 'php') {
+      if (phpLocation === 'php') {
         command = `php artisan ${command}`;
       } else {
+        // Location is in quotes so that it can support spaces in the path
         command = `"${phpLocation}" artisan ${command}`;
       }
       cmd = command;
     }
 
     Output.command(command.trim());
-    if (wsl) {
+    window.withProgress(
+      {
+        location: ProgressLocation.Window,
+        cancellable: false,
+        title: 'Executing Artisan Command',
+      },
+      async progress => {
+        progress.report({ increment: 0 });
+        if (wsl) {
+          await Common.wslCommand(callback, artisanRoot, artisanToUse, cmd);
+        } else {
+          await Common.nonWslCommand(callback, artisanRoot, artisanToUse, cmd, maxBuffer);
+        }
+        progress.report({ increment: 100 });
+      }
+    );
+  }
+  /**
+   * Executes an artisan command when not using WSL.
+   * @param callback The callback to execute when the command is finished.
+   * @param artisanRoot The root directory of the artisan file.
+   * @param artisanToUse The artisan file to use.
+   * @param cmd The command to execute.
+   * @param maxBuffer The max buffer size to use.
+   */
+  protected static async nonWslCommand(
+    callback: (info: CommandInfo) => void,
+    artisanRoot: string,
+    artisanToUse: string,
+    cmd: string,
+    maxBuffer: number
+  ) {
+    return new Promise<void>((resolve, reject) => {
+      cp.exec(
+        cmd,
+        {
+          cwd: artisanRoot,
+          maxBuffer: maxBuffer,
+        },
+        (err, stdout, stderr) => {
+          Output.command(stdout.trim());
+          Output.showConsole();
+          if (err) {
+            Output.command('-----------------------------------');
+            Output.error(err.message.trim());
+            Output.showConsole();
+            resolve();
+          } else {
+            reject(err);
+          }
+          callback({
+            err,
+            stdout,
+            stderr,
+            artisan: {
+              dir: artisanRoot,
+              path: artisanToUse,
+            },
+          });
+        }
+      );
+    });
+  }
+  /**
+   * Executes an artisan command when using WSL.
+   * @param callback The callback to execute when the command is finished.
+   * @param artisanRoot The root directory of the artisan file.
+   * @param artisanToUse The artisan file to use.
+   * @param cmd The command to execute.
+   */
+  protected static async wslCommand(callback: (info: CommandInfo) => void, artisanRoot: string, artisanToUse: string, cmd: string) {
+    return new Promise<void>((resolve, reject) => {
       console.log('wsl', cmd);
       const child = cp.spawn('wsl', [cmd], {
         cwd: artisanRoot,
@@ -127,6 +180,7 @@ export default class Common {
             path: artisanToUse,
           },
         });
+        resolve();
       });
       child.stderr.on('error', err => {
         callback({
@@ -138,36 +192,15 @@ export default class Common {
             path: artisanToUse,
           },
         });
+        reject();
       });
-    } else {
-      cp.exec(
-        cmd,
-        {
-          cwd: artisanRoot,
-          maxBuffer: maxBuffer,
-        },
-        (err, stdout, stderr) => {
-          Output.command(stdout.trim());
-          Output.showConsole();
-          if (err) {
-            Output.command('-----------------------------------');
-            Output.error(err.message.trim());
-            Output.showConsole();
-          }
-          callback({
-            err,
-            stdout,
-            stderr,
-            artisan: {
-              dir: artisanRoot,
-              path: artisanToUse,
-            },
-          });
-        }
-      );
-    }
+    });
   }
-
+  /**
+   * Opens a file in the editor.
+   * @param root The root directory.
+   * @param filename The filename to open.
+   */
   protected static async openFile(root: string, filename: string) {
     try {
       // let doc = await workspace.openTextDocument(this.artisanRoot + '/' + filename)
@@ -178,19 +211,22 @@ export default class Common {
       console.log(e.message);
     }
   }
-
+  /**
+   * Parses a cli table generated by artisan.
+   * @param cliTable The cli table to parse.
+   */
   protected static parseCliTable(cliTable: string) {
     let cliRows = cliTable.split(/\r\n|\n/g);
     let headers: string[] = [];
     let rows: string[][] = [];
     // Parse the cli table
     for (let i = 0, len = cliRows.length; i < len; i++) {
-      if (i == 0 || i == 2) {
+      if (i === 0 || i === 2) {
         continue;
-      } else if (i == 1) {
+      } else if (i === 1) {
         (headers = cliRows[i].split('|')).forEach((v, k) => {
           headers[k] = v.replace(/[\u001b\u009b][[()#?]*(?:[0-9]{1,4}(?:[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '').trim();
-          if (headers[k] == '') {
+          if (headers[k] === '') {
             delete headers[k];
           }
         });
@@ -206,16 +242,6 @@ export default class Common {
     }
     return { headers: headers, rows: rows };
   }
-
-  // protected static async openVirtualFile(path: string, title: string, content: string) {
-  //   let uri = Uri.parse('laravel-artisan://artisan/' + path)
-  //   let doc = await workspace.openTextDocument(uri)
-  //   let edit = new WorkspaceEdit()
-  //   let range = new Range(0, 0, doc.lineCount, doc.getText().length)
-  //   edit.set(uri, [new TextEdit(range, content)])
-  //   workspace.applyEdit(edit)
-  //   commands.executeCommand('vscode.previewHtml', uri, ViewColumn.One, title)
-  // }
 
   private static get tableStyle(): string {
     return `<style>
@@ -233,7 +259,14 @@ export default class Common {
       .loading { text-align: center; }
     </style>`;
   }
-
+  /**
+   * Opens a virtual Laravel routes list.
+   * @param openPath The path to open.
+   * @param title The title of the file.
+   * @param headers The headers of the table.
+   * @param rows The rows of the table.
+   * @param artisanRoot The root directory of the artisan file.
+   */
   protected static async openVirtualHtmlFile(openPath: string, title: string, headers: string[], rows: string[][], artisanRoot: string) {
     let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`;
     html += '<h2 class="loading">Loading Route Information...</h2>';
@@ -274,7 +307,7 @@ export default class Common {
       document.querySelectorAll('tbody > tr').forEach(row => {
         let txt = row.textContent
         let reg = new RegExp(v, 'ig')
-        if (reg.test(txt) || v.length == 0) {
+        if (reg.test(txt) || v.length === 0) {
           row.classList.remove('hidden')
         } else {
           row.classList.add('hidden')
@@ -338,40 +371,60 @@ export default class Common {
     });
     return panel;
   }
-
+  /**
+   * Shows an input box and returns the value.
+   * @param placeHolder The placeholder text.
+   */
   protected static async getInput(placeHolder: string) {
     let name = await window.showInputBox({
       placeHolder: placeHolder.replace(/\s\s+/g, ' ').trim(),
     });
-    name = name == undefined ? '' : name;
-    // if (name.length == 0) {
+    name = typeof name === 'undefined' ? '' : name;
+    // if (name.length === 0) {
     //   window.showErrorMessage('Invalid ' + placeHolder)
     //   return ''
     // }
     return name;
   }
-
+  /**
+   * Shows a list of items and returns the selected item.
+   * @param placeHolder The placeholder text.
+   * @param list The list of items to choose from.
+   */
   protected static async getListInput(placeHolder: string, list: string[]) {
     let name = await window.showQuickPick(list, { placeHolder: placeHolder });
-    name = name == undefined ? '' : name;
+    name = typeof name === 'undefined' ? '' : name;
     return name;
   }
-
+  /**
+   * Shows a Yes/No dialog (where `yes` is first in the list) and returns the result.
+   * @param placeHolder The placeholder text.
+   */
   protected static async getYesNo(placeHolder: string): Promise<boolean> {
     let value = await window.showQuickPick(['Yes', 'No'], { placeHolder });
-    return value.toLowerCase() == 'yes' ? true : false;
+    return value.toLowerCase() === 'yes' ? true : false;
   }
-
+  /**
+   * Shows a No/Yes dialog (where `no` is first in the list) and returns the result.
+   * @param placeHolder The placeholder text.
+   */
   protected static async getNoYes(placeHolder: string): Promise<boolean> {
     let value = await window.showQuickPick(['No', 'Yes'], { placeHolder });
-    return value.toLowerCase() == 'yes' ? true : false;
+    return value.toLowerCase() === 'yes' ? true : false;
   }
-
+  /**
+   * Shows snackbar message to the user.
+   * @param message The message to show.
+   */
   protected static async showMessage(message: string) {
     window.showInformationMessage(message);
     return true;
   }
-
+  /**
+   * Shows snackbar error message to the user.
+   * @param message The message to show.
+   * @param consoleErr The message to show in console.
+   */
   protected static async showError(message: string, consoleErr = null) {
     if (consoleErr !== null) {
       message += ' (See output console for more details)';
@@ -380,11 +433,15 @@ export default class Common {
     window.showErrorMessage(message);
     return false;
   }
-
+  /**
+   * Refreshes the files explorer.
+   */
   protected static refreshFilesExplorer() {
     commands.executeCommand('workbench.files.action.refreshFilesExplorer');
   }
-
+  /**
+   * Get a list of all artisan commands.
+   */
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
       this.execCmd(`list --format=json`, info => {

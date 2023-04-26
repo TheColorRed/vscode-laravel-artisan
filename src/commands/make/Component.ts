@@ -4,7 +4,7 @@ export default class MakeComponent extends Common {
   public static async run() {
     // Get the name of the component to create
     let componentName = await this.getInput('Component Name');
-    if (componentName.length == 0) {
+    if (componentName.length === 0) {
       this.showError('A component name is required');
       return;
     }

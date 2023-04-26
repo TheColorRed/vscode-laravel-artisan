@@ -1,7 +1,26 @@
-# 0.0.28
+# 0.0.31
+
+- Added `make:cast` command
+- Added `make:channel` command
+- Added `make:rule` command
+- Added question to `make:mail` command to ask if the mail should be markdown or not
+- Show progress bar when running commands
+  - Displayed in the status bar on the bottom left
+- Added context menus to the file explorer
+  - Right click on one of the listed folders or a child of the listed folders to see the context menu:
+    - app
+    - database
+    - resources
+    - routes
+
+# 0.0.30
 
 - Updated `route:list` to use the json result instead of parsing a cli table.
 - Added `make:component` command.
+- Updated the way `wsl` executes commands (See [WSL](/README.md#wsl)).
+  - `artisan.wsl.enabled` should be set to `true` if you are using `wsl`.
+  - The command will use the default `php` command unless `artisan.php.location` is set.
+    - This path is based on the root of the `wsl` filesystem, **NOT** the windows filesystem.
 
 # 0.0.27
 

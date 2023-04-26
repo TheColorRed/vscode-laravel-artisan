@@ -6,7 +6,7 @@ export default class MakeController extends Common {
   public static async run() {
     // Get the name of the controller to create
     let ctrlName = await this.getInput('Controller Name');
-    if (ctrlName.length == 0) {
+    if (ctrlName.length === 0) {
       this.showError('A controller name is required');
       return;
     }
@@ -25,7 +25,7 @@ export default class MakeController extends Common {
     }
 
     let modelToUseCommand = refModel ? `--model=${modelToUse} --no-interaction` : '';
-    let typeCommand = type == 'resource' ? '--resource' : type == 'api' ? '--api' : '';
+    let typeCommand = type === 'resource' ? '--resource' : type === 'api' ? '--api' : '';
     let command = `make:controller ${ctrlName} ${typeCommand} ${modelToUseCommand}`;
     // let command = `make:controller ${ctrlName} ${isResource ? '--resource' : ''} ${isAPI ? '--api' : ''}`.trim()
 

@@ -1,72 +1,75 @@
 'use strict'
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, ExtensionContext, workspace, window } from 'vscode'
-import TextDocumentProvider from './TextDocumentProvider'
-import Common from './Common'
+import { ExtensionContext, commands, workspace } from 'vscode';
+import Common from './Common';
+import TextDocumentProvider from './TextDocumentProvider';
 
 // Base files
-import ClearCompiled from './commands/base/ClearCompiled'
-import Migrate from './commands/base/Migrate'
-import Optimize from './commands/base/Optimize'
-import Server from './commands/base/Serve'
-import List from './commands/base/List'
+import ClearCompiled from './commands/base/ClearCompiled';
+import List from './commands/base/List';
+import Migrate from './commands/base/Migrate';
+import Optimize from './commands/base/Optimize';
+import Server from './commands/base/Serve';
 
 // Make files
-import MakeAuth from './commands/make/Auth'
-import MakeCommand from './commands/make/Command'
-import MakeComponent from './commands/make/Component'
-import MakeController from './commands/make/Controller'
-import MakeEvent from './commands/make/Event'
-import MakeFactory from './commands/make/Factory'
-import MakeJob from './commands/make/Job'
-import MakeListener from './commands/make/Listener'
-import MakeMail from './commands/make/Mail'
-import MakeMiddleware from './commands/make/Middleware'
-import MakeModel from './commands/make/Model'
-import MakeMigration from './commands/make/Migration'
-import MakeNotification from './commands/make/Notification'
-import MakeObserver from './commands/make/Observer'
-import MakePolicy from './commands/make/Policy'
-import MakeProvider from './commands/make/Provider'
-import MakeRequest from './commands/make/Request'
-import MakeResource from './commands/make/Resource'
-import MakeSeeder from './commands/make/Seeder'
-import MakeTest from './commands/make/Test'
+import MakeAuth from './commands/make/Auth';
+import MakeCommand from './commands/make/Command';
+import MakeComponent from './commands/make/Component';
+import MakeController from './commands/make/Controller';
+import MakeEvent from './commands/make/Event';
+import MakeFactory from './commands/make/Factory';
+import MakeJob from './commands/make/Job';
+import MakeListener from './commands/make/Listener';
+import MakeMail from './commands/make/Mail';
+import MakeMiddleware from './commands/make/Middleware';
+import MakeMigration from './commands/make/Migration';
+import MakeModel from './commands/make/Model';
+import MakeNotification from './commands/make/Notification';
+import MakeObserver from './commands/make/Observer';
+import MakePolicy from './commands/make/Policy';
+import MakeProvider from './commands/make/Provider';
+import MakeRequest from './commands/make/Request';
+import MakeResource from './commands/make/Resource';
+import MakeSeeder from './commands/make/Seeder';
+import MakeTest from './commands/make/Test';
 
 // Migrate files
-import MigrateInstall from './commands/migrate/Install'
-import MigrateRefresh from './commands/migrate/Refresh'
-import MigrateReset from './commands/migrate/Reset'
-import MigrateRollback from './commands/migrate/Rollback'
-import MigrateStatus from './commands/migrate/Status'
-import MigrateFresh from './commands/migrate/Fresh'
+import MigrateFresh from './commands/migrate/Fresh';
+import MigrateInstall from './commands/migrate/Install';
+import MigrateRefresh from './commands/migrate/Refresh';
+import MigrateReset from './commands/migrate/Reset';
+import MigrateRollback from './commands/migrate/Rollback';
+import MigrateStatus from './commands/migrate/Status';
 
 // Cache files
-import CacheClear from './commands/cache/Clear'
-import CacheTable from './commands/cache/Table'
+import CacheClear from './commands/cache/Clear';
+import CacheTable from './commands/cache/Table';
 
 // Route files
-import RouteCache from './commands/route/Cache'
-import RouteCacheClear from './commands/route/Clear'
-import RouteCacheRefresh from './commands/route/Refresh'
-import RouteList from './commands/route/List'
+import RouteCache from './commands/route/Cache';
+import RouteCacheClear from './commands/route/Clear';
+import RouteList from './commands/route/List';
+import RouteCacheRefresh from './commands/route/Refresh';
 
 // Cache files
-import ConfigCache from './commands/config/Cache'
-import ConfigCacheClear from './commands/config/Clear'
-import ConfigCacheRefresh from './commands/config/Refresh'
+import ConfigCache from './commands/config/Cache';
+import ConfigCacheClear from './commands/config/Clear';
+import ConfigCacheRefresh from './commands/config/Refresh';
 
 // Key files
-import KeyGenerate from './commands/key/Generate'
+import KeyGenerate from './commands/key/Generate';
 
 // Event files
-import EventGenerate from './commands/event/Generate'
+import EventGenerate from './commands/event/Generate';
 
 // View files
-import ViewClear from './commands/view/Clear'
+import ViewClear from './commands/view/Clear';
 
-import RunCommand from './commands/run/Command'
+import MakeChannel from './commands/make/Channel';
+import RunCommand from './commands/run/Command';
+import MakeCast from './commands/make/Cast';
+import MakeRule from './commands/make/Rule';
 
 export async function activate(context: ExtensionContext) {
   let files = await workspace.findFiles('**/artisan', undefined)
@@ -84,6 +87,8 @@ export async function activate(context: ExtensionContext) {
 
   // Make commands
   context.subscriptions.push(commands.registerCommand('artisan.make.auth', () => { MakeAuth.run() }))
+  context.subscriptions.push(commands.registerCommand('artisan.make.cast', () => { MakeCast.run() }))
+  context.subscriptions.push(commands.registerCommand('artisan.make.channel', () => { MakeChannel.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.command', () => { MakeCommand.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.controller', () => { MakeController.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.component', () => { MakeComponent.run() }))
@@ -101,6 +106,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(commands.registerCommand('artisan.make.provider', () => { MakeProvider.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.request', () => { MakeRequest.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.resource', () => { MakeResource.run() }))
+  context.subscriptions.push(commands.registerCommand('artisan.make.rule', () => { MakeRule.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.seeder', () => { MakeSeeder.run() }))
   context.subscriptions.push(commands.registerCommand('artisan.make.test', () => { MakeTest.run() }))
 

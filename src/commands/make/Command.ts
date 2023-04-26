@@ -3,7 +3,7 @@ import Common from '../../Common';
 export default class MakeCommand extends Common {
   public static async run() {
     let cmdName = await this.getInput('Command Class Name');
-    if (cmdName.length == 0) {
+    if (cmdName.length === 0) {
       this.showError('A command name is required');
       return;
     }

@@ -39,6 +39,8 @@ Run Laravel Artisan commands from within Visual Studio Code.
 
 ## Usage
 
+### Command Pallet
+
 Once you have installed the extension, it will become active once you open a workspace that has at least one `artisan` file within the workspace.
 You can then open the command pallet, and start running the commands.
 Just type `Artisan:` to get a list of commands. If you have more than one `artisan` file within the workspace, then this will ask which `artisan` file you want to use to execute the selected command.
@@ -46,6 +48,20 @@ Just type `Artisan:` to get a list of commands. If you have more than one `artis
 Many commands have optional input questions, leave them blank to use the defaults, or enter your own value.
 
 All commands are accessible through `Artisan: Run Command`, here you can access your custom commands as well as built in commands.
+
+### Context Menu
+
+You can also right click on some files and folders to run commands, the context menu will only show commands that are relevant to the file or folder you have right clicked on. The context menu will show on child folders and files as well as the main folder.
+
+- app &ndash; Run app related commands.
+  - Make &ndash; To make app files.
+  - Serve &ndash; To start/stop a local php server.
+- database &ndash; Run database related commands.
+  - Make &ndash; To make database files.
+  - Migrate &ndash; To run migrations.
+- resources &ndash; Run resource related commands.
+- routes &ndash; Run route related commands.
+- Misc &ndash; Run misc commands (displayed on all files & folders).
 
 ## Docker
 
