@@ -257,6 +257,10 @@ export default class Common {
       .search { padding-top: 15px; padding-bottom: 15px; width: 95vw; margin: auto; }
       #filter { display: block; padding: 5px; width: 100%; }
       .loading { text-align: center; }
+      .filters { display: flex; flex-direction: row; gap: 20px; justify-content: start; }
+      .text-filter-wrapper { display: flex; flex-direction: row; gap: 20px; place-items: center; }
+      .text-filter-wrapper label { width: 150px }
+      label { display: flex; flex-direction: row; gap: 5px; place-items: center; }
     </style>`;
   }
   /**
@@ -268,26 +272,43 @@ export default class Common {
    * @param artisanRoot The root directory of the artisan file.
    */
   protected static async openVirtualHtmlFile(openPath: string, title: string, headers: string[], rows: string[][], artisanRoot: string) {
-    let html: string = `<div class="search"><input type="text" id="filter" placeholder="Search for an item (RegExp Supported)"></div>`;
+    let html: string = `
+      <div class="search">
+        <div class="text-filter-wrapper">
+          <input type="text" id="filter" placeholder="Search for an item (RegExp Supported)">
+          <label>
+            <input type="checkbox" id="filter-invert"> Invert Search
+          </label>
+        </div>
+        <p class="filters">`;
+    headers.forEach(header => {
+      html += `
+        <label>
+          <input type="checkbox" id="filter-${header.toLowerCase()}" checked> Display ${header}
+        </label>`;
+    });
+    html += `</p></div>`;
     html += '<h2 class="loading">Loading Route Information...</h2>';
     html += `${this.tableStyle}<table class="hidden">`;
     html += '<thead><tr>';
     headers.forEach(header => {
-      html += '<th>' + header + '</th>';
+      html += `<th id="header_${header}">${header}</th>`;
     });
     html += '</tr></thead><tbody>';
-    rows.forEach(row => {
+    rows.forEach((row, rowIdx) => {
       html += '<tr>';
-      row.forEach(item => {
+      row.forEach((item, colIdx) => {
         if ((item ?? '').match(/app\\/i)) {
           html +=
-            `<td><a href="file:///${workspace.rootPath}/${item
-              .replace(/@.+$/, '')
-              .replace(/^App/g, 'app')}.php" data-method="${item.replace(/^.+@/, '')}" class="app-item">` +
+            `<td id="cell_${rowIdx}_${headers[colIdx]}">
+              <a href="file:///${workspace.rootPath}/${item.replace(/@.+$/, '').replace(/^App/g, 'app')}.php" data-method="${item.replace(
+              /^.+@/,
+              ''
+            )}" class="app-item">` +
             item +
             '</a></td>';
         } else {
-          html += '<td>' + item + '</td>';
+          html += '<td id="cell_' + rowIdx + '_' + headers[colIdx] + '">' + item + '</td>';
         }
       });
       html += '</tr>';
@@ -296,24 +317,75 @@ export default class Common {
     html += `<script>
     const filter = document.querySelector('#filter')
     const body = document.querySelector('table tbody')
+    const invertCheckbox = document.querySelector('#filter-invert')
     const rootPath = '${artisanRoot.replace(/\\/g, '/')}'
+    const headers = ${JSON.stringify(headers)}
     const vscode = acquireVsCodeApi()
-    console.log(rootPath)
     filter.focus()
     const table = document.querySelector('table')
     const loading = document.querySelector('.loading')
-    function filterItems(){
+    invertCheckbox.addEventListener('change', e => filterItems())
+    `;
+
+    headers.forEach(header => {
+      html += `
+      const ${header}Checkbox = document.querySelector('#filter-${header.toLowerCase()}')
+      let shouldShow${header} = true
+      ${header}Checkbox.addEventListener('change', e => {
+        shouldShow${header} = e.currentTarget.checked
+        filterItems()
+      });
+      `;
+    });
+    // Begin filter items function
+    html += `
+    function filterItems() {
       let v = filter.value
+      let shouldInvert = invertCheckbox.checked
       document.querySelectorAll('tbody > tr').forEach(row => {
         let txt = row.textContent
         let reg = new RegExp(v, 'ig')
-        if (reg.test(txt) || v.length === 0) {
+        // If the row matches the regular expression or the value is empty, show the row
+        // If the search is inverted, hide the row if it matches the regular expression
+        if(v.length === 0) {
           row.classList.remove('hidden')
         } else {
-          row.classList.add('hidden')
+          if (!shouldInvert) {
+            reg.test(txt)?row.classList.remove('hidden'):row.classList.add('hidden')
+          } else {
+            !reg.test(txt)?row.classList.remove('hidden'):row.classList.add('hidden')
+          }
         }
       })
-    }
+    `;
+    headers.forEach(header => {
+      html += `
+      const ${header}Header = document.querySelector('#header_${header}')
+      const ${header}Checkbox = document.querySelector('#filter-${header.toLowerCase()}')
+      ${header}Checkbox.addEventListener('change', e => {
+        if (e.currentTarget.checked) {
+          ${header}Header.classList.remove('hidden')
+        } else {
+          ${header}Header.classList.add('hidden')
+        }
+      });
+      `;
+    });
+    headers.forEach(header => {
+      html += `
+      document.querySelectorAll('tbody > tr').forEach((row, rowIdx) => {
+        const ${header} = row.querySelector('#cell_' + rowIdx + '_${header}')
+        if (${header} && !shouldShow${header}) {
+          ${header}.classList.add('hidden')
+        } else if (${header} && shouldShow${header}) {
+          ${header}.classList.remove('hidden')
+        }
+      });
+      `;
+    });
+    // End filter items function
+    html += `}`;
+    html += `
     function routeEvents(){
       Array.from(body.querySelectorAll('a')).forEach(item => {
         item.addEventListener('click', e => {
@@ -323,6 +395,7 @@ export default class Common {
         })
       })
     }
+
     filter.addEventListener('input', filterItems)
     window.addEventListener('message', msg => {
       let rows = msg.data.rows
@@ -331,14 +404,14 @@ export default class Common {
         loading.classList.add('hidden')
       }
       let html = ''
-      rows.forEach(row => {
+      rows.forEach((row, rowIdx) => {
         html += '<tr>'
-        row.forEach(item => {
+        row.forEach((item, colIdx) => {
           if ((item??'').match(/app\\\\/i)) {
             let file = \`\${rootPath}/\${item.replace(/@.+$/, '').replace(/^App/, 'app')}.php\`.replace(/\\\\/g, '/')
-            html += \`<td><a href="\${file}" data-method="\${item.replace(/^.+@/, '')}" class="app-item">\` + item + '</a></td>'
+            html += \`<td  id="cell_\${rowIdx}_\${headers[colIdx]}"><a href="\${file}" data-method="\${item.replace(/^.+@/, '')}" class="app-item">\` + item + '</a></td>'
           } else {
-            html += '<td>' + item + '</td>'
+            html += '<td id="cell_' + rowIdx + '_' + headers[colIdx] + '">' + item + '</td>'
           }
         })
         html += '</tr>'

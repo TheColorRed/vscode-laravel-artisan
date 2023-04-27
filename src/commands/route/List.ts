@@ -14,9 +14,13 @@ export default class RouteList extends Common {
       if (typeof RouteList.panel === 'undefined') {
         const artisan = await Common.getArtisanRoot();
         RouteList.panel = await Common.openVirtualHtmlFile('route-list', 'Route List', RouteList.headers, [], artisan);
-        RouteList.panel.onDidDispose(() => RouteList.subscription.unsubscribe());
+        RouteList.panel.onDidDispose(() => {
+          RouteList.subscription.unsubscribe();
+          RouteList.panel = undefined;
+        });
       }
     }),
+    filter(() => typeof RouteList.panel !== 'undefined'),
     exhaustMap(cmd => RouteList.runCommand(cmd)),
     filter(info => {
       if (info.err) {
@@ -28,7 +32,7 @@ export default class RouteList extends Common {
     switchMap(c =>
       of(c).pipe(
         map(info => RouteList.parseRouteList(info.stdout)),
-        tap(async info => RouteList.panel.webview.postMessage({ rows: info.rows }))
+        tap(info => RouteList.panel.webview.postMessage({ rows: info.rows }))
       )
     )
   );

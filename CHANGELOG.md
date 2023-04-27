@@ -4,6 +4,7 @@
 - Added `make:channel` command
 - Added `make:rule` command
 - Added question to `make:mail` command to ask if the mail should be markdown or not
+- Added the ability to toggle Route List columns on/off
 - Show progress bar when running commands
   - Displayed in the status bar on the bottom left
 - Added context menus to the file explorer
