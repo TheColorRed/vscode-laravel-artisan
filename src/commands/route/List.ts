@@ -4,9 +4,18 @@ import { WebviewPanel } from 'vscode';
 
 import Common, { CommandInfo } from '../../Common';
 
+interface RouteRow {
+  domain: string;
+  method: string;
+  uri: string;
+  name: string;
+  action: string;
+  middleware: string[];
+}
+
 export default class RouteList extends Common {
   private static panel: WebviewPanel;
-  private static headers: string[] = ['Method', 'URI', 'Name', 'Action', 'Middleware'];
+  private static headers: string[] = ['Domain', 'Method', 'URI', 'Name', 'Action', 'Middleware'];
 
   private static observable = timer(0, 5000).pipe(
     map(() => 'route:list --json'),
@@ -53,11 +62,17 @@ export default class RouteList extends Common {
 
   private static parseRouteList(stdout: string): { headers: string[]; rows: string[][] } {
     const data = JSON.parse(stdout);
-    console.log('data', data);
     // {domain: null, method: 'GET|HEAD', uri: '/', name: null, action: 'Closure', middleware: []}
-    const rows = data.map((row: any) => {
-      return [row.method, row.uri, row.name, row.action, row.middleware.join(', ')];
+    let rows = data.map((row: RouteRow) => [row.domain ?? '', row.method, row.uri, row.name, row.action, row.middleware]);
+    const resultRows = [];
+    rows.forEach(row => {
+      if (row[5].length > 1) {
+        resultRows.push([row[0], row[1], row[2], row[3], row[4], row[5][0]]);
+        row[5].forEach((middleware, idx) => idx > 0 && resultRows.push(['', '', '', '', '', middleware]));
+      } else {
+        resultRows.push([row[0], row[1], row[2], row[3], row[4], row[5][0]]);
+      }
     });
-    return { headers: ['Method', 'URI', 'Name', 'Action', 'Middleware'], rows };
+    return { headers: ['Domain', 'Method', 'URI', 'Name', 'Action', 'Middleware'], rows: resultRows };
   }
 }

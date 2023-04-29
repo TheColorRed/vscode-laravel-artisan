@@ -3,7 +3,7 @@ import { join } from 'path';
 import { ProgressLocation, Selection, Uri, ViewColumn, commands, window, workspace } from 'vscode';
 import Output from './utils/Output';
 
-interface Command {
+export interface Command {
   name: string;
   description: string;
   arguments: any[];
@@ -19,13 +19,18 @@ interface Command {
 }
 
 export interface CommandInfo {
-  err: Error | undefined;
-  stdout: string;
-  stderr: string;
+  err?: Error;
+  stdout?: string;
+  stderr?: string;
   artisan: {
     dir: string;
     path: string;
   };
+}
+
+export default interface Common {
+  run(): void;
+  dispose?(): void;
 }
 
 export default class Common {
@@ -101,11 +106,10 @@ export default class Common {
       },
       async progress => {
         progress.report({ increment: 0 });
-        if (wsl) {
-          await Common.wslCommand(callback, artisanRoot, artisanToUse, cmd);
-        } else {
-          await Common.nonWslCommand(callback, artisanRoot, artisanToUse, cmd, maxBuffer);
-        }
+        const result = wsl
+          ? await this.wslCommand(artisanRoot, artisanToUse, cmd)
+          : await this.nonWslCommand(artisanRoot, artisanToUse, cmd, maxBuffer);
+        callback(result);
         progress.report({ increment: 100 });
       }
     );
@@ -118,42 +122,26 @@ export default class Common {
    * @param cmd The command to execute.
    * @param maxBuffer The max buffer size to use.
    */
-  protected static async nonWslCommand(
-    callback: (info: CommandInfo) => void,
-    artisanRoot: string,
-    artisanToUse: string,
-    cmd: string,
-    maxBuffer: number
-  ) {
-    return new Promise<void>((resolve, reject) => {
-      cp.exec(
-        cmd,
-        {
-          cwd: artisanRoot,
-          maxBuffer: maxBuffer,
-        },
-        (err, stdout, stderr) => {
-          Output.command(stdout.trim());
+  protected static async nonWslCommand(artisanRoot: string, artisanToUse: string, cmd: string, maxBuffer: number) {
+    return new Promise<CommandInfo>(resolve => {
+      cp.exec(cmd, { cwd: artisanRoot, maxBuffer: maxBuffer }, (err, stdout, stderr) => {
+        Output.command(stdout.trim());
+        Output.showConsole();
+        if (err) {
+          Output.command('-----------------------------------');
+          Output.error(err.message.trim());
           Output.showConsole();
-          if (err) {
-            Output.command('-----------------------------------');
-            Output.error(err.message.trim());
-            Output.showConsole();
-            resolve();
-          } else {
-            reject(err);
-          }
-          callback({
-            err,
-            stdout,
-            stderr,
-            artisan: {
-              dir: artisanRoot,
-              path: artisanToUse,
-            },
-          });
         }
-      );
+        resolve({
+          err,
+          stdout,
+          stderr,
+          artisan: {
+            dir: artisanRoot,
+            path: artisanToUse,
+          },
+        });
+      });
     });
   }
   /**
@@ -163,27 +151,27 @@ export default class Common {
    * @param artisanToUse The artisan file to use.
    * @param cmd The command to execute.
    */
-  protected static async wslCommand(callback: (info: CommandInfo) => void, artisanRoot: string, artisanToUse: string, cmd: string) {
-    return new Promise<void>((resolve, reject) => {
-      console.log('wsl', cmd);
-      const child = cp.spawn('wsl', [cmd], {
-        cwd: artisanRoot,
-        shell: true,
-      });
-      child.stdout.on('data', data => {
-        callback({
+  protected static async wslCommand(artisanRoot: string, artisanToUse: string, cmd: string) {
+    return new Promise<CommandInfo>((resolve, reject) => {
+      const child = cp.spawn('wsl', [cmd], { cwd: artisanRoot, shell: true });
+      const childData: string[] = [];
+      child.stdout.on('data', data => childData.push(data.toString()));
+      child.stdout.on('end', () => {
+        resolve({
           err: undefined,
-          stdout: data.toString(),
+          stdout: childData.join(''),
           stderr: undefined,
           artisan: {
             dir: artisanRoot,
             path: artisanToUse,
           },
         });
-        resolve();
       });
       child.stderr.on('error', err => {
-        callback({
+        Output.command('-----------------------------------');
+        Output.error(err.message.trim());
+        Output.showConsole();
+        reject({
           err,
           stdout: undefined,
           stderr: undefined,
@@ -192,7 +180,6 @@ export default class Common {
             path: artisanToUse,
           },
         });
-        reject();
       });
     });
   }
@@ -260,7 +247,7 @@ export default class Common {
       .filters { display: flex; flex-direction: row; gap: 20px; justify-content: start; }
       .text-filter-wrapper { display: flex; flex-direction: row; gap: 20px; place-items: center; }
       .text-filter-wrapper label { width: 150px }
-      label { display: flex; flex-direction: row; gap: 5px; place-items: center; }
+      label { display: flex; flex-direction: row; gap: 5px; place-items: center; cursor: pointer; }
     </style>`;
   }
   /**
