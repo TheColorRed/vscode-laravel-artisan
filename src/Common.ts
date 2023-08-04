@@ -126,7 +126,6 @@ export default class Common {
     return new Promise<CommandInfo>(resolve => {
       cp.exec(cmd, { cwd: artisanRoot, maxBuffer: maxBuffer }, (err, stdout, stderr) => {
         Output.command(stdout.trim());
-        Output.showConsole();
         if (err) {
           Output.command('-----------------------------------');
           Output.error(err.message.trim());
