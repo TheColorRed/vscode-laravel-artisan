@@ -4,6 +4,8 @@
 import { ExtensionContext, commands, workspace } from 'vscode';
 import Common from './Common';
 import TextDocumentProvider from './TextDocumentProvider';
+import { AppDown, AppUp } from './commands/app/Maintenance';
+import Tinker from './commands/app/Tinker';
 import ClearCompiled from './commands/base/ClearCompiled';
 import List from './commands/base/List';
 import Migrate from './commands/base/Migrate';
@@ -16,15 +18,29 @@ import ConfigCacheClear from './commands/config/Clear';
 import ConfigCacheRefresh from './commands/config/Refresh';
 import EventGenerate from './commands/event/Generate';
 import KeyGenerate from './commands/key/Generate';
-import MakeAuth from './commands/make/Auth';
+import LivewireAttribute from './commands/livewire/Attribute';
+import LivewireConfig from './commands/livewire/Config';
+import LivewireConvert from './commands/livewire/Convert';
+import LivewireForm from './commands/livewire/Form';
+import LivewireLayout from './commands/livewire/Layout';
+import LivewireMake from './commands/livewire/Make';
+import LivewirePublish from './commands/livewire/Publish';
+import LivewireS3Cleanup from './commands/livewire/S3Cleanup';
+import LivewireStubs from './commands/livewire/Stubs';
 import MakeCast from './commands/make/Cast';
 import MakeChannel from './commands/make/Channel';
+import MakeClass from './commands/make/Class';
 import MakeCommand from './commands/make/Command';
 import MakeComponent from './commands/make/Component';
+import MakeConfig from './commands/make/Config';
 import MakeController from './commands/make/Controller';
+import MakeEnum from './commands/make/Enum';
 import MakeEvent from './commands/make/Event';
+import MakeException from './commands/make/Exception';
 import MakeFactory from './commands/make/Factory';
+import MakeInterface from './commands/make/Interface';
 import MakeJob from './commands/make/Job';
+import MakeJobMiddleware from './commands/make/JobMiddleware';
 import MakeListener from './commands/make/Listener';
 import MakeMail from './commands/make/Mail';
 import MakeMiddleware from './commands/make/Middleware';
@@ -37,14 +53,20 @@ import MakeProvider from './commands/make/Provider';
 import MakeRequest from './commands/make/Request';
 import MakeResource from './commands/make/Resource';
 import MakeRule from './commands/make/Rule';
+import MakeScope from './commands/make/Scope';
 import MakeSeeder from './commands/make/Seeder';
+import { MakeCacheTable, MakeNotificationsTable, MakeQueueBatchesTable, MakeQueueFailedTable, MakeQueueTable, MakeSessionTable } from './commands/make/TableMigrations';
 import MakeTest from './commands/make/Test';
+import MakeTrait from './commands/make/Trait';
+import MakeView from './commands/make/View';
 import MigrateFresh from './commands/migrate/Fresh';
 import MigrateInstall from './commands/migrate/Install';
 import MigrateRefresh from './commands/migrate/Refresh';
 import MigrateReset from './commands/migrate/Reset';
 import MigrateRollback from './commands/migrate/Rollback';
 import MigrateStatus from './commands/migrate/Status';
+import { QueueClear, QueueFailed, QueueFlush, QueueForget, QueuePause, QueuePruneBatches, QueuePruneFailed, QueueRestart, QueueResume, QueueRetry, QueueRetryBatch } from './commands/queue/Commands';
+import { QueueListen, QueueWork } from './commands/queue/Workers';
 import RouteCache from './commands/route/Cache';
 import RouteCacheClear from './commands/route/Clear';
 import RouteList from './commands/route/List';
@@ -72,7 +94,6 @@ export async function activate(context: ExtensionContext) {
     { name: 'artisan.stopServer', action: Server, method: 'stop' },
     { name: 'artisan.restartServer', action: Server, method: 'restart' },
     { name: 'artisan.list', action: List },
-    { name: 'artisan.make.auth', action: MakeAuth },
     { name: 'artisan.make.cast', action: MakeCast },
     { name: 'artisan.make.channel', action: MakeChannel },
     { name: 'artisan.make.command', action: MakeCommand },
@@ -114,6 +135,49 @@ export async function activate(context: ExtensionContext) {
     { name: 'artisan.event.generate', action: EventGenerate },
     { name: 'artisan.view.clear', action: ViewClear },
     { name: 'artisan.run.command', action: RunCommand },
+    // App
+    { name: 'artisan.app.down', action: AppDown },
+    { name: 'artisan.app.up', action: AppUp },
+    { name: 'artisan.tinker', action: Tinker },
+    // Make (new)
+    { name: 'artisan.make.class', action: MakeClass },
+    { name: 'artisan.make.config', action: MakeConfig },
+    { name: 'artisan.make.enum', action: MakeEnum },
+    { name: 'artisan.make.exception', action: MakeException },
+    { name: 'artisan.make.interface', action: MakeInterface },
+    { name: 'artisan.make.jobMiddleware', action: MakeJobMiddleware },
+    { name: 'artisan.make.scope', action: MakeScope },
+    { name: 'artisan.make.trait', action: MakeTrait },
+    { name: 'artisan.make.view', action: MakeView },
+    { name: 'artisan.make.cacheTable', action: MakeCacheTable },
+    { name: 'artisan.make.notificationsTable', action: MakeNotificationsTable },
+    { name: 'artisan.make.queueBatchesTable', action: MakeQueueBatchesTable },
+    { name: 'artisan.make.queueFailedTable', action: MakeQueueFailedTable },
+    { name: 'artisan.make.queueTable', action: MakeQueueTable },
+    { name: 'artisan.make.sessionTable', action: MakeSessionTable },
+    // Queue
+    { name: 'artisan.queue.clear', action: QueueClear },
+    { name: 'artisan.queue.failed', action: QueueFailed },
+    { name: 'artisan.queue.flush', action: QueueFlush },
+    { name: 'artisan.queue.forget', action: QueueForget },
+    { name: 'artisan.queue.restart', action: QueueRestart },
+    { name: 'artisan.queue.pause', action: QueuePause },
+    { name: 'artisan.queue.resume', action: QueueResume },
+    { name: 'artisan.queue.retry', action: QueueRetry },
+    { name: 'artisan.queue.retryBatch', action: QueueRetryBatch },
+    { name: 'artisan.queue.pruneBatches', action: QueuePruneBatches },
+    { name: 'artisan.queue.pruneFailed', action: QueuePruneFailed },
+    { name: 'artisan.queue.work', action: QueueWork },
+    { name: 'artisan.queue.listen', action: QueueListen },
+    { name: 'artisan.livewire.make', action: LivewireMake },
+    { name: 'artisan.livewire.attribute', action: LivewireAttribute },
+    { name: 'artisan.livewire.form', action: LivewireForm },
+    { name: 'artisan.livewire.convert', action: LivewireConvert },
+    { name: 'artisan.livewire.layout', action: LivewireLayout },
+    { name: 'artisan.livewire.publish', action: LivewirePublish },
+    { name: 'artisan.livewire.stubs', action: LivewireStubs },
+    { name: 'artisan.livewire.config', action: LivewireConfig },
+    { name: 'artisan.livewire.s3cleanup', action: LivewireS3Cleanup },
   ];
 
   registeredCommands.forEach((command: RegisterCommand) => {
@@ -123,7 +187,7 @@ export async function activate(context: ExtensionContext) {
       const args = command.args ?? [];
 
       // Run the command
-      await command.action[method](...args);
+      await (command.action as any)[method](...args);
 
       // Cleanup
       // command.action.dispose?.();
@@ -144,7 +208,6 @@ export async function activate(context: ExtensionContext) {
   // context.subscriptions.push(commands.registerCommand('artisan.list', () => {  }))
 
   // // Make commands
-  // context.subscriptions.push(commands.registerCommand('artisan.make.auth', () => {  }))
   // context.subscriptions.push(commands.registerCommand('artisan.make.cast', () => {  }))
   // context.subscriptions.push(commands.registerCommand('artisan.make.channel', () => {  }))
   // context.subscriptions.push(commands.registerCommand('artisan.make.command', () => {  }))

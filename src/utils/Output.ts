@@ -21,6 +21,6 @@ export default class Output {
   }
 
   public static showConsole() {
-    outputConsole.show()
+    outputConsole.show(true)
   }
 }

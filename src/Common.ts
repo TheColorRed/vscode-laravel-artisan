@@ -42,7 +42,7 @@ export default class Common {
     let config = workspace.getConfiguration('artisan');
     let additionalLocations = config.get<string | null | string[]>('location');
     additionalLocations = typeof additionalLocations === 'string' ? new Array(1).concat(additionalLocations) : additionalLocations;
-    let list = this.artisanFileList.concat(additionalLocations.map(i => Uri.parse(i)));
+    let list = this.artisanFileList.concat((additionalLocations ?? []).map(i => Uri.parse(i)));
     if (list.length === 1 && list[0].fsPath.length) return list[0].fsPath;
     else if (list.length === 0) return 'artisan';
     let artisanToUse = await Common.getListInput(
@@ -79,7 +79,7 @@ export default class Common {
     const config = workspace.getConfiguration('artisan');
     const phpLocation = config.get<string | null>('php.location', 'php');
     const dockerEnabled = config.get<boolean>('docker.enabled', false);
-    const dockerCommand = config.get<string>('docker.command', null);
+    const dockerCommand = config.get<string | null>('docker.command', null);
     const maxBuffer = config.get<number>('maxBuffer', 1024 * 200);
     const wsl = config.get<boolean>('wsl.enabled', false);
 
@@ -124,7 +124,7 @@ export default class Common {
    */
   protected static async nonWslCommand(artisanRoot: string, artisanToUse: string, cmd: string, maxBuffer: number) {
     return new Promise<CommandInfo>(resolve => {
-      cp.exec(cmd, { cwd: artisanRoot, maxBuffer: maxBuffer }, (err, stdout, stderr) => {
+      cp.exec(cmd, { cwd: artisanRoot, maxBuffer: maxBuffer }, (err: Error | null, stdout: string, stderr: string) => {
         Output.command(stdout.trim());
         if (err) {
           Output.command('-----------------------------------');
@@ -132,7 +132,7 @@ export default class Common {
           Output.showConsole();
         }
         resolve({
-          err,
+          err: err ?? undefined,
           stdout,
           stderr,
           artisan: {
@@ -154,7 +154,7 @@ export default class Common {
     return new Promise<CommandInfo>((resolve, reject) => {
       const child = cp.spawn('wsl', [cmd], { cwd: artisanRoot, shell: true });
       const childData: string[] = [];
-      child.stdout.on('data', data => childData.push(data.toString()));
+      child.stdout.on('data', (data: Buffer) => childData.push(data.toString()));
       child.stdout.on('end', () => {
         resolve({
           err: undefined,
@@ -166,7 +166,7 @@ export default class Common {
           },
         });
       });
-      child.stderr.on('error', err => {
+      child.stderr.on('error', (err: Error) => {
         Output.command('-----------------------------------');
         Output.error(err.message.trim());
         Output.showConsole();
@@ -194,7 +194,7 @@ export default class Common {
       window.showTextDocument(doc);
       this.refreshFilesExplorer();
     } catch (e) {
-      console.log(e.message);
+      console.log((e as Error).message);
     }
   }
   /**
@@ -461,7 +461,7 @@ export default class Common {
    */
   protected static async getYesNo(placeHolder: string): Promise<boolean> {
     let value = await window.showQuickPick(['Yes', 'No'], { placeHolder });
-    return value.toLowerCase() === 'yes' ? true : false;
+    return (value ?? 'No').toLowerCase() === 'yes';
   }
   /**
    * Shows a No/Yes dialog (where `no` is first in the list) and returns the result.
@@ -469,7 +469,7 @@ export default class Common {
    */
   protected static async getNoYes(placeHolder: string): Promise<boolean> {
     let value = await window.showQuickPick(['No', 'Yes'], { placeHolder });
-    return value.toLowerCase() === 'yes' ? true : false;
+    return (value ?? 'No').toLowerCase() === 'yes';
   }
   /**
    * Shows snackbar message to the user.
@@ -480,11 +480,19 @@ export default class Common {
     return true;
   }
   /**
+   * Shows a warning message with action buttons and returns the chosen option.
+   * @param message The warning message to show.
+   * @param options The action button labels.
+   */
+  protected static async showWarningWithOptions(message: string, ...options: string[]): Promise<string | undefined> {
+    return window.showWarningMessage(message, ...options);
+  }
+  /**
    * Shows snackbar error message to the user.
    * @param message The message to show.
    * @param consoleErr The message to show in console.
    */
-  protected static async showError(message: string, consoleErr = null) {
+  protected static async showError(message: string, consoleErr: string | Error | null = null) {
     if (consoleErr !== null) {
       message += ' (See output console for more details)';
       console.error(consoleErr + ' (See output console for more details)');
@@ -499,19 +507,74 @@ export default class Common {
     commands.executeCommand('workbench.files.action.refreshFilesExplorer');
   }
   /**
+   * Checks whether a Livewire "namespace not found" error was returned and, if so,
+   * offers to install the package via composer.
+   * @returns true if Livewire was not installed (caller should abort further handling).
+   */
+  protected static async handleLivewireNotInstalled(info: CommandInfo): Promise<boolean> {
+    const output = (info.err?.message ?? '') + (info.stderr ?? '') + (info.stdout ?? '');
+    if (!/no commands defined in the "livewire" namespace/i.test(output)) {
+      return false;
+    }
+    const choice = await window.showWarningMessage(
+      'Livewire is not installed in this project. Would you like to install it via Composer?',
+      'Install Livewire',
+      'Cancel'
+    );
+    if (choice === 'Install Livewire') {
+      this.execCmd('', async root => {
+        // Run composer require outside of artisan by using execCmd's resolved root
+        const config = workspace.getConfiguration('artisan');
+        const wsl = config.get<boolean>('wsl.enabled', false);
+        const dockerEnabled = config.get<boolean>('docker.enabled', false);
+        const dockerCommand = config.get<string | null>('docker.command', null);
+        const maxBuffer = config.get<number>('maxBuffer', 1024 * 200);
+
+        let cmd: string;
+        if (dockerEnabled) {
+          cmd = `${dockerCommand} composer require livewire/livewire`;
+        } else if (wsl) {
+          cmd = `wsl composer require livewire/livewire`;
+        } else {
+          cmd = `composer require livewire/livewire`;
+        }
+
+        Output.command(cmd);
+        window.withProgress(
+          { location: ProgressLocation.Window, cancellable: false, title: 'Installing Livewire...' },
+          () =>
+            new Promise<void>(resolve => {
+              cp.exec(cmd, { cwd: root.artisan.dir, maxBuffer }, (err: Error | null, stdout: string, stderr: string) => {
+                Output.command(stdout.trim());
+                if (err) {
+                  Output.error(err.message.trim());
+                  Output.showConsole();
+                  window.showErrorMessage('Livewire installation failed. See output console for details.');
+                } else {
+                  window.showInformationMessage('Livewire installed successfully!');
+                }
+                resolve();
+              });
+            })
+        );
+      });
+    }
+    return true;
+  }
+  /**
    * Get a list of all artisan commands.
    */
   protected static getCommandList(): Promise<Command[]> {
     return new Promise(resolve => {
       this.execCmd(`list --format=json`, info => {
-        let commands: any[] = JSON.parse(info.stdout).commands;
+        let commands: any[] = JSON.parse(info.stdout ?? '{}').commands;
         let commandList: Command[] = [];
         commands.forEach(command => {
           let commandItem = {
             name: command.name,
             description: command.description,
-            options: [],
-            arguments: [],
+            options: [] as any[],
+            arguments: [] as any[],
           };
           for (let i in command.definition.options) {
             if (['help', 'quiet', 'verbose', 'version', 'ansi', 'no-ansi', 'no-interaction', 'env'].indexOf(i) > -1) continue;

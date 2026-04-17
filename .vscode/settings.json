@@ -10,6 +10,8 @@
   },
   "typescript.tsdk": "./node_modules/typescript/lib",
   "cSpell.words": [
+    "Laravel",
+    "livewire",
     "micration",
     "nqry"
   ] // we want to use the TS server from our node_modules folder to control its version

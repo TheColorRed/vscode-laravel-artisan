@@ -3,7 +3,7 @@
   "displayName": "Laravel Artisan",
   "description": "Run Laravel Artisan commands within Visual Studio Code",
   "icon": "images/icon.png",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "publisher": "ryannaddy",
   "repository": {
     "type": "git",
@@ -32,9 +32,6 @@
   "contributes": {
     "menus": {
       "artisan.make.app": [
-        {
-          "command": "artisan.make.auth"
-        },
         {
           "command": "artisan.make.command"
         },
@@ -88,6 +85,33 @@
         },
         {
           "command": "artisan.make.channel"
+        },
+        {
+          "command": "artisan.make.class"
+        },
+        {
+          "command": "artisan.make.config"
+        },
+        {
+          "command": "artisan.make.enum"
+        },
+        {
+          "command": "artisan.make.exception"
+        },
+        {
+          "command": "artisan.make.interface"
+        },
+        {
+          "command": "artisan.make.jobMiddleware"
+        },
+        {
+          "command": "artisan.make.scope"
+        },
+        {
+          "command": "artisan.make.trait"
+        },
+        {
+          "command": "artisan.make.view"
         }
       ],
       "artisan.server.app": [
@@ -113,6 +137,24 @@
         },
         {
           "command": "artisan.make.seeder"
+        },
+        {
+          "command": "artisan.make.cacheTable"
+        },
+        {
+          "command": "artisan.make.notificationsTable"
+        },
+        {
+          "command": "artisan.make.queueBatchesTable"
+        },
+        {
+          "command": "artisan.make.queueFailedTable"
+        },
+        {
+          "command": "artisan.make.queueTable"
+        },
+        {
+          "command": "artisan.make.sessionTable"
         }
       ],
       "artisan.migrate.database": [
@@ -167,6 +209,85 @@
         },
         {
           "command": "artisan.cache.table"
+        },
+        {
+          "command": "artisan.app.down"
+        },
+        {
+          "command": "artisan.app.up"
+        },
+        {
+          "command": "artisan.tinker"
+        }
+      ],
+      "artisan.queue": [
+        {
+          "command": "artisan.queue.work"
+        },
+        {
+          "command": "artisan.queue.listen"
+        },
+        {
+          "command": "artisan.queue.restart"
+        },
+        {
+          "command": "artisan.queue.failed"
+        },
+        {
+          "command": "artisan.queue.retry"
+        },
+        {
+          "command": "artisan.queue.retryBatch"
+        },
+        {
+          "command": "artisan.queue.forget"
+        },
+        {
+          "command": "artisan.queue.flush"
+        },
+        {
+          "command": "artisan.queue.clear"
+        },
+        {
+          "command": "artisan.queue.pause"
+        },
+        {
+          "command": "artisan.queue.resume"
+        },
+        {
+          "command": "artisan.queue.pruneBatches"
+        },
+        {
+          "command": "artisan.queue.pruneFailed"
+        }
+      ],
+      "artisan.livewire": [
+        {
+          "command": "artisan.livewire.make"
+        },
+        {
+          "command": "artisan.livewire.attribute"
+        },
+        {
+          "command": "artisan.livewire.form"
+        },
+        {
+          "command": "artisan.livewire.convert"
+        },
+        {
+          "command": "artisan.livewire.layout"
+        },
+        {
+          "command": "artisan.livewire.config"
+        },
+        {
+          "command": "artisan.livewire.publish"
+        },
+        {
+          "command": "artisan.livewire.stubs"
+        },
+        {
+          "command": "artisan.livewire.s3cleanup"
         }
       ],
       "explorer/context": [
@@ -209,6 +330,16 @@
           "when": "resource =~ /.+?\\/routes/iu",
           "submenu": "artisan.routes",
           "group": "0_artisan"
+        },
+        {
+          "when": "resource =~ /.+?/iu",
+          "submenu": "artisan.queue",
+          "group": "0_artisan"
+        },
+        {
+          "when": "resource =~ /.+?/iu",
+          "submenu": "artisan.livewire",
+          "group": "0_artisan@99"
         }
       ]
     },
@@ -236,6 +367,14 @@
       {
         "id": "artisan.routes",
         "label": "Artisan Routes"
+      },
+      {
+        "id": "artisan.queue",
+        "label": "Artisan Queue"
+      },
+      {
+        "id": "artisan.livewire",
+        "label": "Artisan Livewire"
       }
     ],
     "configuration": {
@@ -414,11 +553,6 @@
         "command": "artisan.make.channel",
         "title": "Artisan: Make Channel",
         "shortTitle": "Make Channel"
-      },
-      {
-        "command": "artisan.make.auth",
-        "title": "Artisan: Make Auth",
-        "shortTitle": "Make Auth"
       },
       {
         "command": "artisan.make.command",
@@ -654,14 +788,222 @@
         "command": "artisan.event.generate",
         "title": "Artisan: Generate Events",
         "shortTitle": "Generate Events"
+      },
+      {
+        "command": "artisan.livewire.make",
+        "title": "Artisan: Make Livewire Component",
+        "shortTitle": "Make Livewire"
+      },
+      {
+        "command": "artisan.livewire.attribute",
+        "title": "Artisan: Livewire Attribute",
+        "shortTitle": "Livewire Attribute"
+      },
+      {
+        "command": "artisan.livewire.form",
+        "title": "Artisan: Livewire Form",
+        "shortTitle": "Livewire Form"
+      },
+      {
+        "command": "artisan.livewire.convert",
+        "title": "Artisan: Livewire Convert",
+        "shortTitle": "Livewire Convert"
+      },
+      {
+        "command": "artisan.livewire.layout",
+        "title": "Artisan: Livewire Layout",
+        "shortTitle": "Livewire Layout"
+      },
+      {
+        "command": "artisan.livewire.config",
+        "title": "Artisan: Livewire Config",
+        "shortTitle": "Livewire Config"
+      },
+      {
+        "command": "artisan.livewire.publish",
+        "title": "Artisan: Livewire Publish",
+        "shortTitle": "Livewire Publish"
+      },
+      {
+        "command": "artisan.livewire.stubs",
+        "title": "Artisan: Livewire Stubs",
+        "shortTitle": "Livewire Stubs"
+      },
+      {
+        "command": "artisan.livewire.s3cleanup",
+        "title": "Artisan: Livewire Configure S3 Upload Cleanup",
+        "shortTitle": "Livewire S3 Cleanup"
+      },
+      {
+        "command": "artisan.app.down",
+        "title": "Artisan: Down (Maintenance Mode)",
+        "shortTitle": "Down"
+      },
+      {
+        "command": "artisan.app.up",
+        "title": "Artisan: Up",
+        "shortTitle": "Up"
+      },
+      {
+        "command": "artisan.tinker",
+        "title": "Artisan: Tinker",
+        "shortTitle": "Tinker"
+      },
+      {
+        "command": "artisan.make.class",
+        "title": "Artisan: Make Class",
+        "shortTitle": "Make Class"
+      },
+      {
+        "command": "artisan.make.config",
+        "title": "Artisan: Make Config",
+        "shortTitle": "Make Config"
+      },
+      {
+        "command": "artisan.make.enum",
+        "title": "Artisan: Make Enum",
+        "shortTitle": "Make Enum"
+      },
+      {
+        "command": "artisan.make.exception",
+        "title": "Artisan: Make Exception",
+        "shortTitle": "Make Exception"
+      },
+      {
+        "command": "artisan.make.interface",
+        "title": "Artisan: Make Interface",
+        "shortTitle": "Make Interface"
+      },
+      {
+        "command": "artisan.make.jobMiddleware",
+        "title": "Artisan: Make Job Middleware",
+        "shortTitle": "Make Job Middleware"
+      },
+      {
+        "command": "artisan.make.scope",
+        "title": "Artisan: Make Scope",
+        "shortTitle": "Make Scope"
+      },
+      {
+        "command": "artisan.make.trait",
+        "title": "Artisan: Make Trait",
+        "shortTitle": "Make Trait"
+      },
+      {
+        "command": "artisan.make.view",
+        "title": "Artisan: Make View",
+        "shortTitle": "Make View"
+      },
+      {
+        "command": "artisan.make.cacheTable",
+        "title": "Artisan: Make Cache Table Migration",
+        "shortTitle": "Make Cache Table"
+      },
+      {
+        "command": "artisan.make.notificationsTable",
+        "title": "Artisan: Make Notifications Table Migration",
+        "shortTitle": "Make Notifications Table"
+      },
+      {
+        "command": "artisan.make.queueBatchesTable",
+        "title": "Artisan: Make Queue Batches Table Migration",
+        "shortTitle": "Make Queue Batches Table"
+      },
+      {
+        "command": "artisan.make.queueFailedTable",
+        "title": "Artisan: Make Queue Failed Table Migration",
+        "shortTitle": "Make Queue Failed Table"
+      },
+      {
+        "command": "artisan.make.queueTable",
+        "title": "Artisan: Make Queue Table Migration",
+        "shortTitle": "Make Queue Table"
+      },
+      {
+        "command": "artisan.make.sessionTable",
+        "title": "Artisan: Make Session Table Migration",
+        "shortTitle": "Make Session Table"
+      },
+      {
+        "command": "artisan.queue.work",
+        "title": "Artisan: Queue Work",
+        "shortTitle": "Queue Work"
+      },
+      {
+        "command": "artisan.queue.listen",
+        "title": "Artisan: Queue Listen",
+        "shortTitle": "Queue Listen"
+      },
+      {
+        "command": "artisan.queue.restart",
+        "title": "Artisan: Queue Restart",
+        "shortTitle": "Queue Restart"
+      },
+      {
+        "command": "artisan.queue.failed",
+        "title": "Artisan: Queue Failed Jobs",
+        "shortTitle": "Queue Failed"
+      },
+      {
+        "command": "artisan.queue.retry",
+        "title": "Artisan: Queue Retry",
+        "shortTitle": "Queue Retry"
+      },
+      {
+        "command": "artisan.queue.retryBatch",
+        "title": "Artisan: Queue Retry Batch",
+        "shortTitle": "Queue Retry Batch"
+      },
+      {
+        "command": "artisan.queue.forget",
+        "title": "Artisan: Queue Forget Failed Job",
+        "shortTitle": "Queue Forget"
+      },
+      {
+        "command": "artisan.queue.flush",
+        "title": "Artisan: Queue Flush Failed Jobs",
+        "shortTitle": "Queue Flush"
+      },
+      {
+        "command": "artisan.queue.clear",
+        "title": "Artisan: Queue Clear",
+        "shortTitle": "Queue Clear"
+      },
+      {
+        "command": "artisan.queue.pause",
+        "title": "Artisan: Queue Pause",
+        "shortTitle": "Queue Pause"
+      },
+      {
+        "command": "artisan.queue.resume",
+        "title": "Artisan: Queue Resume",
+        "shortTitle": "Queue Resume"
+      },
+      {
+        "command": "artisan.queue.pruneBatches",
+        "title": "Artisan: Queue Prune Batches",
+        "shortTitle": "Queue Prune Batches"
+      },
+      {
+        "command": "artisan.queue.pruneFailed",
+        "title": "Artisan: Queue Prune Failed",
+        "shortTitle": "Queue Prune Failed"
+      }
+    ],
+    "chatSkills": [
+      {
+        "path": "out/docs/skills/vscode-laravel-artisan/SKILL.md"
       }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
+    "vscode:prepublish": "tsc -p ./ && npm run copy-docs",
     "compile": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test"
+    "prewatch": "rm -rf out/docs && npm run copy-docs",
+    "test": "node ./node_modules/vscode/bin/test",
+    "copy-files": "npm run copy-docs",
+    "copy-docs": "cp -r \"src/docs/\" out"
   },
   "dependencies": {
     "rxjs": "7.8.0"

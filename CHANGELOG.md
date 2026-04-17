@@ -1,3 +1,23 @@
+# 0.0.32
+
+- Removed `make:auth` command (since it's no longer included in Laravel 8+)
+- Fixed infinite loop when running `route:list` — the 5-second refresh interval now starts after the command completes rather than on a fixed clock
+- Fixed output console stealing focus on errors — output panel now opens with focus preserved
+- Added Livewire v3 support (`livewire:*` submenu):
+  - `make:livewire` — creates a Livewire component and opens both the class and view
+  - `livewire:attribute`, `livewire:form`, `livewire:convert`, `livewire:layout`
+  - `livewire:config`, `livewire:publish`, `livewire:stubs`, `livewire:configure-s3-upload-cleanup`
+- Added `down` / `up` commands (maintenance mode) with optional message and secret bypass token
+- Added `tinker` command (opens in a dedicated terminal)
+- Added new `make:*` commands:
+  - `make:class`, `make:config`, `make:enum`, `make:exception`, `make:interface`
+  - `make:job-middleware`, `make:scope`, `make:trait`, `make:view`
+  - `make:cache-table`, `make:notifications-table`, `make:queue-table`, `make:queue-failed-table`, `make:queue-batches-table`, `make:session-table`
+- Added full `queue:*` submenu:
+  - `queue:work`, `queue:listen` (long-running, open in a terminal)
+  - `queue:restart`, `queue:failed`, `queue:retry`, `queue:retry-batch`, `queue:forget`, `queue:flush`, `queue:clear`, `queue:pause`, `queue:resume`, `queue:prune-batches`, `queue:prune-failed`
+- Added Copilot skill with reference guides for commands, environments, migrations, queues, maintenance, and Livewire
+
 # 0.0.31
 
 - Added `make:cast` command

@@ -23,6 +23,13 @@
     "problemMatcher": "$tsc-watch",
     "tasks": [
       {
+        "label": "copy-docs",
+        "type": "shell",
+        "command": "npm",
+        "args": ["run", "copy-docs"],
+        "problemMatcher": []
+      },
+      {
         "label": "npm",
         "type": "shell",
         "command": "npm",
@@ -33,6 +40,7 @@
           "silent"
         ],
         "isBackground": true,
+        "dependsOn": "copy-docs",
         "problemMatcher": "$tsc-watch",
         "group": {
           "_id": "build",
